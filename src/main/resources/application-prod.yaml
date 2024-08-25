@@ -1,0 +1,44 @@
+server:
+  port: 8080
+  servlet:
+    contextPath: /api/v1
+
+spring:
+  jackson:
+    time-zone: Asia/Seoul
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?createDatabaseIfNotExist=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      auto-commit: false
+      connection-test-query: SELECT 1
+      minimum-idle: 10
+      maximum-pool-size: 20
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
+#      ddl-auto: update
+    open-in-view: false
+
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
