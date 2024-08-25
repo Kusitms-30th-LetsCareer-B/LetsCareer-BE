@@ -25,10 +25,10 @@
 - 클래스 : 클래스 이름은 명사나 명사절로 지으며, 대문자 카멜표기법(Upper camel case)을 사용합니다.
 - 메서드 : 메서드 이름은 동사/전치사로 시작하며, 소문자 카멜표기법(Lower camel case)를 사용합니다. 의도가 전달되도록 최대한 간결하게 표현합니다.
 - 변수 : 소문자 카멜표기법(Lower camel case)를 사용합니다.
-- ENUM, 상수 : 상태를 가지지 않는 자료형이면서 `static final`로 선언되어 있는 필드일 때를 상수로 간주하며, 대문자와 언더스코어(Upper_snake_case)로 구성합니다.
+- ENUM, 상수 : 상태를 가지지 않는 자료형이면서 `static final`로 선언되어 있는 필드일 때를 상수로 간주하며, 대문자와 언더스코어(UPPER_SNAKE_CASE)로 구성합니다.
 - DB 테이블: 소문자와 언더스코어로(lower_snake_case) 구성합니다.
 - 컬렉션(Collection): **복수형**을 사용하거나 **컬렉션을 명시합니다**. (Ex. userList, users, userMap)
-- LocalDateTime: 접미사에 **Date**를 붙입니다.
+- LocalDateTime: 접미사에 *Time**를 붙입니다.
 
 
 </div>
@@ -43,23 +43,19 @@
 // 하이~
 ```
 
-### 2. Bracket 사용 시 내부에 주석을 작성한다.
+### 2. 한줄 주석 외에 설명을 위한 주석은 JavaDoc을 사용한다.
 
 ```java
-/*
-   하이~!
-*/
-```
-
-### 3. 주요 함수에 대한 주석
-
-```java
-/*
- * 입력 : 인덱스:Long
- * 기능 : 유저 인덱스로 db에 접근해 유저 객체를 반환한다
- * 출력 : 유저:User
+/**
+ * 두 정수를 더합니다.
+ * 
+ * <p>이 메소드는 두 개의 정수를 입력받아 그 합계를 반환합니다.</p>
+ * 
+ * @param a 첫 번째 정수
+ * @param b 두 번째 정수
+ * @return 두 정수의 합
+ * @throws ArithmeticException 만약 계산 중 오류가 발생하면
  */
-public User getUser(Long idx)
 ```
 
 </div>
@@ -136,18 +132,15 @@ URL은 RESTful API 설계 가이드에 따라 작성합니다.
 IntelliJ로 작업을 진행하는 경우, 작업 시작 시 선행되어야 할 작업은 다음과 같습니다.
 
 > 1. 깃허브 프로젝트 저장소에서 issue를 생성합니다.
-> 2. IntelliJ의 git 탭 → local develop branch 우클릭 → update 를 진행합니다.
-> 3. IntelliJ의 git 탭 → local develop branch 우클릭 → new branch from ‘develop’ 을 진행합니다.
-> 4. 생성한 issue 번호에 맞는 feature branch를 생성함과 동시에 feature branch로 checkout 합니다.
-> 5. feature branch에서 issue 단위 작업을 진행합니다.
-> 6. 작업 완료 후, add → commit을 진행합니다.
-> 7. push 하기 전, remote develop branch의 변경 사항을 확인하기 위해 2번 과정을 다시 수행합니다.
-> 8. IntelliJ의 git 탭 → local develop branch 우클릭 → merge ‘develop’ into ‘4번 과정에서 생성한 feature branch’ 를 진행합니다.
-> 9. 만약 코드 충돌이 발생하였다면, IntelliJ에서 코드 충돌을 해결하고 add → commit을 진행합니다.
-> 10. push → pull request (feature branch → develop branch) 를 진행합니다.
-> 11. pull request가 작성되면 작성자 이외의 다른 팀원이 code review를 진행합니다.
-> 12. 최소 한 명 이상의 팀원에게 code review와 approve를 받은 경우 pull request 생성자가 merge를 진행합니다.
-> 13. 종료된 issue와 pull request의 label과 milestone을 관리합니다.
+> 2. 생성한 issue 번호에 맞는 feature branch를 생성함과 동시에 feature branch로 checkout 합니다.
+> 3. feature branch에서 issue 단위 작업을 진행합니다.
+> 4. 작업 완료 후, add → commit을 진행합니다.
+> 5. remote develop branch의 변경 사항을 확인하기 위해 pull 받은 이후 push를 진행합니다.
+> 6. 만약 코드 충돌이 발생하였다면, IntelliJ에서 코드 충돌을 해결하고 add → commit을 진행합니다.
+> 7. push → pull request (feature branch → develop branch) 를 진행합니다.
+> 8. pull request가 작성되면 작성자 이외의 다른 팀원이 code review를 진행합니다.
+> 9. 최소 한 명 이상의 팀원에게 code review와 approve를 받은 경우 pull request 생성자가 merge를 진행합니다.
+> 10. 종료된 issue와 pull request의 label과 milestone을 관리합니다.
 
 
 ### 3. Etc
@@ -166,7 +159,7 @@ IntelliJ로 작업을 진행하는 경우, 작업 시작 시 선행되어야 할
 
 ### 1. Branch
 
-branch는 작업 단위 & 기능 단위로 생성하며 이는 issue를 기반으로 합니다.
+branch는 작업 단위 & 기능 단위로 생성된 issue를 기반으로 합니다.
 
 ### 2. Branch Naming Rule
 
@@ -236,6 +229,7 @@ issue 생성 시 github 오른편의 assignee, label을 적용합니다. assigne
 - **chore** : 의존성 추가, yml 추가와 수정, 패키지 구조 변경, 파일 이동 `[chore] #21 yml 수정`, `[chore] #22 lombok 의존성 추가`
 - **test**: 테스트 코드 작성, 수정 `[test] #20 로그인 API 테스트 코드 작성`
 - **style** : 코드에 관련 없는 주석 달기, 줄바꿈
+- **rename** : 파일 및 폴더명 수정
 
 </div>
 </details>
