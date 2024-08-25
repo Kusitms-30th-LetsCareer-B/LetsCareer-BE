@@ -7,7 +7,7 @@ on:
     branches: [ "develop" ]
 
 permissions:
-  contents: write  # Docker 이미지 푸시 및 배포 시 필요할 수 있음
+  contents: write  # Docker 이미지 푸시 및 배포 시 필요
 
 jobs:
   CI-CD:
