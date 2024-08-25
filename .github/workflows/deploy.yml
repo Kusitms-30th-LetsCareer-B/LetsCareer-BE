@@ -1,24 +1,59 @@
-name: Deploy To EC2
+name: Java CI with Gradle
 
 on:
   push:
-    branches:
-      - develop
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+permissions:
+  contents: write  # Docker 이미지 푸시 및 배포 시 필요할 수 있음
 
 jobs:
-  Deploy:
+  CI-CD:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH(원격 접속)로 EC2에 접속하기
-        uses: appleboy/ssh-action@v1.0.3
+
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Docker build & push to prod
+        if: contains(github.ref, 'develop')
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/letscareer .
+          docker push ${{ secrets.DOCKER_USERNAME }}/letscareer
+
+      - name: Deploy to prod
+        uses: appleboy/ssh-action@v0.1.5  # 최신 릴리스 버전을 명시하는 것이 좋음
+        id: deploy-prod
+        if: contains(github.ref, 'develop')
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script_stop: true
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          envs: GITHUB_SHA
           script: |
-            cd /home/ubuntu/LetsCareer-BE
-            git pull origin develop
-            ./gradlew clean build
-            sudo fuser -k -n tcp 8080 || true
-            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
+            sudo docker stop ${{ secrets.DOCKER_REPOSITORY }} || true
+            sudo docker rm ${{ secrets.DOCKER_REPOSITORY }} || true
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/letscareer
+            sudo docker run -d -p 8080:8080 -e DB_URL=${{ secrets.DB_HOST }} -e DB_USER=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} --name letscareer ${{ secrets.DOCKER_USERNAME }}/letscareer
+            sudo docker image prune -f
