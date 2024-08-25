@@ -55,5 +55,5 @@ jobs:
             sudo docker stop ${{ secrets.DOCKER_REPOSITORY }} || true
             sudo docker rm ${{ secrets.DOCKER_REPOSITORY }} || true
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/letscareer
-            sudo docker run -d -p 8080:8080 -e DB_URL=${{ secrets.DB_HOST }} -e DB_USER=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} --name letscareer ${{ secrets.DOCKER_USERNAME }}/letscareer
+            sudo docker run -d -p 8080:8080 -e DB_HOST=${{ secrets.DB_HOST }} -e DB_NAME=${{ secrets.DB_NAME }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} --name letscareer ${{ secrets.DOCKER_USERNAME }}/letscareer
             sudo docker image prune -f
