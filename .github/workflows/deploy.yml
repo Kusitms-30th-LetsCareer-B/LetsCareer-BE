@@ -39,8 +39,8 @@ jobs:
         if: contains(github.ref, 'develop')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/letscareer .
-          docker push ${{ secrets.DOCKER_USERNAME }}/letscareer
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
 
       - name: Deploy to prod
         uses: appleboy/ssh-action@v0.1.5  # 최신 릴리스 버전을 명시하는 것
@@ -54,6 +54,6 @@ jobs:
           script: |
             sudo docker stop ${{ secrets.DOCKER_REPOSITORY }} || true
             sudo docker rm ${{ secrets.DOCKER_REPOSITORY }} || true
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/letscareer
-            sudo docker run -d -p 8080:8080 -e DB_HOST=${{ secrets.DB_HOST }} -e DB_NAME=${{ secrets.DB_NAME }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} --name letscareer ${{ secrets.DOCKER_USERNAME }}/letscareer
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
+            sudo docker run -d -p 8080:8080 -e DB_HOST=${{ secrets.DB_HOST }} -e DB_NAME=${{ secrets.DB_NAME }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} --name ${{ secrets.DOCKER_REPOSITORY }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
             sudo docker image prune -f
