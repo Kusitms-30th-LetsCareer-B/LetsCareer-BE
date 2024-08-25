@@ -43,7 +43,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/letscareer
 
       - name: Deploy to prod
-        uses: appleboy/ssh-action@v0.1.5  # 최신 릴리스 버전을 명시하는 것이 좋음
+        uses: appleboy/ssh-action@v0.1.5  # 최신 릴리스 버전을 명시하는 것
         id: deploy-prod
         if: contains(github.ref, 'develop')
         with:
