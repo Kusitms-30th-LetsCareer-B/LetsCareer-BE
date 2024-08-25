@@ -3,7 +3,7 @@ name: Deploy To EC2
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   Deploy:
@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            cd /home/ubuntu/lets-career-server
+            cd /home/ubuntu/LetsCareer-BE
             git pull origin main
             ./gradlew clean build
             sudo fuser -k -n tcp 8080 || true
