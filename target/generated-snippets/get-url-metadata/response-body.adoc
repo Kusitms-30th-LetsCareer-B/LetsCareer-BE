@@ -1,0 +1,9 @@
+[source,json,options="nowrap"]
+----
+{
+  "title" : "Test Title",
+  "description" : "Test Description",
+  "iconUrl" : "https://example.com/favicon.ico",
+  "url" : "https://example.com"
+}
+----

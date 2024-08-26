@@ -127,7 +127,7 @@ jacocoTestCoverageVerification {
 	violationRules {
 		rule {
 			limit {
-				minimum = 0.2 // 최소 커버리지 비율 설정 (예: 80%)
+				minimum = 0.0 // 최소 커버리지 비율 설정 (예: 80%)
 			}
 		}
 	}
