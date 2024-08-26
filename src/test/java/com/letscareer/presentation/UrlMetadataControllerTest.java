@@ -20,7 +20,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UrlMetadataController.class)
-@AutoConfigureRestDocs(outputDir = "target/generated-snippets")
+@AutoConfigureRestDocs(outputDir = "build/generated-snippets") // ext.snippetsDir에 맞춰 설정
 public class UrlMetadataControllerTest {
 
     @Autowired
@@ -36,10 +36,10 @@ public class UrlMetadataControllerTest {
         Mockito.when(urlMetadataService.getUrlMetadata(anyString())).thenReturn(metadata);
 
         // when & then
-        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/url-metadata")
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/url/metadata")
                         .param("url", "https://example.com"))
                 .andExpect(status().isOk())
-                .andDo(document("get-url-metadata",
+                .andDo(document("url/getMetadata",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));

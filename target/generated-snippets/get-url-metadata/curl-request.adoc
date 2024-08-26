@@ -1,4 +1,0 @@
-[source,bash]
-----
-$ curl 'http://localhost:8080/url-metadata?url=https%3A%2F%2Fexample.com' -i -X GET
-----
