@@ -1,4 +1,4 @@
-package com.letscareer.global.config;
+package com.letscareer.global.configuration;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
