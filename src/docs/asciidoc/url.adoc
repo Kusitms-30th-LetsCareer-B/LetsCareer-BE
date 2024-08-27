@@ -1,0 +1,15 @@
+== URL
+
+=== URL metadata 조회
+
+==== Request
+
+include::{snippets}/url/getMetadata/curl-request.adoc[]
+include::{snippets}/url/getMetadata/http-request.adoc[]
+include::{snippets}/url/getMetadata/httpie-request.adoc[]
+include::{snippets}/url/getMetadata/request-body.adoc[]
+
+==== Response
+
+include::{snippets}/url/getMetadata/http-response.adoc[]
+include::{snippets}/url/getMetadata/response-body.adoc[]

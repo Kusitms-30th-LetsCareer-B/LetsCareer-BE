@@ -1,4 +1,4 @@
-package com.letscareer.global.config;
+package com.letscareer.global.configuration;
 
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.P6SpyOptions;

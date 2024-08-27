@@ -1,4 +1,4 @@
-package com.letscareer.global.config;
+package com.letscareer.global.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
