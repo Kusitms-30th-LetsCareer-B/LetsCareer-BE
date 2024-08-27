@@ -498,23 +498,31 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 148
+Content-Length: 220
 
 {
-  "title" : "Test Title",
-  "description" : "Test Description",
-  "iconUrl" : "https://example.com/favicon.ico",
-  "url" : "https://example.com"
+  "code" : 200,
+  "message" : "요청 성공",
+  "data" : {
+    "title" : "Test Title",
+    "description" : "Test Description",
+    "iconUrl" : "https://example.com/favicon.ico",
+    "url" : "https://example.com"
+  }
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "title" : "Test Title",
-  "description" : "Test Description",
-  "iconUrl" : "https://example.com/favicon.ico",
-  "url" : "https://example.com"
+  "code" : 200,
+  "message" : "요청 성공",
+  "data" : {
+    "title" : "Test Title",
+    "description" : "Test Description",
+    "iconUrl" : "https://example.com/favicon.ico",
+    "url" : "https://example.com"
+  }
 }</code></pre>
 </div>
 </div>

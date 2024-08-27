@@ -77,6 +77,10 @@ sourceSets {
 }
 
 tasks.named('test') {
+	// test 실행 전 generated-snippets 디렉터리를 자동으로 삭제하도록 설정
+	doFirst {
+		delete snippetsDir
+	}
 	useJUnitPlatform()
 	finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport 동작
 	outputs.dir snippetsDir // REST Docs 스니펫 디렉터리를 출력으로 설정
@@ -109,13 +113,13 @@ jacocoTestReport {
 	)
 
 	reports {
+		xml.required = true
+		xml.outputLocation = file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
+
 		// html로 report 생성하기
 		// 빌드경로/jacoco/report.html 폴더 내부로 경로 설정
-		xml.required = true
-		xml.destination file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
-
 		html.required = true
-		html.destination file("$buildDir/reports/jacoco/test/html")
+		html.outputLocation = file("$buildDir/reports/jacoco/test/html")
 	}
 
 	// jacocoTestReport가 끝나면 jacocoTestCoverageVerification 동작
@@ -145,6 +149,16 @@ asciidoctor.doFirst {
 	delete file('src/main/resources/static/docs')
 }
 
+tasks.register('cleanSnippets', Delete) {
+	delete snippetsDir
+}
+
+tasks.register('buildDocs') {
+	dependsOn 'cleanSnippets' // 먼저 스니펫 디렉터리를 삭제
+	dependsOn 'test'          // 그 다음에 테스트 실행
+	dependsOn 'asciidoctor'   // 마지막으로 asciidoctor 실행
+}
+
 tasks.register('copyDocument', Copy) {
 	dependsOn asciidoctor // Gradle의 asciidoctor Task 이후 수행
 	from file("${asciidoctor.outputDir}")
@@ -152,6 +166,7 @@ tasks.register('copyDocument', Copy) {
 }
 
 build {
+	dependsOn 'buildDocs'
 	dependsOn copyDocument // build 이후 html 파일 복사
 }
 
