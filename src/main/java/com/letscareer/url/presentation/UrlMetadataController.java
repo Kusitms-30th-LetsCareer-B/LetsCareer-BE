@@ -20,7 +20,7 @@ public class UrlMetadataController {
     private final UrlMetadataService urlMetadataService;
 
     @GetMapping("/metadata")
-    public ResponseEntity<SuccessResponse> getUrlMetadata(@RequestParam String url) {
+    public ResponseEntity<SuccessResponse> getUrlMetadata(@RequestParam String url){
         return new ResponseEntity<>(SuccessResponse.of(urlMetadataService.getUrlMetadata(url)), HttpStatus.OK);
     }
 }

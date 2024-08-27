@@ -27,7 +27,7 @@ public class UrlMetadataService {
 
             return new UrlMetadata(title, description, iconUrl, url);
         } catch (IOException e) {
-            log.error("Failed to fetch URL metadata for: " + url, e);
+            // todo : IOException은 어떻게 처리해야 할지 고민
             return null;
         }
     }
