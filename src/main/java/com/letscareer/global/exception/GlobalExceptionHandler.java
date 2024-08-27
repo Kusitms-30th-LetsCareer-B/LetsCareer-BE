@@ -1,5 +1,6 @@
-package com.letscareer.global.handler;
+package com.letscareer.global.exception;
 
+import com.letscareer.global.handler.ErrorResponse;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
