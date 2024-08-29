@@ -15,6 +15,17 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    //커스텀 Exception
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException exception) {
+        ErrorResponse errorResponse = ErrorResponse.of(
+                exception.getContent().getHttpStatus(),
+                exception.getMessage(),
+                null);
+        return ResponseEntity
+                .status(exception.getContent().getHttpStatus())
+                .body(errorResponse);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {

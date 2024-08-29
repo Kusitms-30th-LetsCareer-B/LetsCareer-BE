@@ -41,4 +41,3 @@ out/
 
 ### applicaion 제외 ###
 src/main/resources/application.yaml
-src/main/java/com/letscareer/global/exception/ExceptionContent.java
