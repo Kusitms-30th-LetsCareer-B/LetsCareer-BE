@@ -35,7 +35,6 @@ public class Recruitment extends BaseTimeEntity {
 
     private String announcementUrl;
 
-    @Builder
     public static Recruitment of(User user, String companyName,  Boolean isFavorite, String task, Boolean isRemind, String announcementUrl) {
         return Recruitment.builder()
                 .user(user)

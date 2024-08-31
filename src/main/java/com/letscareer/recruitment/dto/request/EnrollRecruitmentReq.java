@@ -2,7 +2,9 @@ package com.letscareer.recruitment.dto.request;
 
 import com.letscareer.recruitment.domain.Recruitment;
 import com.letscareer.user.domain.User;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -15,8 +17,7 @@ public class EnrollRecruitmentReq {
     private String task;
     private Boolean isRemind;
     private String announcementUrl;
-    private String stageName = "서류";
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate stageStartDate;
+    private LocalDate stageEndDate;
 
 }

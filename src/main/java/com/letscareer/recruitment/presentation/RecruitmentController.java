@@ -16,11 +16,10 @@ public class RecruitmentController {
     /**
      * 채용일정 등록 api
      * @param userId 유저id
-     * @param request 채용일정 정보
      * @return null
      */
-    @PostMapping("/recruitments?userId={userId}")
-    public ResponseEntity<ResponseDto<Void>> enrollRecruitment(@RequestParam Long userId, @RequestBody EnrollRecruitmentReq request){
+    @PostMapping("/recruitments")
+    public ResponseEntity<ResponseDto<Void>> enrollRecruitment(@RequestParam(name = "userId") Long userId, @RequestBody EnrollRecruitmentReq request){
         recruitmentService.enrollRecruitment(userId, request);
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용일정을 등록하였습니다.",null));
     }
