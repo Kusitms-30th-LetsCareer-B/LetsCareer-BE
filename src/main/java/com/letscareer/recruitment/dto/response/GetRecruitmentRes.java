@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class GetRecruitmentRes {
+    private Long recruitmentId;
     private String companyName;
     private Boolean isFavorite;
     private String task;
@@ -23,6 +24,7 @@ public class GetRecruitmentRes {
 
     public static GetRecruitmentRes of (Recruitment recruitment, List<StageRes> stages) {
         return GetRecruitmentRes.builder()
+                .recruitmentId(recruitment.getId())
                 .companyName(recruitment.getCompanyName())
                 .isFavorite(recruitment.getIsFavorite())
                 .task(recruitment.getTask())
@@ -35,6 +37,7 @@ public class GetRecruitmentRes {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Builder
     public static class StageRes {
+        private Long stageId;
         private String stageName;
         private LocalDate startDate;
         private LocalDate endDate;
@@ -43,6 +46,7 @@ public class GetRecruitmentRes {
 
         public static StageRes from(Stage stage){
             return StageRes.builder()
+                    .stageId(stage.getId())
                     .stageName(stage.getStageName())
                     .startDate(stage.getStartDate())
                     .endDate(stage.getEndDate())
