@@ -29,4 +29,10 @@ public class StageController {
         stageService.modifyStage(stageId, request);
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 수정하였습니다.", null));
     }
+
+    @DeleteMapping("/stages")
+    public ResponseEntity<ResponseDto<Void>> deleteStage(@RequestParam(name= "stageId") Long stageId){
+        stageService.deleteStage(stageId);
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 삭제하였습니다.", null));
+    }
 }

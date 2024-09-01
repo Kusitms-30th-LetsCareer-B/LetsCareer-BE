@@ -30,5 +30,8 @@ public class StageService {
         stage.modifyStage(request);
     }
 
-
+    @Transactional
+    public void deleteStage(Long stageId) {
+        stageRepository.deleteById(stageId);
+    }
 }
