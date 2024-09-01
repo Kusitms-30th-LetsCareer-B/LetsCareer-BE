@@ -1,6 +1,7 @@
 package com.letscareer.recruitment.domain;
 
 import com.letscareer.global.domain.BaseTimeEntity;
+import com.letscareer.recruitment.dto.request.ModifyStageReq;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -45,5 +46,11 @@ public class Stage extends BaseTimeEntity {
                 .status(status)
                 .isFinal(isFinal)
                 .build();
+    }
+
+    public void modifyStage(ModifyStageReq request) {
+            this.stageName = request.getStageName();
+            this.endDate = request.getEndDate();
+            this.status = request.getStatus();
     }
 }
