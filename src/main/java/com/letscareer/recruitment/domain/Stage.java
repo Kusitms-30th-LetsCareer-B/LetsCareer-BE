@@ -1,6 +1,5 @@
 package com.letscareer.recruitment.domain;
 
-import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 

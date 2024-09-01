@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StageRepository extends JpaRepository<Stage, Long> {
-    List<Stage> findAllByRecruitment(Recruitment recruitment);
+    List<Stage> findAllByRecruitmentOrderByEndDateAsc(Recruitment recruitment);
 }

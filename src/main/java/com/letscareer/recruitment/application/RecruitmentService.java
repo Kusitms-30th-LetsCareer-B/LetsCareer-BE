@@ -50,26 +50,10 @@ public class RecruitmentService {
     public GetRecruitmentRes getRecruitment(Long recruitmentId) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
-
-
-        List<Stage> stages = stageRepository.findAllByRecruitment(recruitment);
-        List<GetRecruitmentRes.Stage> stageResponses = stages.stream()
-                .map(stage -> new GetRecruitmentRes.Stage(
-                        stage.getStageName(),
-                        stage.getStartDate(),
-                        stage.getEndDate(),
-                        stage.getStatus(),
-                        stage.getIsFinal()
-                ))
+        List<GetRecruitmentRes.StageRes> stageResponses = stageRepository.findAllByRecruitmentOrderByEndDateAsc(recruitment)
+                .stream()
+                .map(GetRecruitmentRes.StageRes::from)
                 .toList();
-
-        return new GetRecruitmentRes(
-                recruitment.getCompanyName(),
-                recruitment.getIsFavorite(),
-                recruitment.getTask(),
-                recruitment.getAnnouncementUrl(),
-                stageResponses
-        );
-
+        return GetRecruitmentRes.of(recruitment, stageResponses);
     }
 }
