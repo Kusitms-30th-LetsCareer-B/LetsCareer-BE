@@ -5,6 +5,8 @@ plugins {
 	id 'jacoco'
 	id "org.sonarqube" version "4.0.0.2929"
 	id "org.asciidoctor.jvm.convert" version "3.3.2"
+	id 'com.epages.restdocs-api-spec' version '0.17.1'//restdocs -> swagger
+	id 'org.hidetake.swagger.generator' version '2.18.2'
 }
 
 group = 'com.letscareer'
@@ -50,10 +52,14 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 	annotationProcessor 'org.projectlombok:lombok'
-	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' // mockMvc 사용
 	testImplementation 'com.h2database:h2'
+
+	//restdocs-api-spec 의존성 추가
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.17.1'
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation 'com.squareup.okhttp3:mockwebserver'
 
 	// Querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -76,14 +82,73 @@ sourceSets {
 	}
 }
 
-tasks.named('test') {
-	// test 실행 전 generated-snippets 디렉터리를 자동으로 삭제하도록 설정
-	doFirst {
-		delete snippetsDir
+openapi3 {
+	server = "http://localhost:8080"
+	title = "위대한레츠비 API 문서"
+	description = "Spring REST Docs with SwaggerUI."
+	version = "0.0.1"
+	outputFileNamePrefix = 'open-api-3.0.1'
+	format = 'json'
+
+	// /static/docs/open-api-3.0.1.json 생성 → jar 파일만 배포할 예정이기에 build 에 출력
+	outputDirectory = 'build/resources/main/static/docs'
+}
+
+
+// Task 및 설정 추가
+// GenerateSwaggerUI 태스크가, openapi3 task 를 의존하도록 설정
+tasks.withType(GenerateSwaggerUI).configureEach {
+	dependsOn 'openapi3'
+
+//    기존 파일 삭제했다가, build 에 출력한 json 정적파일 복사 (안해도 됨 → local 확인용)
+	delete file('src/main/resources/static/docs/')
+	copy {
+		from "build/resources/main/static/docs"
+		into "src/main/resources/static/docs/"
+
 	}
+}
+
+// 테스트를 통해 생성된 snippets 출력 위치 정의
+tasks.register("ext") {
+	snippetsDir = file('build/generated-snippets')
+}
+
+tasks.named('test') {
 	useJUnitPlatform()
+	outputs.dir 'snippetsDir' // test 스니펫 디렉터리를 출력으로 추가하도록 작업을 구성
 	finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport 동작
-	outputs.dir snippetsDir // REST Docs 스니펫 디렉터리를 출력으로 설정
+}
+
+// 기존에 존재하던 docs 삭제
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
+}
+
+// asciidoctor 작업을 구성
+tasks.named("asciidoctor") {
+	inputs.dir 'snippetsDir'
+	configurations 'asciidoctorExt'
+	dependsOn test
+}
+
+
+tasks.named("bootJar") {
+	dependsOn asciidoctor
+	from("${asciidoctor.outputDir}") {
+		into 'static/docs'
+	}
+	dependsOn(':openapi3')
+}
+
+tasks.register('copyDocument', Copy) {
+	dependsOn asciidoctor
+	from file("$buildDir/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+tasks.named("build") {
+	dependsOn copyDocument
 }
 
 // jacoco report 설정
@@ -134,45 +199,5 @@ jacocoTestCoverageVerification {
 				minimum = 0.0 // 최소 커버리지 비율 설정 (예: 80%)
 			}
 		}
-	}
-}
-
-// Asciidoctor 설정
-asciidoctor {
-	configurations 'asciidoctorExt' // asciidoctor 확장 설정
-	baseDirFollowsSourceFile() // .adoc 파일을 include 하면서 사용하기 위한 설정
-	inputs.dir snippetsDir // 스니펫을 불러올 위치 설정
-	dependsOn test // Gradle의 test Task 이후 asciidoctor를 수행
-}
-
-asciidoctor.doFirst {
-	delete file('src/main/resources/static/docs')
-}
-
-tasks.register('cleanSnippets', Delete) {
-	delete snippetsDir
-}
-
-tasks.register('buildDocs') {
-	dependsOn 'cleanSnippets' // 먼저 스니펫 디렉터리를 삭제
-	dependsOn 'test'          // 그 다음에 테스트 실행
-	dependsOn 'asciidoctor'   // 마지막으로 asciidoctor 실행
-}
-
-tasks.register('copyDocument', Copy) {
-	dependsOn asciidoctor // Gradle의 asciidoctor Task 이후 수행
-	from file("${asciidoctor.outputDir}")
-	into file("src/main/resources/static/docs")
-}
-
-build {
-	dependsOn 'buildDocs'
-	dependsOn copyDocument // build 이후 html 파일 복사
-}
-
-bootJar {
-	dependsOn asciidoctor // asciidoctor 이후 bootJar 수행
-	from ("${asciidoctor.outputDir}") {
-		into 'static/docs'
 	}
 }

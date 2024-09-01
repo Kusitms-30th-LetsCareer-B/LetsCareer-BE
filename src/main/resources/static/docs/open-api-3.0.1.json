@@ -1,0 +1,87 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "렛츠커리어 B팀 위대한레츠비 API 문서",
+    "description" : "Spring REST Docs with SwaggerUI.",
+    "version" : "0.0.1"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8080"
+  } ],
+  "tags" : [ ],
+  "paths" : {
+    "/url/metadata" : {
+      "get" : {
+        "tags" : [ "URL" ],
+        "summary" : "URL 메타데이터 조회",
+        "description" : "URL 메타데이터 조회",
+        "operationId" : "url/getMetadata",
+        "parameters" : [ {
+          "name" : "url",
+          "in" : "query",
+          "description" : "조회할 대상의 URL",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UrlMetadataResponse"
+                },
+                "examples" : {
+                  "url/getMetadata" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"요청 성공\",\n  \"data\" : {\n    \"title\" : \"Test Title\",\n    \"description\" : \"Test Description\",\n    \"iconUrl\" : \"https://example.com/favicon.ico\",\n    \"url\" : \"https://example.com\"\n  }\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "UrlMetadataResponse" : {
+        "title" : "UrlMetadataResponse",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "description" : "응답 코드"
+          },
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "description" : {
+                "type" : "string",
+                "description" : "메타데이터의 설명"
+              },
+              "iconUrl" : {
+                "type" : "string",
+                "description" : "Icon  URL"
+              },
+              "title" : {
+                "type" : "string",
+                "description" : "메타데이터의 제목"
+              },
+              "url" : {
+                "type" : "string",
+                "description" : "원본 URL"
+              }
+            }
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "응답 메시지"
+          }
+        }
+      }
+    }
+  }
+}
