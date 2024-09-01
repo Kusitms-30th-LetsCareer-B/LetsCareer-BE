@@ -1,5 +1,6 @@
 package com.letscareer.calendar.domain;
 
+import com.letscareer.calendar.dto.request.PersonalScheduleRequest;
 import com.letscareer.global.domain.BaseTimeEntity;
 import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
@@ -30,4 +31,13 @@ public class Schedule extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String content;
+
+    public static Schedule of(PersonalScheduleRequest request, User user, ScheduleFilter filter) {
+        return Schedule.builder()
+                .user(user)
+                .date(request.date())
+                .filter(filter)
+                .content(request.content())
+                .build();
+    }
 }

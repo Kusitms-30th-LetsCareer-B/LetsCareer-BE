@@ -1,14 +1,12 @@
 package com.letscareer.calendar.presentation;
 
 import com.letscareer.calendar.application.ScheduleService;
+import com.letscareer.calendar.dto.request.PersonalScheduleRequest;
 import com.letscareer.calendar.dto.response.ScheduleResponse;
 import com.letscareer.global.domain.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +32,21 @@ public class ScheduleController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("캘린더 조회에 성공하였습니다.", scheduleService.getScheduleForMonth(userId, year, month)));
     }
 
+
+    /**
+     * 사용자의 개인 일정을 추가하는 API
+     *
+     * @param userId  the user id
+     * @param request the request
+     * @return the response entity
+     */
+    @PostMapping("/personal-schedule")
+    public ResponseEntity<CommonResponse<?>> addPersonalSchedule(
+            @RequestParam Long userId,
+            @RequestBody PersonalScheduleRequest request) {
+
+        scheduleService.addPersonalSchedule(userId, request);
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("개인 일정 추가에 성공하였습니다.", null));
+    }
 
 }

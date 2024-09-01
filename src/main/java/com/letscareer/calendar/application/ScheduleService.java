@@ -3,6 +3,7 @@ package com.letscareer.calendar.application;
 import com.letscareer.calendar.domain.Schedule;
 import com.letscareer.calendar.domain.ScheduleFilter;
 import com.letscareer.calendar.domain.repository.ScheduleRepository;
+import com.letscareer.calendar.dto.request.PersonalScheduleRequest;
 import com.letscareer.calendar.dto.response.ScheduleResponse;
 import com.letscareer.global.exception.CustomException;
 import com.letscareer.global.exception.ExceptionContent;
@@ -43,25 +44,19 @@ public class ScheduleService {
                 .toList();
     }
 
+
     /**
      * 개인 일정을 추가하는 메소드
      *
-     * @param userId  the user id
-     * @param date    the date of the schedule
-     * @param content the content of the schedule
+     * @param request the request
      * @return the added schedule response
      */
     @Transactional
-    public ScheduleResponse addPersonalSchedule(Long userId, LocalDate date, String content) {
+    public ScheduleResponse addPersonalSchedule(Long userId, PersonalScheduleRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
 
-        Schedule schedule = Schedule.builder()
-                .user(user)
-                .date(date)
-                .filter(ScheduleFilter.PERSONAL)  // 필터는 PERSONAL로 고정
-                .content(content)
-                .build();
+        Schedule schedule = Schedule.of(request, user, ScheduleFilter.PERSONAL);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return new ScheduleResponse(savedSchedule);
