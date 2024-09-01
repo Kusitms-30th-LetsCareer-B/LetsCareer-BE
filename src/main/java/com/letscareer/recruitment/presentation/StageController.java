@@ -25,7 +25,7 @@ public class StageController {
     }
 
     @PatchMapping("/stages")
-    public ResponseEntity<ResponseDto<Void>> patchStage(@RequestParam(name= "stageId") Long stageId, @RequestBody ModifyStageReq request){
+    public ResponseEntity<ResponseDto<Void>> modifyStage(@RequestParam(name= "stageId") Long stageId, @RequestBody ModifyStageReq request){
         stageService.modifyStage(stageId, request);
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 수정하였습니다.", null));
     }
