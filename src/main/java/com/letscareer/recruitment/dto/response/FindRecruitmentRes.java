@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class GetRecruitmentRes {
+public class FindRecruitmentRes {
     private Long recruitmentId;
     private String companyName;
     private Boolean isFavorite;
@@ -22,8 +22,8 @@ public class GetRecruitmentRes {
     private String announcementUrl;
     private List<StageRes> stages;
 
-    public static GetRecruitmentRes of (Recruitment recruitment, List<StageRes> stages) {
-        return GetRecruitmentRes.builder()
+    public static FindRecruitmentRes of (Recruitment recruitment, List<StageRes> stages) {
+        return FindRecruitmentRes.builder()
                 .recruitmentId(recruitment.getId())
                 .companyName(recruitment.getCompanyName())
                 .isFavorite(recruitment.getIsFavorite())

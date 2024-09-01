@@ -8,7 +8,7 @@ import com.letscareer.recruitment.domain.StageStatusType;
 import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
 import com.letscareer.recruitment.domain.repository.StageRepository;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
-import com.letscareer.recruitment.dto.response.GetRecruitmentRes;
+import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
 import com.letscareer.user.domain.User;
 import com.letscareer.user.domain.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -47,13 +47,13 @@ public class RecruitmentService {
     }
 
     @Transactional(readOnly = true)
-    public GetRecruitmentRes findRecruitment(Long recruitmentId) {
+    public FindRecruitmentRes findRecruitment(Long recruitmentId) {
         try{
             Recruitment recruitment = recruitmentRepository.findRecruitmentWithStagesByAsc(recruitmentId);
-            List<GetRecruitmentRes.StageRes> stageResponses = recruitment.getStages().stream()
-                    .map(GetRecruitmentRes.StageRes::from)
+            List<FindRecruitmentRes.StageRes> stageResponses = recruitment.getStages().stream()
+                    .map(FindRecruitmentRes.StageRes::from)
                     .toList();
-            return GetRecruitmentRes.of(recruitment, stageResponses);
+            return FindRecruitmentRes.of(recruitment, stageResponses);
         }
         catch(Exception e){
             throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);

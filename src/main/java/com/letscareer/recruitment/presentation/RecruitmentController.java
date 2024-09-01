@@ -3,7 +3,7 @@ package com.letscareer.recruitment.presentation;
 import com.letscareer.global.domain.ResponseDto;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
-import com.letscareer.recruitment.dto.response.GetRecruitmentRes;
+import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class RecruitmentController {
      * @return GetRecruitmentRes
      */
     @GetMapping("/recruitments")
-    public ResponseEntity<ResponseDto<GetRecruitmentRes>> findRecruitment(@RequestParam(name = "recruitmentId") Long recruitmentId){
+    public ResponseEntity<ResponseDto<FindRecruitmentRes>> findRecruitment(@RequestParam(name = "recruitmentId") Long recruitmentId){
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 일정을 조회하였습니다.", recruitmentService.findRecruitment(recruitmentId)));
     }
 
