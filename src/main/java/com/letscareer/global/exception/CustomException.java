@@ -7,4 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomException extends RuntimeException {
     private final ExceptionContent content;
+
+    @Override
+    public String getMessage() {
+        return content.getMessage();
+    }
 }
