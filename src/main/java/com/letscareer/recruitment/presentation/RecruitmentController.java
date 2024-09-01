@@ -31,9 +31,10 @@ public class RecruitmentController {
      * @return GetRecruitmentRes
      */
     @GetMapping("/recruitments")
-    public ResponseEntity<ResponseDto<GetRecruitmentRes>> getRecruitment(@RequestParam(name = "recruitmentId") Long recruitmentId){
-        return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 일정을 조회하였습니다.", recruitmentService.getRecruitment(recruitmentId)));
+    public ResponseEntity<ResponseDto<GetRecruitmentRes>> findRecruitment(@RequestParam(name = "recruitmentId") Long recruitmentId){
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 일정을 조회하였습니다.", recruitmentService.findRecruitment(recruitmentId)));
     }
+
 
 
 }

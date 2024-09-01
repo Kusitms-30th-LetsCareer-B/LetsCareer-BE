@@ -47,7 +47,7 @@ public class RecruitmentService {
     }
 
     @Transactional(readOnly = true)
-    public GetRecruitmentRes getRecruitment(Long recruitmentId) {
+    public GetRecruitmentRes findRecruitment(Long recruitmentId) {
         try{
             Recruitment recruitment = recruitmentRepository.findRecruitmentWithStagesByAsc(recruitmentId);
             List<GetRecruitmentRes.StageRes> stageResponses = recruitment.getStages().stream()
