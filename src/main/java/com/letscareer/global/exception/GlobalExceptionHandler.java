@@ -1,6 +1,6 @@
 package com.letscareer.global.exception;
 
-import com.letscareer.global.handler.ErrorResponse;
+import com.letscareer.global.domain.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.HttpStatusException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,56 +17,54 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 공통적으로 사용하는 ErrorResponse 빌더 메서드
-    private ResponseEntity<ErrorResponse> generateErrorResponse(HttpStatus status, String message) {
-        ErrorResponse errorResponse = ErrorResponse.of(status, message, null);
+    // 공통적으로 사용하는 CommonResponse 빌더 메서드
+    private ResponseEntity<CommonResponse<?>> generateErrorResponse(HttpStatus status, String message) {
+        CommonResponse<?> errorResponse = CommonResponse.of(status.value(), message, null);
         return new ResponseEntity<>(errorResponse, status);
     }
 
-    //커스텀 Exception
+    // 커스텀 Exception
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> handleCustomException(CustomException exception) {
+    public ResponseEntity<CommonResponse<?>> handleCustomException(CustomException exception) {
         log.error("Exception occurred: {}\n", exception.getMessage());
         return generateErrorResponse(exception.getContent().getHttpStatus(), exception.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {
+    public ResponseEntity<CommonResponse<?>> handleAllExceptions(Exception e) {
         log.error("Unhandled exception occurred: {}\n", e.getMessage(), e);
         return generateErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     @ExceptionHandler(HttpStatusException.class)
-    public ResponseEntity<ErrorResponse> handleHttpStatusException(HttpStatusException e) {
+    public ResponseEntity<CommonResponse<?>> handleHttpStatusException(HttpStatusException e) {
         return generateErrorResponse(HttpStatus.valueOf(e.getStatusCode()), e.getMessage());
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException e) {
+    public ResponseEntity<CommonResponse<?>> handleNoSuchElementException(NoSuchElementException e) {
         log.error("No such element found: {}\n", e.getMessage(), e);
         return generateErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<ErrorResponse> handleEmptyResultDataAccessException(EmptyResultDataAccessException e) {
+    public ResponseEntity<CommonResponse<?>> handleEmptyResultDataAccessException(EmptyResultDataAccessException e) {
         log.error("Empty result for data access operation: {}\n", e.getMessage(), e);
         return generateErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleJsonException(HttpMessageNotReadableException e) {
+    public ResponseEntity<CommonResponse<?>> handleJsonException(HttpMessageNotReadableException e) {
         log.error("Json Exception ErrMessage={}\n", e.getMessage());
-        return generateErrorResponse(HttpStatus.BAD_REQUEST,"json 형식이 올바르지 않습니다.");
+        return generateErrorResponse(HttpStatus.BAD_REQUEST, "json 형식이 올바르지 않습니다.");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleRequestMethodException(HttpRequestMethodNotSupportedException e) {
+    public ResponseEntity<CommonResponse<?>> handleRequestMethodException(HttpRequestMethodNotSupportedException e) {
         log.error("Http Method not supported Exception ErrMessage={}\n", e.getMessage());
-        return generateErrorResponse(HttpStatus.BAD_REQUEST,"해당 요청에 대한 API가 존재하지 않습니다. 엔드 포인트를 확인해주시길 바랍니다.");
+        return generateErrorResponse(HttpStatus.BAD_REQUEST, "해당 요청에 대한 API가 존재하지 않습니다. 엔드 포인트를 확인해주시길 바랍니다.");
     }
 
     // 다른 특정 예외 핸들러 추가 가능
-
-
 
 }
