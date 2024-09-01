@@ -15,7 +15,7 @@ public class RecruitmentController {
     private final RecruitmentService recruitmentService;
 
     /**
-     * 채용일정 등록 api
+     * 채용일정 등록
      * @param userId 유저id
      * @return null
      */
@@ -26,7 +26,7 @@ public class RecruitmentController {
     }
 
     /**
-     * 채용일정 단일 조회 api
+     * 채용일정 단일 조회
      * @param recruitmentId 채용일정id
      * @return GetRecruitmentRes
      */
@@ -36,7 +36,7 @@ public class RecruitmentController {
     }
 
     /**
-     *
+     * 채용 일정 삭제
      * @param recruitmentId 채용일정id
      * @return null
      *
@@ -46,5 +46,7 @@ public class RecruitmentController {
         recruitmentService.deleteRecruitment(recruitmentId);
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 일정을 삭제하였습니다.", null));
     }
+
+
 
 }
