@@ -2,6 +2,7 @@ package com.letscareer.recruitment.presentation;
 
 import com.letscareer.global.domain.ResponseDto;
 import com.letscareer.recruitment.application.StageService;
+import com.letscareer.recruitment.dto.request.CreateStageReq;
 import com.letscareer.recruitment.dto.request.ModifyStageReq;
 import com.letscareer.recruitment.dto.response.FindStageRes;
 import lombok.RequiredArgsConstructor;
@@ -15,21 +16,44 @@ public class StageController {
     private final StageService stageService;
 
     /**
+     * 채용 전형 추가
+     * @param recruitmentId 채용일정id
+     * @param request
+     * @return null
+     */
+    @PostMapping("/stages")
+    public ResponseEntity<ResponseDto<Void>> createStage(@RequestParam(name= "recruitmentId") Long recruitmentId, @RequestBody CreateStageReq request){
+        stageService.createStage(recruitmentId, request);
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용전형을 추가하였습니다.", null));
+    }
+
+    /**
      * 특정 채용 전형 단일 조회
      * @param stageId 채용전형id
      * @return FindStageRes
      */
     @GetMapping("/stages")
     public ResponseEntity<ResponseDto<FindStageRes>> findStage(@RequestParam(name= "stageId") Long stageId){
-        return ResponseEntity.ok().body(ResponseDto.ofSuccess("해당 채용전형을 조회하였습니다.",stageService.findStage(stageId)));
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("해당 채용전형을 조회하였습니다.", stageService.findStage(stageId)));
     }
 
+    /**
+     * 채용 전형 수정
+     * @param stageId
+     * @param request
+     * @return null
+     */
     @PatchMapping("/stages")
     public ResponseEntity<ResponseDto<Void>> modifyStage(@RequestParam(name= "stageId") Long stageId, @RequestBody ModifyStageReq request){
         stageService.modifyStage(stageId, request);
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 수정하였습니다.", null));
     }
 
+    /**
+     * 채용 전형 삭제
+     * @param stageId
+     * @return null
+     */
     @DeleteMapping("/stages")
     public ResponseEntity<ResponseDto<Void>> deleteStage(@RequestParam(name= "stageId") Long stageId){
         stageService.deleteStage(stageId);

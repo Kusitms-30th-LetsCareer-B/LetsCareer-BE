@@ -2,8 +2,12 @@ package com.letscareer.recruitment.application;
 
 import com.letscareer.global.exception.CustomException;
 import com.letscareer.global.exception.ExceptionContent;
+import com.letscareer.recruitment.domain.Recruitment;
 import com.letscareer.recruitment.domain.Stage;
+import com.letscareer.recruitment.domain.StageStatusType;
+import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
 import com.letscareer.recruitment.domain.repository.StageRepository;
+import com.letscareer.recruitment.dto.request.CreateStageReq;
 import com.letscareer.recruitment.dto.request.ModifyStageReq;
 import com.letscareer.recruitment.dto.response.FindStageRes;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class StageService {
 
     private final StageRepository stageRepository;
+    private final RecruitmentRepository recruitmentRepository;
+
+    @Transactional
+    public void createStage(Long recruitmentId, CreateStageReq request) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
+                .orElseThrow(()-> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
+        stageRepository.save(Stage.of(recruitment, request.getStageName(), null, request.getEndDate(), StageStatusType.PENDING, request.getIsFinal()));
+    }
 
     @Transactional(readOnly = true)
     public FindStageRes findStage(Long stageId) {
@@ -36,4 +48,5 @@ public class StageService {
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_STAGE));
         stageRepository.delete(stage);
     }
+
 }

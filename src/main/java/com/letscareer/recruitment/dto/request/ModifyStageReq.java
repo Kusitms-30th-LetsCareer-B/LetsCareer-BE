@@ -15,6 +15,6 @@ public class ModifyStageReq {
     @NotNull(message = "마감일을 함께 전달해주세요.")
     private LocalDate endDate;
     @NotNull(message = "채용 전형을 함께 전달해주세요.")
-    private StageStatusType status;
+    private String status;
 
 }
