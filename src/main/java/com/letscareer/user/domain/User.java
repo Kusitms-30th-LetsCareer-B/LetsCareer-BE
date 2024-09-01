@@ -1,8 +1,13 @@
 package com.letscareer.user.domain;
 
 import com.letscareer.global.domain.BaseTimeEntity;
+import com.letscareer.recruitment.domain.Recruitment;
+import com.letscareer.recruitment.domain.Stage;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,6 +20,10 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+
+    // Recruitment 엔티티와의 일대다 관계 설정
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Recruitment> recruitments = new ArrayList<>();
 
     private String name;
 

@@ -25,7 +25,7 @@ public class Recruitment extends BaseTimeEntity {
     private User user;
 
     // Stage 엔티티와의 일대다 관계 설정
-    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE)
     private List<Stage> stages = new ArrayList<>();
 
     @Column(nullable = false)

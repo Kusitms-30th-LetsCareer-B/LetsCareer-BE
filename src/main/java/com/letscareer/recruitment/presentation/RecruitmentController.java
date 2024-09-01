@@ -4,6 +4,7 @@ import com.letscareer.global.domain.ResponseDto;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
 import com.letscareer.recruitment.dto.response.GetRecruitmentRes;
+import com.letscareer.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class RecruitmentController {
 
     private final RecruitmentService recruitmentService;
+    private final UserRepository userRepository;
 
     /**
      * 채용일정 등록 api
