@@ -8,12 +8,15 @@ import com.letscareer.recruitment.domain.StageStatusType;
 import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
 import com.letscareer.recruitment.domain.repository.StageRepository;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
+import com.letscareer.recruitment.dto.response.GetRecruitmentRes;
 import com.letscareer.user.domain.User;
 import com.letscareer.user.domain.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +41,35 @@ public class RecruitmentService {
     @Transactional
     public void enrollRecruitment(Long userId, EnrollRecruitmentReq request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new CustomException(ExceptionContent.NOT_FOUND_USER));
+                .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
         Recruitment recruitment = recruitmentRepository.save(Recruitment.of(user, request.getCompanyName(), request.getIsFavorite(), request.getTask(), request.getIsRemind(), request.getAnnouncementUrl()));
-        stageRepository.save(Stage.of(recruitment,"서류", request.getStageStartDate(), request.getStageEndDate(), StageStatusType.PENDING,false));
+        stageRepository.save(Stage.of(recruitment,"서류", request.getStageStartDate(), request.getStageEndDate(), StageStatusType.PROGRESS,false));
+    }
+
+    @Transactional(readOnly = true)
+    public GetRecruitmentRes getRecruitment(Long recruitmentId) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
+                .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
+
+
+        List<Stage> stages = stageRepository.findAllByRecruitment(recruitment);
+        List<GetRecruitmentRes.Stage> stageResponses = stages.stream()
+                .map(stage -> new GetRecruitmentRes.Stage(
+                        stage.getStageName(),
+                        stage.getStartDate(),
+                        stage.getEndDate(),
+                        stage.getStatus(),
+                        stage.getIsFinal()
+                ))
+                .toList();
+
+        return new GetRecruitmentRes(
+                recruitment.getCompanyName(),
+                recruitment.getIsFavorite(),
+                recruitment.getTask(),
+                recruitment.getAnnouncementUrl(),
+                stageResponses
+        );
+
     }
 }
