@@ -32,6 +32,8 @@ public class StageService {
 
     @Transactional
     public void deleteStage(Long stageId) {
-        stageRepository.deleteById(stageId);
+        Stage stage = stageRepository.findById(stageId)
+                .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_STAGE));
+        stageRepository.delete(stage);
     }
 }
