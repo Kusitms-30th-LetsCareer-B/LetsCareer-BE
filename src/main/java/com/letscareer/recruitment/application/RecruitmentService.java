@@ -60,4 +60,11 @@ public class RecruitmentService {
         }
 
     }
+
+    @Transactional
+    public void deleteRecruitment(Long recruitmentId) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
+                .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
+        recruitmentRepository.delete(recruitment);
+    }
 }

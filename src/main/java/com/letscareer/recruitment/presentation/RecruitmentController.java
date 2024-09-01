@@ -35,6 +35,17 @@ public class RecruitmentController {
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 일정을 조회하였습니다.", recruitmentService.findRecruitment(recruitmentId)));
     }
 
+    /**
+     *
+     * @param recruitmentId 채용일정id
+     * @return null
+     *
+     */
+    @DeleteMapping("/recruitments")
+    public ResponseEntity<ResponseDto<Void>> deleteRecruitment(@RequestParam(name = "recruitmentId") Long recruitmentId){
+        recruitmentService.deleteRecruitment(recruitmentId);
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 일정을 삭제하였습니다.", null));
+    }
 
 
 }
