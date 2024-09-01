@@ -48,12 +48,16 @@ public class RecruitmentService {
 
     @Transactional(readOnly = true)
     public GetRecruitmentRes getRecruitment(Long recruitmentId) {
-        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
-                .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
-        List<GetRecruitmentRes.StageRes> stageResponses = stageRepository.findAllByRecruitmentOrderByEndDateAsc(recruitment)
-                .stream()
-                .map(GetRecruitmentRes.StageRes::from)
-                .toList();
-        return GetRecruitmentRes.of(recruitment, stageResponses);
+        try{
+            Recruitment recruitment = recruitmentRepository.findRecruitmentWithStagesByAsc(recruitmentId);
+            List<GetRecruitmentRes.StageRes> stageResponses = recruitment.getStages().stream()
+                    .map(GetRecruitmentRes.StageRes::from)
+                    .toList();
+            return GetRecruitmentRes.of(recruitment, stageResponses);
+        }
+        catch(Exception e){
+            throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);
+        }
+
     }
 }

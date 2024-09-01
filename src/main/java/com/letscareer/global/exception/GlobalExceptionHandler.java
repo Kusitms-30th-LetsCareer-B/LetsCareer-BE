@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     }
 
     //커스텀 Exception
-    @ExceptionHandler
+    @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException exception) {
         log.error("Exception occurred: {}\n", exception.getMessage());
         return generateErrorResponse(exception.getContent().getHttpStatus(), exception.getMessage());

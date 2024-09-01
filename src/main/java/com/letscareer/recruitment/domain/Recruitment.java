@@ -5,6 +5,9 @@ import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +23,10 @@ public class Recruitment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    // Stage 엔티티와의 일대다 관계 설정
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.ALL)
+    private List<Stage> stages = new ArrayList<>();
 
     @Column(nullable = false)
     private String companyName;

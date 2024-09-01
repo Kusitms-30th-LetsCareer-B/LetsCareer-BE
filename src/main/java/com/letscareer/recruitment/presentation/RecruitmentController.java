@@ -27,7 +27,7 @@ public class RecruitmentController {
 
     /**
      * 채용일정 단일 조회 api
-     * @param recruitmentId
+     * @param recruitmentId 채용일정id
      * @return GetRecruitmentRes
      */
     @GetMapping("/recruitments")
