@@ -83,7 +83,7 @@ sourceSets {
 	}
 }
 
-def serverUrl = "http://localhost:8080" // 기본값
+def serverUrl = "http://localhost:8080"
 
 if (project.hasProperty("spring.profiles.active")) {
 	def activeProfile = project.property("spring.profiles.active")
