@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/calendar")
+@RequestMapping("/calendar/personal-schedule")
 public class PersonalScheduleController {
     private final PersonalScheduleService personalScheduleService;
 
@@ -24,7 +24,7 @@ public class PersonalScheduleController {
      * @param request the request
      * @return the response entity
      */
-    @PostMapping("/personal-schedule")
+    @PostMapping("")
     public ResponseEntity<CommonResponse<?>> addPersonalSchedule(
             @RequestParam Long userId,
             @RequestBody PersonalScheduleRequest request) {

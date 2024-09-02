@@ -61,6 +61,54 @@
       }
     },
     "/calendar/personal-schedule" : {
+      "get" : {
+        "tags" : [ "Calendar" ],
+        "summary" : "월별 개인 일정 조회",
+        "description" : "월별 개인 일정 조회",
+        "operationId" : "calendar/getPersonalScheduleForMonth",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "조회할 사용자의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "year",
+          "in" : "query",
+          "description" : "조회할 년도",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "month",
+          "in" : "query",
+          "description" : "조회할 월",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PersonalScheduleResponse"
+                },
+                "examples" : {
+                  "calendar/getPersonalScheduleForMonth" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \" 개인 일정 조회에 성공하였습니다.\",\n  \"data\" : [ {\n    \"personalScheduleId\" : 1,\n    \"date\" : \"2024-09-01\",\n    \"content\" : \"Meeting\"\n  } ]\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post" : {
         "tags" : [ "Calendar" ],
         "summary" : "사용자의 개인 일정 추가",
@@ -209,6 +257,40 @@
               "url" : {
                 "type" : "string",
                 "description" : "원본 URL"
+              }
+            }
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "응답 메시지"
+          }
+        }
+      },
+      "PersonalScheduleResponse" : {
+        "title" : "PersonalScheduleResponse",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "description" : "응답 코드"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "date" : {
+                  "type" : "string",
+                  "description" : "개인 일정 날짜"
+                },
+                "content" : {
+                  "type" : "string",
+                  "description" : "개인 일정 내용"
+                },
+                "personalScheduleId" : {
+                  "type" : "number",
+                  "description" : "개인 일정 ID"
+                }
               }
             }
           },
