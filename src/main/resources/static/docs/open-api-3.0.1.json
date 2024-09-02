@@ -11,6 +11,52 @@
   "tags" : [ ],
   "paths" : {
     "/archiving" : {
+      "get" : {
+        "tags" : [ "아카이빙" ],
+        "summary" : "특정 아카이빙의 상세 정보 조회 및 파일 다운로드",
+        "description" : "특정 아카이빙의 상세 정보 조회 및 파일 다운로드",
+        "operationId" : "archiving/getArchivingDetailAndFile",
+        "parameters" : [ {
+          "name" : "archivingId",
+          "in" : "query",
+          "description" : "아카이빙 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "headers" : {
+              "Content-Disposition" : {
+                "description" : "파일 첨부 헤더",
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Content-Type" : {
+                "description" : "파일의 MIME 타입",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/octet-stream;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/file"
+                },
+                "examples" : {
+                  "archiving/getArchivingDetailAndFile" : {
+                    "value" : "Test content"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post" : {
         "tags" : [ "아카이빙" ],
         "summary" : "아카이빙 추가",
@@ -100,6 +146,40 @@
                 "examples" : {
                   "archiving/updateArchiving" : {
                     "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 수정에 성공하였습니다.\",\n  \"data\" : null\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/archiving/recruitment" : {
+      "get" : {
+        "tags" : [ "아카이빙" ],
+        "summary" : "특정 채용 일정에 해당하는 아카이빙 목록 조회",
+        "description" : "특정 채용 일정에 해당하는 아카이빙 목록 조회",
+        "operationId" : "archiving/getArchivingsByRecruitmentId",
+        "parameters" : [ {
+          "name" : "recruitmentId",
+          "in" : "query",
+          "description" : "채용 일정 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "archiving/getArchivingsByRecruitmentId" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 목록 조회에 성공하였습니다.\",\n  \"data\" : [ {\n    \"id\" : 1,\n    \"title\" : \"First Archiving\"\n  }, {\n    \"id\" : 2,\n    \"title\" : \"Second Archiving\"\n  } ]\n}"
                   }
                 }
               }
@@ -474,6 +554,24 @@
   },
   "components" : {
     "schemas" : {
+      "file" : {
+        "title" : "file",
+        "type" : "object"
+      },
+      "CommonResponse" : {
+        "title" : "CommonResponse",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "description" : "응답 코드"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "응답 메시지"
+          }
+        }
+      },
       "ScheduleResponse" : {
         "title" : "ScheduleResponse",
         "type" : "object",
@@ -547,13 +645,38 @@
           }
         }
       },
-      "CommonResponse" : {
-        "title" : "CommonResponse",
+      "GetRecruitmentRes" : {
+        "title" : "GetRecruitmentRes",
         "type" : "object",
         "properties" : {
           "code" : {
             "type" : "number",
             "description" : "응답 코드"
+          },
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "announcementUrl" : {
+                "type" : "string",
+                "description" : "공고 URL"
+              },
+              "task" : {
+                "type" : "string",
+                "description" : "직무"
+              },
+              "companyName" : {
+                "type" : "string",
+                "description" : "회사 이름"
+              },
+              "recruitmentId" : {
+                "type" : "number",
+                "description" : "채용 일정 ID"
+              },
+              "isFavorite" : {
+                "type" : "boolean",
+                "description" : "즐겨찾기 여부"
+              }
+            }
           },
           "message" : {
             "type" : "string",
@@ -586,45 +709,6 @@
                   "type" : "number",
                   "description" : "개인 일정 ID"
                 }
-              }
-            }
-          },
-          "message" : {
-            "type" : "string",
-            "description" : "응답 메시지"
-          }
-        }
-      },
-      "GetRecruitmentRes" : {
-        "title" : "GetRecruitmentRes",
-        "type" : "object",
-        "properties" : {
-          "code" : {
-            "type" : "number",
-            "description" : "응답 코드"
-          },
-          "data" : {
-            "type" : "object",
-            "properties" : {
-              "announcementUrl" : {
-                "type" : "string",
-                "description" : "공고 URL"
-              },
-              "task" : {
-                "type" : "string",
-                "description" : "직무"
-              },
-              "companyName" : {
-                "type" : "string",
-                "description" : "회사 이름"
-              },
-              "recruitmentId" : {
-                "type" : "number",
-                "description" : "채용 일정 ID"
-              },
-              "isFavorite" : {
-                "type" : "boolean",
-                "description" : "즐겨찾기 여부"
               }
             }
           },

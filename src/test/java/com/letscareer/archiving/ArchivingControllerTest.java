@@ -4,6 +4,8 @@ import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.letscareer.archiving.application.ArchivingService;
+import com.letscareer.archiving.dto.response.ArchivingDetailResponse;
+import com.letscareer.archiving.dto.response.ArchivingResponse;
 import com.letscareer.archiving.presentation.ArchivingController;
 import com.letscareer.configuration.ControllerTestConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +18,12 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -73,6 +78,79 @@ public class ArchivingControllerTest extends ControllerTestConfig {
                                                 fieldWithPath("data").description("생성된 아카이빙 ID")
                                         )
                                         .responseSchema(Schema.schema("CommonResponse"))
+                                        .build()
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("아카이빙 목록 조회")
+    public void testGetArchivingsByRecruitmentId() throws Exception {
+        // given
+        Mockito.when(archivingService.getArchivingsByRecruitmentId(anyLong()))
+                .thenReturn(List.of(new ArchivingResponse(1L, "First Archiving"),
+                        new ArchivingResponse(2L, "Second Archiving")));
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/archiving/recruitment")
+                .queryParam("recruitmentId", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(MockMvcRestDocumentationWrapper.document("archiving/getArchivingsByRecruitmentId",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("아카이빙")
+                                        .description("특정 채용 일정에 해당하는 아카이빙 목록 조회")
+                                        .queryParameters(
+                                                parameterWithName("recruitmentId").description("채용 일정 ID")
+                                        )
+                                        .responseFields(
+                                                fieldWithPath("code").description("응답 코드"),
+                                                fieldWithPath("message").description("응답 메시지"),
+                                                fieldWithPath("data.[].id").description("아카이빙 ID"),
+                                                fieldWithPath("data.[].title").description("아카이빙 제목")
+                                        )
+                                        .responseSchema(Schema.schema("CommonResponse"))
+                                        .build()
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("아카이빙 상세 조회 및 파일 다운로드")
+    public void testGetArchivingDetailAndFile() throws Exception {
+        // given
+        Mockito.when(archivingService.getArchivingDetail(anyLong()))
+                .thenReturn(new ArchivingDetailResponse("Archiving Title", "Archiving Content", "test.txt", "Test content".getBytes()));
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/archiving")
+                .queryParam("archivingId", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_OCTET_STREAM));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(MockMvcRestDocumentationWrapper.document("archiving/getArchivingDetailAndFile",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("아카이빙")
+                                        .description("특정 아카이빙의 상세 정보 조회 및 파일 다운로드")
+                                        .queryParameters(
+                                                parameterWithName("archivingId").description("아카이빙 ID")
+                                        )
+                                        .responseHeaders(
+                                                headerWithName("Content-Disposition").description("파일 첨부 헤더"),
+                                                headerWithName("Content-Type").description("파일의 MIME 타입")
+                                        )
+                                        .responseSchema(Schema.schema("file"))
                                         .build()
                         )
                 ));

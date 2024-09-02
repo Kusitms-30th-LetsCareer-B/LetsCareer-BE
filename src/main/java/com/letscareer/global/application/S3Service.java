@@ -2,6 +2,8 @@ package com.letscareer.global.application;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.letscareer.global.exception.CustomException;
+import com.letscareer.global.exception.ExceptionContent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,5 +69,23 @@ public class S3Service {
             fos.write(file.getBytes());
         }
         return Optional.of(convertFile);
+    }
+
+    public byte[] downloadFile(String fileUrl) throws IOException {
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+        String key = DIR_NAME + "/" + fileName;
+
+        try {
+            S3Object s3Object = amazonS3.getObject(new GetObjectRequest(bucket, key));
+            S3ObjectInputStream inputStream = s3Object.getObjectContent();
+            return inputStream.readAllBytes();
+        } catch (AmazonS3Exception e) {
+            if (e.getStatusCode() == 404) {
+                log.error("S3 파일을 찾을 수 없습니다. Key: {}", key);
+                throw new CustomException(ExceptionContent.NOT_FOUND_FILE);
+            } else {
+                throw e;
+            }
+        }
     }
 }
