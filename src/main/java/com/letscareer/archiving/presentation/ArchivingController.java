@@ -21,7 +21,7 @@ public class ArchivingController {
             @RequestParam Long recruitmentId,
             @RequestParam String title,
             @RequestParam String content,
-            @RequestParam MultipartFile file) throws IOException {
+            @RequestParam(required = false) MultipartFile file) throws IOException {
 
         Long archivingId = archivingService.addArchiving(recruitmentId, title, content, file);
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("아카이빙 추가에 성공하였습니다.", archivingId));
@@ -29,20 +29,20 @@ public class ArchivingController {
 
     @PutMapping("")
     public ResponseEntity<CommonResponse<?>> updateArchiving(
-            @RequestParam Long recruitmentId,
+            @RequestParam Long archivingId,
             @RequestParam String title,
             @RequestParam String content,
             @RequestParam(required = false) MultipartFile file) throws IOException {
 
-        archivingService.updateArchiving(recruitmentId, title, content, file);
+        archivingService.updateArchiving(archivingId, title, content, file);
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("아카이빙 수정에 성공하였습니다.", null));
     }
 
     @DeleteMapping("")
     public ResponseEntity<CommonResponse<?>> deleteArchiving(
-            @RequestParam Long recruitmentId) {
+            @RequestParam Long archivingId) {
 
-        archivingService.deleteArchiving(recruitmentId);
+        archivingService.deleteArchiving(archivingId);
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("아카이빙 삭제에 성공하였습니다.", null));
     }
 }

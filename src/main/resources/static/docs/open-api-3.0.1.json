@@ -10,6 +10,136 @@
   } ],
   "tags" : [ ],
   "paths" : {
+    "/archiving" : {
+      "put" : {
+        "tags" : [ "아카이빙" ],
+        "summary" : "아카이빙 수정",
+        "description" : "아카이빙 수정",
+        "operationId" : "archiving/updateArchiving",
+        "parameters" : [ {
+          "name" : "archivingId",
+          "in" : "query",
+          "description" : "수정할 아카이빙 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "title",
+          "in" : "query",
+          "description" : "수정할 아카이빙 제목",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "content",
+          "in" : "query",
+          "description" : "수정할 아카이빙 내용",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "archiving/updateArchiving" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 수정에 성공하였습니다.\",\n  \"data\" : null\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "아카이빙" ],
+        "summary" : "아카이빙 추가",
+        "description" : "아카이빙 추가",
+        "operationId" : "archiving/addArchiving",
+        "parameters" : [ {
+          "name" : "recruitmentId",
+          "in" : "query",
+          "description" : "채용 일정 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "title",
+          "in" : "query",
+          "description" : "아카이빙 제목",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "content",
+          "in" : "query",
+          "description" : "아카이빙 내용",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "archiving/addArchiving" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 추가에 성공하였습니다.\",\n  \"data\" : 1\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "아카이빙" ],
+        "summary" : "아카이빙 삭제",
+        "description" : "아카이빙 삭제",
+        "operationId" : "archiving/deleteArchiving",
+        "parameters" : [ {
+          "name" : "archivingId",
+          "in" : "query",
+          "description" : "삭제할 아카이빙 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "archiving/deleteArchiving" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 삭제에 성공하였습니다.\",\n  \"data\" : null\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/calendar/personal" : {
       "get" : {
         "tags" : [ "Calendar" ],
@@ -337,6 +467,20 @@
           }
         }
       },
+      "CommonResponse" : {
+        "title" : "CommonResponse",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "description" : "응답 코드"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "응답 메시지"
+          }
+        }
+      },
       "PersonalScheduleResponse" : {
         "title" : "PersonalScheduleResponse",
         "type" : "object",
@@ -364,20 +508,6 @@
                 }
               }
             }
-          },
-          "message" : {
-            "type" : "string",
-            "description" : "응답 메시지"
-          }
-        }
-      },
-      "CommonResponse" : {
-        "title" : "CommonResponse",
-        "type" : "object",
-        "properties" : {
-          "code" : {
-            "type" : "number",
-            "description" : "응답 코드"
           },
           "message" : {
             "type" : "string",
