@@ -33,7 +33,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -Pspring.profiles.active=prod
 
       - name: Docker build & push to prod
         if: contains(github.ref, 'develop')

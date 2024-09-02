@@ -28,18 +28,6 @@ public class RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
     private final StageRepository stageRepository;
 
-    @PostConstruct
-    public void init() {
-        userRepository.save(User.builder()
-                .name("하이")
-                .email("jh981109@naver.com")
-                .build());
-        userRepository.save(User.builder()
-                .name("하이2")
-                .email("wnsgud@naver.com")
-                .build());
-    }
-
     @Transactional
     public void enrollRecruitment(Long userId, EnrollRecruitmentReq request) {
         User user = userRepository.findById(userId)
