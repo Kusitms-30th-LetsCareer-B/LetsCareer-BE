@@ -69,5 +69,10 @@ public class RecruitmentController {
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", recruitmentService.findAllRecruitments(userId)));
     }
 
+//    @GetMapping("/recruitments/{type}")
+//    public ResponseEntity<ResponseDto<Void>> findRecruitmentsByType(@PathVariable(name = "type") String type, @RequestParam(name = "userId") Long userId){
+//        recruitmentService.findRecruitmentsByType(type, userId);
+//        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", null));
+//    }
 
 }

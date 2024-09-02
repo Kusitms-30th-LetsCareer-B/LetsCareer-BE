@@ -12,6 +12,7 @@ import com.letscareer.recruitment.dto.response.DetermineRecruitmentStatusRes;
 import com.letscareer.recruitment.dto.response.FindAllRecruitmentsRes;
 import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
 import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
+import com.letscareer.recruitment.presentation.RecruitmentController;
 import com.letscareer.user.domain.User;
 import com.letscareer.user.domain.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -29,6 +30,7 @@ public class RecruitmentService {
     private final UserRepository userRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final StageRepository stageRepository;
+    private final RecruitmentController recruitmentController;
 
     @PostConstruct
     public void init() {
@@ -83,7 +85,12 @@ public class RecruitmentService {
             DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
             switch (recruitmentStatus.getStatus()){
                 case PROGRESS -> ++progress;
-                case PASSED -> ++passed;
+                case PASSED -> {
+                 switch (recruitmentStatus.getStageName()){
+                     case "최종" -> ++passed;
+                     default -> ++progress;
+                 }
+                }
                 case FAILED -> ++failed;
             }
         }
@@ -123,4 +130,11 @@ public class RecruitmentService {
 
         return FindAllRecruitmentsRes.of(recruitmentInfos);
     }
+
+//    @Transactional(readOnly = true)
+//    public void findRecruitmentsByType(String type, Long userId) {
+//        List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
+//        List<FindAllRecruitmentsRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
+//                .map(recruitment -> {
+//    }
 }
