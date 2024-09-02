@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface RecruitmentRepository extends JpaRepository<Recruitment,Long>, RecruitmentRepositoryCustom {
     List<Recruitment> findAllByUserId(Long userId);
+
+    List<Recruitment> findAllByUserIdOrderByIdDesc(Long userId);
 }

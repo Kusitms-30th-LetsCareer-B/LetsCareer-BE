@@ -92,14 +92,17 @@ public class RecruitmentService {
 
     private DetermineRecruitmentStatusRes determineRecruitmentStatus(List<Stage> stages){
         for (Stage stage : stages) {
-            if (stage.getStatus().equals(StageStatusType.FAILED)) {
-                return DetermineRecruitmentStatusRes.of(stage.getStageName(), StageStatusType.FAILED);
+            if (stage.getStatus() == StageStatusType.FAILED) {
+                return DetermineRecruitmentStatusRes.of(stage.getStageName(), StageStatusType.FAILED, stage.getEndDate());
             }
-            else if (stage.getStatus().equals(StageStatusType.PASSED)) {
-                return DetermineRecruitmentStatusRes.of(stage.getStageName(), StageStatusType.PASSED);
+            else if (stage.getStatus() == StageStatusType.PASSED) {
+                return DetermineRecruitmentStatusRes.of(stage.getStageName(), StageStatusType.PASSED, stage.getEndDate());
             }
         }
-        return DetermineRecruitmentStatusRes.of("서류", StageStatusType.PROGRESS);
+        // stages가 내림차순이기 때문에 마지막 stage인 서류의 endDate를 가져옵니다.
+        LocalDate lastEndDate = stages.get(stages.size() - 1).getEndDate();
+
+        return DetermineRecruitmentStatusRes.of("서류", StageStatusType.PROGRESS, lastEndDate);
     }
 
     @Transactional(readOnly = true)
@@ -107,13 +110,13 @@ public class RecruitmentService {
         List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
         List<FindAllRecruitmentsRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
                 .map(recruitment -> {
-                    List<Stage> stages = recruitment.getStages();
+                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateDesc(recruitment.getId());
                     DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
                     return FindAllRecruitmentsRes.RecruitmentInfo.of(
                             recruitment,
                             recruitmentStatus.getStageName(),
                             recruitmentStatus.getStatus(),
-                            LocalDate.of(2024, 1, 1) // 예시 날짜, 실제 값으로 대체 필요
+                            recruitmentStatus.getEndDate()
                     );
                 })
                 .toList();

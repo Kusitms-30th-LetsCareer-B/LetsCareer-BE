@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
@@ -13,12 +15,14 @@ public class DetermineRecruitmentStatusRes {
 
     private String stageName;
     private StageStatusType status;
+    private LocalDate endDate;
 
-    public static DetermineRecruitmentStatusRes of(String stageName, StageStatusType status) {
+    public static DetermineRecruitmentStatusRes of(String stageName, StageStatusType status, LocalDate endDate) {
         return DetermineRecruitmentStatusRes
                 .builder()
                 .stageName(stageName)
                 .status(status)
+                .endDate(endDate)
                 .build();
     }
 }

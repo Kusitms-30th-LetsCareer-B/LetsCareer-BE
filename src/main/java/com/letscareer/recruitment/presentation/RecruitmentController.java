@@ -3,6 +3,7 @@ package com.letscareer.recruitment.presentation;
 import com.letscareer.global.domain.ResponseDto;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
+import com.letscareer.recruitment.dto.response.FindAllRecruitmentsRes;
 import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
 import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
 import lombok.RequiredArgsConstructor;
@@ -64,9 +65,8 @@ public class RecruitmentController {
      * @return
      */
     @GetMapping("/recruitments")
-    public ResponseEntity<ResponseDto<Void>> findAllRecruitments(@RequestParam(name = "userId") Long userId){
-        recruitmentService.findAllRecruitments(userId);
-        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", null));
+    public ResponseEntity<ResponseDto<FindAllRecruitmentsRes>> findAllRecruitments(@RequestParam(name = "userId") Long userId){
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", recruitmentService.findAllRecruitments(userId)));
     }
 
 
