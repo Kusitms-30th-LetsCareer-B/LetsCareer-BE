@@ -39,7 +39,7 @@ public class ScheduleService {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-        return scheduleRepository.findAllByUserIdAndDateBetween(user.getId(), startDate, endDate).stream()
+        return scheduleRepository.findAllByUserIdAndDateBetweenOrderByDateAsc(user.getId(), startDate, endDate).stream()
                 .map(ScheduleResponse::new)
                 .toList();
     }

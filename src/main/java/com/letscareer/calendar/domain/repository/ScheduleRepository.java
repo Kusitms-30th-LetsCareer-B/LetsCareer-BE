@@ -8,6 +8,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findAllByUserIdAndDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
+    List<Schedule> findAllByUserIdAndDateBetweenOrderByDateAsc(Long userId, LocalDate startDate, LocalDate endDate);
     void deleteByStageId(Long stageId);
 }

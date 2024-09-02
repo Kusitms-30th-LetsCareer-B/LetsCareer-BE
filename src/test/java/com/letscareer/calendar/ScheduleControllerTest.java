@@ -60,7 +60,7 @@ public class ScheduleControllerTest extends ControllerTestConfig {
                 resource(
                     ResourceSnippetParameters.builder()
                         .tag("Calendar")
-                        .description("월별 스케줄 조회")
+                        .description("월별 채용 일정 조회")
                         .queryParameters(
                             parameterWithName("userId").description("조회할 사용자의 ID"),
                             parameterWithName("year").description("조회할 년도"),

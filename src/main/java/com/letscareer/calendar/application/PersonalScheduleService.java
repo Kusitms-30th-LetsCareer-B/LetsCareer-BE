@@ -59,7 +59,7 @@ public class PersonalScheduleService {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-        return personalScheduleRepository.findAllByUserIdAndDateBetween(user.getId(), startDate, endDate).stream()
+        return personalScheduleRepository.findAllByUserIdAndDateBetweenOrderByDateAsc(user.getId(), startDate, endDate).stream()
                 .map(PersonalScheduleResponse::new)
                 .toList();
     }

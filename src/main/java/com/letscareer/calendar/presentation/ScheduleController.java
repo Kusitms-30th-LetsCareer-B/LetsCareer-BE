@@ -17,7 +17,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     /**
-     * 월에 해당하는 스케줄을 가져오는 API
+     * 월에 해당하는 채용 전형을 가져오는 API
      *
      * @param userId the user id
      * @param year   the year
