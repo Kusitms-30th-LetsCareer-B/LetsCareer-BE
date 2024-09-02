@@ -18,14 +18,17 @@ public class DetermineRecruitmentStatusRes {
     private StageStatusType status;
     private LocalDate endDate;
     private Boolean isFinal;
+    private long daysUntilFinal;
 
     public static DetermineRecruitmentStatusRes from(Stage stage) {
+        LocalDate today = LocalDate.now();
         return DetermineRecruitmentStatusRes
                 .builder()
                 .stageName(stage.getStageName())
                 .status(stage.getStatus())
                 .endDate(stage.getEndDate())
                 .isFinal(stage.getIsFinal())
+                .daysUntilFinal(stage.getEndDate().toEpochDay() - today.toEpochDay())
                 .build();
     }
 }
