@@ -71,27 +71,33 @@ public class RecruitmentService {
 
     @Transactional(readOnly = true)
     public GetRecruitmentsStatusRes getRecruitmentsStatus(Long userId) {
-        int total=0;
         int progress=0;
         int passed=0;
         int failed=0;
+
         List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
-        total=recruitments.size();
+        int total=recruitments.size();
+
         for (Recruitment recruitment : recruitments) {
+            boolean foundStatus = false;
             List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateDesc(recruitment.getId());
             for (Stage stage : stages) {
                 if (stage.getStatus().equals(StageStatusType.FAILED)) {
                     ++failed;
+                    foundStatus = true;
                     break;
                 }
                 else if (stage.getStatus().equals(StageStatusType.PASSED)) {
                     ++passed;
-                    break;
-                }else if (stage.getStatus().equals(StageStatusType.PROGRESS)) {
-                    ++progress;
+                    foundStatus = true;
                     break;
                 }
             }
+            // 만약 PASSED나 FAILED 상태가 없었다면 progress를 증가시킴
+            if (!foundStatus) {
+                ++progress;
+            }
+
         }
 
         return GetRecruitmentsStatusRes.of(total,progress,passed,failed);

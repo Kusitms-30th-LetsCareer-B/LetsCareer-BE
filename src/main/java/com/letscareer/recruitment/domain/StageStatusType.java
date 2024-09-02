@@ -9,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum StageStatusType {
 
-    PENDING("시작전"),
-    PROGRESS("진행중"),
+    PROGRESS("준비중"),
     PASSED("합격"),
     FAILED("불합격");
 
