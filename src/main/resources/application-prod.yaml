@@ -28,6 +28,20 @@ spring:
     openfeign:
       okhttp:
         enabled: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKETNAME}
+    region:
+      static: ${AWS_REGION}
+    credentials:
+      access-key: ${AWS_ACCESSKEY}
+      secret-key: ${AWS_SECRETKEY}
 
 management:
   endpoints:
