@@ -47,7 +47,7 @@ public class PersonalScheduleControllerTest extends ControllerTestConfig {
                 """;
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.post("/calendar/personal-schedule")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.post("/calendar/personal")
                 .param("userId", "1")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +89,7 @@ public class PersonalScheduleControllerTest extends ControllerTestConfig {
                 .thenReturn(Collections.singletonList(personalScheduleResponse));
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/calendar/personal-schedule")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/calendar/personal")
                 .param("userId", "1")
                 .param("year", "2024")
                 .param("month", "9")

@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/calendar/personal-schedule")
+@RequestMapping("/calendar/personal")
 public class PersonalScheduleController {
     private final PersonalScheduleService personalScheduleService;
 
