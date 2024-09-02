@@ -15,7 +15,8 @@ public enum ExceptionContent {
 
     BAD_REQUEST_STAGE_STATUS_TYPE(BAD_REQUEST, "잘못된 요청입니다. 유효하지 않은 채용 상태입니다."),
     NOT_FOUND_USER(NOT_FOUND, "존재하지 않는 사용자입니다."),
-    NOT_FOUND_RECRUITMENT(NOT_FOUND, "존재하지 않는 일정입니다." );
+    NOT_FOUND_RECRUITMENT(NOT_FOUND, "존재하지 않는 일정입니다." ),
+    NOT_FOUND_ARCHIVING(NOT_FOUND, "존재하지 않는 아카이빙입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
