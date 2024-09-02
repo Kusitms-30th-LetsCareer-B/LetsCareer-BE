@@ -9,6 +9,7 @@ import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
 import com.letscareer.recruitment.domain.repository.StageRepository;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
 import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
+import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
 import com.letscareer.user.domain.User;
 import com.letscareer.user.domain.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -66,5 +67,33 @@ public class RecruitmentService {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
         recruitmentRepository.delete(recruitment);
+    }
+
+    @Transactional(readOnly = true)
+    public GetRecruitmentsStatusRes getRecruitmentsStatus(Long userId) {
+        int total=0;
+        int progress=0;
+        int passed=0;
+        int failed=0;
+        List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
+        total=recruitments.size();
+        for (Recruitment recruitment : recruitments) {
+            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateDesc(recruitment.getId());
+            for (Stage stage : stages) {
+                if (stage.getStatus().equals(StageStatusType.FAILED)) {
+                    ++failed;
+                    break;
+                }
+                else if (stage.getStatus().equals(StageStatusType.PASSED)) {
+                    ++passed;
+                    break;
+                }else if (stage.getStatus().equals(StageStatusType.PROGRESS)) {
+                    ++progress;
+                    break;
+                }
+            }
+        }
+
+        return GetRecruitmentsStatusRes.of(total,progress,passed,failed);
     }
 }

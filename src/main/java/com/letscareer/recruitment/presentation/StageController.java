@@ -1,10 +1,12 @@
 package com.letscareer.recruitment.presentation;
 
 import com.letscareer.global.domain.ResponseDto;
+import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.application.StageService;
 import com.letscareer.recruitment.dto.request.CreateStageReq;
 import com.letscareer.recruitment.dto.request.ModifyStageReq;
 import com.letscareer.recruitment.dto.response.FindStageRes;
+import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class StageController {
 
     private final StageService stageService;
+    private final RecruitmentService recruitmentService;
 
     /**
      * 채용 전형 추가
@@ -22,7 +25,7 @@ public class StageController {
      * @return null
      */
     @PostMapping("/stages")
-    public ResponseEntity<ResponseDto<Void>> createStage(@RequestParam(name= "recruitmentId") Long recruitmentId, @RequestBody CreateStageReq request){
+    public ResponseEntity<ResponseDto<Void>> createStage(@RequestParam(name = "recruitmentId") Long recruitmentId, @RequestBody CreateStageReq request){
         stageService.createStage(recruitmentId, request);
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용전형을 추가하였습니다.", null));
     }
@@ -33,7 +36,7 @@ public class StageController {
      * @return FindStageRes
      */
     @GetMapping("/stages")
-    public ResponseEntity<ResponseDto<FindStageRes>> findStage(@RequestParam(name= "stageId") Long stageId){
+    public ResponseEntity<ResponseDto<FindStageRes>> findStage(@RequestParam(name = "stageId") Long stageId){
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("해당 채용전형을 조회하였습니다.", stageService.findStage(stageId)));
     }
 
@@ -44,7 +47,7 @@ public class StageController {
      * @return null
      */
     @PatchMapping("/stages")
-    public ResponseEntity<ResponseDto<Void>> modifyStage(@RequestParam(name= "stageId") Long stageId, @RequestBody ModifyStageReq request){
+    public ResponseEntity<ResponseDto<Void>> modifyStage(@RequestParam(name = "stageId") Long stageId, @RequestBody ModifyStageReq request){
         stageService.modifyStage(stageId, request);
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 수정하였습니다.", null));
     }
@@ -55,8 +58,18 @@ public class StageController {
      * @return null
      */
     @DeleteMapping("/stages")
-    public ResponseEntity<ResponseDto<Void>> deleteStage(@RequestParam(name= "stageId") Long stageId){
+    public ResponseEntity<ResponseDto<Void>> deleteStage(@RequestParam(name = "stageId") Long stageId){
         stageService.deleteStage(stageId);
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 삭제하였습니다.", null));
+    }
+
+    /**
+     * 유저 총 채용일정의 상태 개수를 반환한다.
+     * @param userId 유저id
+     * @return
+     */
+    @GetMapping("/recruitments/status")
+    public ResponseEntity<ResponseDto<GetRecruitmentsStatusRes>> getRecruitmentsStatus(@RequestParam(name = "userId") Long userId){
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 총 채용일정 상태 개수가 반환되었습니다.",  recruitmentService.getRecruitmentsStatus(userId)));
     }
 }
