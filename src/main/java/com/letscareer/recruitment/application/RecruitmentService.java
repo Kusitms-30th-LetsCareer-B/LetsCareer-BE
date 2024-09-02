@@ -118,22 +118,24 @@ public class RecruitmentService {
 
         List<FindAllRecruitmentsRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
                 .map(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
-                    DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
+                    List<Stage> nextFilteredStages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId())
+                            .stream()
+                            .filter(stage -> !stage.getEndDate().isBefore(today))
+                            .toList();
 
-                    // LocalDate의 toEpochDay()를 사용하여 endDate와 현재 날짜의 차이 계산
-                    long daysUntilEnd = recruitmentStatus.getEndDate().toEpochDay() - today.toEpochDay();
+                    DetermineRecruitmentStatusRes recruitmentStatus = DetermineRecruitmentStatusRes.from(nextFilteredStages.get(0));
 
                     return FindAllRecruitmentsRes.RecruitmentInfo.of(
                             recruitment,
                             recruitmentStatus.getStageName(),
                             recruitmentStatus.getStatus(),
                             recruitmentStatus.getEndDate(),
-                            daysUntilEnd
+                            recruitmentStatus.getDaysUntilFinal()
                     );
                 })
                 .sorted(Comparator.comparing(FindAllRecruitmentsRes.RecruitmentInfo::getIsFavorite).reversed()  // isFavorite이 true인 것을 앞으로
                         .thenComparing(FindAllRecruitmentsRes.RecruitmentInfo::getDaysUntilEnd))  // 며칠 남았는지 오름차순으로 정렬
+                .limit(6)
                 .toList();
 
         return FindAllRecruitmentsRes.of(recruitmentInfos);
