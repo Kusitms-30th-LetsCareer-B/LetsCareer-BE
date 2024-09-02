@@ -55,5 +55,5 @@ jobs:
             sudo docker stop ${{ secrets.DOCKER_REPOSITORY }} || true
             sudo docker rm ${{ secrets.DOCKER_REPOSITORY }} || true
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
-            sudo docker run -d -p 8080:8080 -e DB_HOST=${{ secrets.DB_HOST }} -e DB_NAME=${{ secrets.DB_NAME }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e AWS_ACCESSKEY=${{ secrets.AWS_ACCESSKEY }} -e AWS_SECRETKEY=${{ secrets.AWS_SECRETKEY }}-e AWS_REGION=${{ secrets.AWS_REGION }}-e S3_BUCKETNAME=${{ secrets.S3_BUCKETNAME }} --name ${{ secrets.DOCKER_REPOSITORY }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
+            sudo docker run -d -p 8080:8080 -e DB_HOST=${{ secrets.DB_HOST }} -e DB_NAME=${{ secrets.DB_NAME }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e AWS_ACCESSKEY=${{ secrets.AWS_ACCESSKEY }} -e AWS_SECRETKEY=${{ secrets.AWS_SECRETKEY }} -e AWS_REGION=${{ secrets.AWS_REGION }} -e S3_BUCKETNAME=${{ secrets.S3_BUCKETNAME }} -e PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} --name ${{ secrets.DOCKER_REPOSITORY }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
             sudo docker image prune -f
