@@ -6,7 +6,6 @@ import com.letscareer.recruitment.application.StageService;
 import com.letscareer.recruitment.dto.request.CreateStageReq;
 import com.letscareer.recruitment.dto.request.ModifyStageReq;
 import com.letscareer.recruitment.dto.response.FindStageRes;
-import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,13 +62,4 @@ public class StageController {
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 삭제하였습니다.", null));
     }
 
-    /**
-     * 유저 총 채용일정의 상태 개수를 반환한다.
-     * @param userId 유저id
-     * @return
-     */
-    @GetMapping("/recruitments/status")
-    public ResponseEntity<ResponseDto<GetRecruitmentsStatusRes>> getRecruitmentsStatus(@RequestParam(name = "userId") Long userId){
-        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 총 채용일정 상태 개수가 반환되었습니다.",  recruitmentService.getRecruitmentsStatus(userId)));
-    }
 }

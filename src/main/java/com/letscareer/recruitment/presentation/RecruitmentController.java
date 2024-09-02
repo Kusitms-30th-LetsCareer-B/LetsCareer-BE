@@ -4,6 +4,7 @@ import com.letscareer.global.domain.ResponseDto;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
 import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
+import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,8 @@ public class RecruitmentController {
      * @param recruitmentId 채용일정id
      * @return GetRecruitmentRes
      */
-    @GetMapping("/recruitments")
-    public ResponseEntity<ResponseDto<FindRecruitmentRes>> findRecruitment(@RequestParam(name = "recruitmentId") Long recruitmentId){
+    @GetMapping("/recruitments/{recruitmentId}")
+    public ResponseEntity<ResponseDto<FindRecruitmentRes>> findRecruitment(@PathVariable(name = "recruitmentId") Long recruitmentId){
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 일정을 조회하였습니다.", recruitmentService.findRecruitment(recruitmentId)));
     }
 
@@ -47,6 +48,20 @@ public class RecruitmentController {
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 일정을 삭제하였습니다.", null));
     }
 
+    /**
+     * 유저 총 채용일정의 상태 개수를 반환한다.
+     * @param userId 유저id
+     * @return
+     */
+    @GetMapping("/recruitments/status")
+    public ResponseEntity<ResponseDto<GetRecruitmentsStatusRes>> getRecruitmentsStatus(@RequestParam(name = "userId") Long userId){
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 총 채용일정 상태 개수가 반환되었습니다.",  recruitmentService.getRecruitmentsStatus(userId)));
+    }
+
+//    @GetMapping("/recruitments")
+//    public ResponseEntity<ResponseDto<Void>> findAllRecruitments(){
+//
+//    }
 
 
 }
