@@ -16,13 +16,15 @@ public class DetermineRecruitmentStatusRes {
     private String stageName;
     private StageStatusType status;
     private LocalDate endDate;
+    private Boolean isFinal;
 
-    public static DetermineRecruitmentStatusRes of(String stageName, StageStatusType status, LocalDate endDate) {
+    public static DetermineRecruitmentStatusRes of(String stageName, StageStatusType status, LocalDate endDate, Boolean isFinal) {
         return DetermineRecruitmentStatusRes
                 .builder()
                 .stageName(stageName)
                 .status(status)
                 .endDate(endDate)
+                .isFinal(isFinal)
                 .build();
     }
 }

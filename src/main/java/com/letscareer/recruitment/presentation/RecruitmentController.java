@@ -52,7 +52,7 @@ public class RecruitmentController {
     /**
      * 유저 총 채용일정의 상태 개수를 반환한다.
      * @param userId 유저id
-     * @return
+     * @return GetRecruitmentsStatusRes
      */
     @GetMapping("/recruitments/status")
     public ResponseEntity<ResponseDto<GetRecruitmentsStatusRes>> getRecruitmentsStatus(@RequestParam(name = "userId") Long userId){
@@ -60,9 +60,9 @@ public class RecruitmentController {
     }
 
     /**
-     * 유저의 채용일정 리스트들을 반환한다.
+     * 유저의 채용일정 리스트들을 반환한다. (관심기업 먼저, 마감일 적게 남은 순)
      * @param userId 유저id
-     * @return
+     * @return FindAllRecruitmentsRes
      */
     @GetMapping("/recruitments")
     public ResponseEntity<ResponseDto<FindAllRecruitmentsRes>> findAllRecruitments(@RequestParam(name = "userId") Long userId){

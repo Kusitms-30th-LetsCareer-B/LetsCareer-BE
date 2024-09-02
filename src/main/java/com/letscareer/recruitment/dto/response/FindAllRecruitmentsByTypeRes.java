@@ -1,7 +1,6 @@
 package com.letscareer.recruitment.dto.response;
 
 import com.letscareer.recruitment.domain.Recruitment;
-import com.letscareer.recruitment.domain.Stage;
 import com.letscareer.recruitment.domain.StageStatusType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,12 +13,12 @@ import java.util.List;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class FindAllRecruitmentsRes {
+public class FindAllRecruitmentsByTypeRes {
 
     private List<RecruitmentInfo> recruitments;
 
-    public static FindAllRecruitmentsRes of(List<RecruitmentInfo> recruitments) {
-        return FindAllRecruitmentsRes
+    public static FindAllRecruitmentsByTypeRes of(List<RecruitmentInfo> recruitments) {
+        return FindAllRecruitmentsByTypeRes
                 .builder()
                 .recruitments(recruitments)
                 .build();
@@ -33,29 +32,26 @@ public class FindAllRecruitmentsRes {
         private String companyName;
         private String task;
         private Boolean isFavorite;
-        private Boolean isRemind;
-        private String announcementUrl;
         private String stageName;
         private StageStatusType status;
         private LocalDate endDate;
-        private long daysUntilEnd;
+        private Long daysUntilEnd;
+        private Boolean isFinal;
 
-        public static RecruitmentInfo of(Recruitment recruitment, String stageName, StageStatusType status, LocalDate endDate, long daysUntilEnd){
+        public static FindAllRecruitmentsByTypeRes.RecruitmentInfo of(Recruitment recruitment, String stageName, StageStatusType status, LocalDate endDate, Long daysUntilEnd, Boolean isFinal) {
             return RecruitmentInfo
                     .builder()
                     .recruitmentId(recruitment.getId())
                     .companyName(recruitment.getCompanyName())
                     .task(recruitment.getTask())
                     .isFavorite(recruitment.getIsFavorite())
-                    .isRemind(recruitment.getIsRemind())
-                    .announcementUrl(recruitment.getAnnouncementUrl())
                     .stageName(stageName)
                     .status(status)
                     .endDate(endDate)
                     .daysUntilEnd(daysUntilEnd)
+                    .isFinal(isFinal)
                     .build();
         }
     }
-
 
 }
