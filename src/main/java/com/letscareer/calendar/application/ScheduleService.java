@@ -3,10 +3,10 @@ package com.letscareer.calendar.application;
 import com.letscareer.calendar.domain.Schedule;
 import com.letscareer.calendar.domain.ScheduleFilter;
 import com.letscareer.calendar.domain.repository.ScheduleRepository;
-import com.letscareer.calendar.dto.request.PersonalScheduleRequest;
 import com.letscareer.calendar.dto.response.ScheduleResponse;
 import com.letscareer.global.exception.CustomException;
 import com.letscareer.global.exception.ExceptionContent;
+import com.letscareer.recruitment.domain.Stage;
 import com.letscareer.user.domain.User;
 import com.letscareer.user.domain.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,22 +44,42 @@ public class ScheduleService {
                 .toList();
     }
 
-
     /**
-     * 개인 일정을 추가하는 메소드
+     * 스케줄(채용 일정)을 추가하는 메소드
      *
-     * @param request the request
-     * @return the added schedule response
+     * @param userId the user id
+     * @param stage  the stage
+     * @return the void
      */
-    @Transactional
-    public ScheduleResponse addPersonalSchedule(Long userId, PersonalScheduleRequest request) {
+    @Transactional// Todo: 채용전형 추가 로직에 추가해야됨
+    public void addSchedule(Long userId, Stage stage, String companyName) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
+        Schedule schedule;
+        switch (stage.getStageName()) {
+            case "서류" -> {
+                addDocumentSchedule(user, stage, companyName);
+                return;
+            }
+            case "필기" -> schedule = Schedule.of(user, stage, stage.getEndDate(), ScheduleFilter.WRITTEN, companyName);
+            case "면접" -> schedule = Schedule.of(user, stage, stage.getEndDate(), ScheduleFilter.INTERVIEW, companyName);
+            default -> schedule = Schedule.of(user, stage, stage.getEndDate(), ScheduleFilter.OTHER, companyName);
+        }
+        scheduleRepository.save(schedule);
+    }
 
-        Schedule schedule = Schedule.of(request, user, ScheduleFilter.PERSONAL);
+    @Transactional
+    public void addDocumentSchedule(User user, Stage stage, String companyName) {
+        Schedule startSchedule = Schedule.of(user, stage, stage.getStartDate(), ScheduleFilter.START, companyName);
+        Schedule finishSchedule = Schedule.of(user, stage, stage.getEndDate(), ScheduleFilter.FINISH, companyName);
+        scheduleRepository.save(startSchedule);
+        scheduleRepository.save(finishSchedule);
+    }
 
-        Schedule savedSchedule = scheduleRepository.save(schedule);
-        return new ScheduleResponse(savedSchedule);
+    // Todo: 채용 전형 삭제 로직에 추가해야됨
+    @Transactional
+    public void delete(Long stageId) {
+        scheduleRepository.deleteByStageId(stageId);
     }
 
 }

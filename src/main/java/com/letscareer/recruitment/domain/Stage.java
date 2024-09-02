@@ -1,9 +1,12 @@
 package com.letscareer.recruitment.domain;
 
+import com.letscareer.calendar.domain.Schedule;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity

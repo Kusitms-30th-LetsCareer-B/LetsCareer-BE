@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ScheduleFilter {
 
-    PERSONAL("개인"),
     START("시"),
     FINISH("끝"),
     WRITTEN("필"),

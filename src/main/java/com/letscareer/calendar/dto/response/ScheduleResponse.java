@@ -5,13 +5,13 @@ import com.letscareer.calendar.domain.ScheduleFilter;
 
 import java.time.LocalDate;
 
-public record ScheduleResponse(Long id, LocalDate date, String filter, String content) {
+public record ScheduleResponse(Long scheduleId, LocalDate date, String filter, String companyName) {
     public ScheduleResponse(Schedule schedule) {
         this(
                 schedule.getId(),
                 schedule.getDate(),
                 schedule.getFilter().getName(), // ScheduleFilter의 name을 가져와서 String으로 변환
-                schedule.getContent()
+                schedule.getCompanyName()
         );
     }
 }

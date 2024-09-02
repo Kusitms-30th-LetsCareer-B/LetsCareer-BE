@@ -32,21 +32,4 @@ public class ScheduleController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("캘린더 조회에 성공하였습니다.", scheduleService.getScheduleForMonth(userId, year, month)));
     }
 
-
-    /**
-     * 사용자의 개인 일정을 추가하는 API
-     *
-     * @param userId  the user id
-     * @param request the request
-     * @return the response entity
-     */
-    @PostMapping("/personal-schedule")
-    public ResponseEntity<CommonResponse<?>> addPersonalSchedule(
-            @RequestParam Long userId,
-            @RequestBody PersonalScheduleRequest request) {
-
-        scheduleService.addPersonalSchedule(userId, request);
-        return ResponseEntity.ok().body(CommonResponse.ofSuccess("개인 일정 추가에 성공하였습니다.", null));
-    }
-
 }
