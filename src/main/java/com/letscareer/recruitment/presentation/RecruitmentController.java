@@ -58,10 +58,16 @@ public class RecruitmentController {
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 총 채용일정 상태 개수가 반환되었습니다.",  recruitmentService.getRecruitmentsStatus(userId)));
     }
 
-//    @GetMapping("/recruitments")
-//    public ResponseEntity<ResponseDto<Void>> findAllRecruitments(){
-//
-//    }
+    /**
+     * 유저의 채용일정 리스트들을 반환한다.
+     * @param userId 유저id
+     * @return
+     */
+    @GetMapping("/recruitments")
+    public ResponseEntity<ResponseDto<Void>> findAllRecruitments(@RequestParam(name = "userId") Long userId){
+        recruitmentService.findAllRecruitments(userId);
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", null));
+    }
 
 
 }

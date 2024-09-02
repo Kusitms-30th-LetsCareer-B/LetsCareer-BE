@@ -9,6 +9,7 @@ import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
 import com.letscareer.recruitment.domain.repository.StageRepository;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
 import com.letscareer.recruitment.dto.response.DetermineRecruitmentStatusRes;
+import com.letscareer.recruitment.dto.response.FindAllRecruitmentsRes;
 import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
 import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
 import com.letscareer.user.domain.User;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -100,5 +102,22 @@ public class RecruitmentService {
         return DetermineRecruitmentStatusRes.of("서류", StageStatusType.PROGRESS);
     }
 
+    @Transactional(readOnly = true)
+    public FindAllRecruitmentsRes findAllRecruitments(Long userId) {
+        List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
+        List<FindAllRecruitmentsRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
+                .map(recruitment -> {
+                    List<Stage> stages = recruitment.getStages();
+                    DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
+                    return FindAllRecruitmentsRes.RecruitmentInfo.of(
+                            recruitment,
+                            recruitmentStatus.getStageName(),
+                            recruitmentStatus.getStatus(),
+                            LocalDate.of(2024, 1, 1) // 예시 날짜, 실제 값으로 대체 필요
+                    );
+                })
+                .toList();
 
+        return FindAllRecruitmentsRes.of(recruitmentInfos);
+    }
 }
