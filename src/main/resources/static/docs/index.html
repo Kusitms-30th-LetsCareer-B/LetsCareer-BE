@@ -437,18 +437,96 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
-<body class="book">
+<body class="book toc2 toc-left">
 <div id="header">
 <h1>LetsCareer Application API Document</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_url">URL</a>
+<ul class="sectlevel2">
+<li><a href="#_url_metadata_조회">URL metadata 조회</a>
+<ul class="sectlevel3">
+<li><a href="#_request">Request</a></li>
+<li><a href="#_response">Response</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_url"><a class="link" href="#_url">URL</a></h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::url.adoc[]</p>
+<div class="sect2">
+<h3 id="_url_metadata_조회"><a class="link" href="#_url_metadata_조회">URL metadata 조회</a></h3>
+<div class="sect3">
+<h4 id="_request"><a class="link" href="#_request">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/url/metadata?url=https%3A%2F%2Fexample.com' -i -X GET</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /url/metadata?url=https%3A%2F%2Fexample.com HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/url/metadata?url=https%3A%2F%2Fexample.com'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response"><a class="link" href="#_response">Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 220
+
+{
+  "code" : 200,
+  "message" : "요청 성공",
+  "data" : {
+    "title" : "Test Title",
+    "description" : "Test Description",
+    "iconUrl" : "https://example.com/favicon.ico",
+    "url" : "https://example.com"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "code" : 200,
+  "message" : "요청 성공",
+  "data" : {
+    "title" : "Test Title",
+    "description" : "Test Description",
+    "iconUrl" : "https://example.com/favicon.ico",
+    "url" : "https://example.com"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

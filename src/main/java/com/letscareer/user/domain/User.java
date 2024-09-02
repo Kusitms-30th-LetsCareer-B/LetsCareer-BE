@@ -1,6 +1,8 @@
 package com.letscareer.user.domain;
 
+import com.letscareer.calendar.domain.Schedule;
 import com.letscareer.global.domain.BaseTimeEntity;
+import com.letscareer.user.dto.request.UserRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,4 +21,11 @@ public class User extends BaseTimeEntity {
     private String name;
 
     private String email;
+
+    public static User from(UserRequest request) {
+        return User.builder()
+                .name(request.name())
+                .email(request.email())
+                .build();
+    }
 }
