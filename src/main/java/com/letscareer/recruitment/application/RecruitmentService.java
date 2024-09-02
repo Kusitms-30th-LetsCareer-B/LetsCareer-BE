@@ -79,18 +79,10 @@ public class RecruitmentService {
         int progress=0, passed=0, failed=0;
 
         for (Recruitment recruitment : recruitments) {
-            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateDesc(recruitment.getId());
-            DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
-            switch (recruitmentStatus.getStatus()){
+            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+            switch (determineRecruitmentStatus(stages).getStatus()){
                 case PROGRESS -> ++progress;
-                case PASSED -> {
-                 if(recruitmentStatus.getIsFinal()){
-                     ++passed;
-                 }
-                 else{
-                     ++progress;
-                 }
-                }
+                case PASSED -> ++passed;
                 case FAILED -> ++failed;
             }
         }
@@ -98,31 +90,39 @@ public class RecruitmentService {
     }
 
     private DetermineRecruitmentStatusRes determineRecruitmentStatus(List<Stage> stages){
-        for (Stage stage : stages) {
-            if (stage.getStatus() == StageStatusType.FAILED) {
-                return DetermineRecruitmentStatusRes.of(stage.getStageName(), StageStatusType.FAILED, stage.getEndDate(), stage.getIsFinal());
-            }
-            else if (stage.getStatus() == StageStatusType.PASSED) {
-                return DetermineRecruitmentStatusRes.of(stage.getStageName(), StageStatusType.PASSED, stage.getEndDate(), stage.getIsFinal());
+        LocalDate today = LocalDate.now();
+
+        List<Stage> prevFilteredStages = stages.stream().filter(stage-> stage.getEndDate().isBefore(today)).toList();
+        List<Stage> nextFilteredStages = stages.stream().filter(stage-> !stage.getEndDate().isBefore(today)).toList();
+
+        // 첫 번째 조건: FAILED 상태의 stage가 있는지 확인
+        for (Stage stage : prevFilteredStages) {
+            if (stage.getStatus().equals(StageStatusType.FAILED)){
+                return DetermineRecruitmentStatusRes.from(stage);
             }
         }
-        // stages가 내림차순이기 때문에 마지막 stage인 서류의 endDate를 가져옵니다.
-        Stage stage = stages.get(stages.size() - 1);
-        return DetermineRecruitmentStatusRes.of(stage.getStageName(), stage.getStatus(), stage.getEndDate(), stage.getIsFinal());
+        // 두 번째 조건: 과거에 PASSED 상태이며 isFinal이 true인 stage가 있는지 확인
+        for (Stage stage : prevFilteredStages) {
+            if (stage.getStatus() == StageStatusType.PASSED && stage.getIsFinal()) {
+                return DetermineRecruitmentStatusRes.from(stage);
+            }
+        }
+        // 세 번째 조건: 이후 남은 단계 중 가장 마감일이 가까운 일정를 PROGRESS 상태로 반환
+        return DetermineRecruitmentStatusRes.from(nextFilteredStages.get(0));
     }
 
     @Transactional(readOnly = true)
     public FindAllRecruitmentsRes findAllRecruitments(Long userId) {
         List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
-        LocalDate now = LocalDate.now();  // LocalDate 사용
+        LocalDate today = LocalDate.now();
 
         List<FindAllRecruitmentsRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
                 .map(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateDesc(recruitment.getId());
+                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
                     DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
 
                     // LocalDate의 toEpochDay()를 사용하여 endDate와 현재 날짜의 차이 계산
-                    long daysUntilEnd = recruitmentStatus.getEndDate().toEpochDay() - now.toEpochDay();
+                    long daysUntilEnd = recruitmentStatus.getEndDate().toEpochDay() - today.toEpochDay();
 
                     return FindAllRecruitmentsRes.RecruitmentInfo.of(
                             recruitment,

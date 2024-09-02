@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface StageRepository extends JpaRepository<Stage, Long> {
 
-    List<Stage> findAllByRecruitmentIdOrderByEndDateDesc(Long recruitmentId);
+    List<Stage> findAllByRecruitmentIdOrderByEndDateAsc(Long recruitmentId);
 }

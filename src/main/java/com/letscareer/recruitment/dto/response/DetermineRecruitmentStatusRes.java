@@ -1,5 +1,6 @@
 package com.letscareer.recruitment.dto.response;
 
+import com.letscareer.recruitment.domain.Stage;
 import com.letscareer.recruitment.domain.StageStatusType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,13 +19,13 @@ public class DetermineRecruitmentStatusRes {
     private LocalDate endDate;
     private Boolean isFinal;
 
-    public static DetermineRecruitmentStatusRes of(String stageName, StageStatusType status, LocalDate endDate, Boolean isFinal) {
+    public static DetermineRecruitmentStatusRes from(Stage stage) {
         return DetermineRecruitmentStatusRes
                 .builder()
-                .stageName(stageName)
-                .status(status)
-                .endDate(endDate)
-                .isFinal(isFinal)
+                .stageName(stage.getStageName())
+                .status(stage.getStatus())
+                .endDate(stage.getEndDate())
+                .isFinal(stage.getIsFinal())
                 .build();
     }
 }
