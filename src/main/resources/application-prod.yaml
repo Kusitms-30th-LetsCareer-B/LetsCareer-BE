@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    contextPath: /api/v1
+    contextPath:
 
 spring:
   jackson:
@@ -20,8 +20,8 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
-#      ddl-auto: update
+#      ddl-auto: create
+      ddl-auto: update
     open-in-view: false
 
   cloud:
@@ -30,8 +30,8 @@ spring:
         enabled: true
   servlet:
     multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: 10MB
+      max-request-size: 20MB
 
 cloud:
   aws:

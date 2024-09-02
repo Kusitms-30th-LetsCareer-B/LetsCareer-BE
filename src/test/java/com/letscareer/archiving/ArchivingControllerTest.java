@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ArchivingController.class)
@@ -37,13 +37,18 @@ public class ArchivingControllerTest extends ControllerTestConfig {
         Mockito.when(archivingService.addArchiving(anyLong(), any(String.class), any(String.class), any())).thenReturn(1L);
 
         MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Test content".getBytes());
+        MockMultipartFile archivingRequest = new MockMultipartFile("archivingRequest", "", "application/json", """
+                {
+                    "title": "Test Archiving",
+                    "content": "This is a test archiving content."
+                }
+                """.getBytes());
 
         // when
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.multipart("/archiving")
                 .file(file)
+                .file(archivingRequest)
                 .queryParam("recruitmentId", "1")
-                .queryParam("title", "Test Archiving")
-                .queryParam("content", "This is a test archiving content.")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .accept(MediaType.APPLICATION_JSON));
 
@@ -52,14 +57,15 @@ public class ArchivingControllerTest extends ControllerTestConfig {
                 .andDo(MockMvcRestDocumentationWrapper.document("archiving/addArchiving",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParts(partWithName("file").description("업로드할 파일").optional(),
+                                partWithName("archivingRequest").description("아카이빙 요청 데이터")
+                        ),
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("아카이빙")
                                         .description("아카이빙 추가")
                                         .queryParameters(
-                                                parameterWithName("recruitmentId").description("채용 일정 ID"),
-                                                parameterWithName("title").description("아카이빙 제목"),
-                                                parameterWithName("content").description("아카이빙 내용")
+                                                parameterWithName("recruitmentId").description("채용 일정 ID")
                                         )
                                         .responseFields(
                                                 fieldWithPath("code").description("응답 코드"),
@@ -79,15 +85,20 @@ public class ArchivingControllerTest extends ControllerTestConfig {
         Mockito.doNothing().when(archivingService).updateArchiving(anyLong(), any(String.class), any(String.class), any());
 
         MockMultipartFile file = new MockMultipartFile("file", "update.txt", "text/plain", "Updated content".getBytes());
+        MockMultipartFile archivingRequest = new MockMultipartFile("archivingRequest", "", "application/json", """
+                {
+                    "title": "Updated Archiving",
+                    "content": "This is updated archiving content."
+                }
+                """.getBytes());
 
         // when
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.multipart("/archiving")
                 .file(file)
+                .file(archivingRequest)
                 .queryParam("archivingId", "1")
-                .queryParam("title", "Updated Archiving")
-                .queryParam("content", "This is updated archiving content.")
                 .with(request -> {
-                    request.setMethod("PUT"); // multipart에서 PUT 메서드를 사용하기 위한 설정
+                    request.setMethod("PATCH"); // multipart에서 PATCH 메서드를 사용하기 위한 설정
                     return request;
                 })
                 .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -98,19 +109,20 @@ public class ArchivingControllerTest extends ControllerTestConfig {
                 .andDo(MockMvcRestDocumentationWrapper.document("archiving/updateArchiving",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParts(partWithName("file").description("업로드할 파일").optional(),
+                                partWithName("archivingRequest").description("아카이빙 요청 데이터")
+                        ),
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("아카이빙")
                                         .description("아카이빙 수정")
                                         .queryParameters(
-                                                parameterWithName("archivingId").description("수정할 아카이빙 ID"),
-                                                parameterWithName("title").description("수정할 아카이빙 제목"),
-                                                parameterWithName("content").description("수정할 아카이빙 내용")
+                                                parameterWithName("archivingId").description("수정할 아카이빙 ID")
                                         )
                                         .responseFields(
                                                 fieldWithPath("code").description("응답 코드"),
                                                 fieldWithPath("message").description("응답 메시지"),
-                                                fieldWithPath("data").description("응답 데이터")
+                                                fieldWithPath("data").description("응답 데이터 (없음, null)")
                                         )
                                         .responseSchema(Schema.schema("CommonResponse"))
                                         .build()

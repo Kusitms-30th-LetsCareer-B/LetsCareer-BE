@@ -43,7 +43,7 @@ public class S3Service {
     private String putS3(File uploadFile, String fileName) {
         amazonS3.putObject(
                 new PutObjectRequest(bucket, fileName, uploadFile)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)
+//                        .withCannedAcl(CannedAccessControlList.PublicRead) //ACL을 사용하지 않는 S3 버킷에서는 사용 X
         );
         return amazonS3.getUrl(bucket, fileName).toString();
     }
@@ -62,13 +62,10 @@ public class S3Service {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
-        if (convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
-            }
-            return Optional.of(convertFile);
+        File convertFile = File.createTempFile("upload_", "_" + file.getOriginalFilename());
+        try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+            fos.write(file.getBytes());
         }
-        return Optional.empty();
+        return Optional.of(convertFile);
     }
 }
