@@ -1,7 +1,7 @@
 {
   "openapi" : "3.0.1",
   "info" : {
-    "title" : "렛츠커리어 B팀 위대한레츠비 API 문서",
+    "title" : "위대한레츠비 API 문서",
     "description" : "Spring REST Docs with SwaggerUI.",
     "version" : "0.0.1"
   },
@@ -10,6 +10,152 @@
   } ],
   "tags" : [ ],
   "paths" : {
+    "/calendar" : {
+      "get" : {
+        "tags" : [ "Calendar" ],
+        "summary" : "월별 채용 일정 조회",
+        "description" : "월별 채용 일정 조회",
+        "operationId" : "calendar/getScheduleForMonth",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "조회할 사용자의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "year",
+          "in" : "query",
+          "description" : "조회할 년도",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "month",
+          "in" : "query",
+          "description" : "조회할 월",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ScheduleResponse"
+                },
+                "examples" : {
+                  "calendar/getScheduleForMonth" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"캘린더 조회에 성공하였습니다.\",\n  \"data\" : [ {\n    \"scheduleId\" : 1,\n    \"date\" : \"2024-09-01\",\n    \"filter\" : \"PERSONAL\",\n    \"companyName\" : \"Naver\"\n  } ]\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendar/personal-schedule" : {
+      "get" : {
+        "tags" : [ "Calendar" ],
+        "summary" : "월별 개인 일정 조회",
+        "description" : "월별 개인 일정 조회",
+        "operationId" : "calendar/getPersonalScheduleForMonth",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "조회할 사용자의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "year",
+          "in" : "query",
+          "description" : "조회할 년도",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "month",
+          "in" : "query",
+          "description" : "조회할 월",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PersonalScheduleResponse"
+                },
+                "examples" : {
+                  "calendar/getPersonalScheduleForMonth" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \" 개인 일정 조회에 성공하였습니다.\",\n  \"data\" : [ {\n    \"personalScheduleId\" : 1,\n    \"date\" : \"2024-09-01\",\n    \"content\" : \"Meeting\"\n  } ]\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Calendar" ],
+        "summary" : "사용자의 개인 일정 추가",
+        "description" : "사용자의 개인 일정 추가",
+        "operationId" : "calendar/addPersonalSchedule",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "일정을 추가할 사용자의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/calendar-personal-schedule-546565965"
+              },
+              "examples" : {
+                "calendar/addPersonalSchedule" : {
+                  "value" : "{\n  \"date\" : \"2024-09-01\",\n  \"content\" : \"Meeting with the team\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "calendar/addPersonalSchedule" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"개인 일정 추가에 성공하였습니다.\",\n  \"data\" : null\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/url/metadata" : {
       "get" : {
         "tags" : [ "URL" ],
@@ -47,6 +193,44 @@
   },
   "components" : {
     "schemas" : {
+      "ScheduleResponse" : {
+        "title" : "ScheduleResponse",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "description" : "응답 코드"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "filter" : {
+                  "type" : "string",
+                  "description" : "스케줄 필터"
+                },
+                "date" : {
+                  "type" : "string",
+                  "description" : "스케줄 날짜"
+                },
+                "companyName" : {
+                  "type" : "string",
+                  "description" : "회사 이름"
+                },
+                "scheduleId" : {
+                  "type" : "number",
+                  "description" : "스케줄 ID"
+                }
+              }
+            }
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "응답 메시지"
+          }
+        }
+      },
       "UrlMetadataResponse" : {
         "title" : "UrlMetadataResponse",
         "type" : "object",
@@ -79,6 +263,67 @@
           "message" : {
             "type" : "string",
             "description" : "응답 메시지"
+          }
+        }
+      },
+      "PersonalScheduleResponse" : {
+        "title" : "PersonalScheduleResponse",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "description" : "응답 코드"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "date" : {
+                  "type" : "string",
+                  "description" : "개인 일정 날짜"
+                },
+                "content" : {
+                  "type" : "string",
+                  "description" : "개인 일정 내용"
+                },
+                "personalScheduleId" : {
+                  "type" : "number",
+                  "description" : "개인 일정 ID"
+                }
+              }
+            }
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "응답 메시지"
+          }
+        }
+      },
+      "CommonResponse" : {
+        "title" : "CommonResponse",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "description" : "응답 코드"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "응답 메시지"
+          }
+        }
+      },
+      "calendar-personal-schedule-546565965" : {
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "description" : "일정 날짜"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "일정 내용"
           }
         }
       }

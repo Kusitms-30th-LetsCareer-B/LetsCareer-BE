@@ -1,5 +1,6 @@
 package com.letscareer.recruitment.application;
 
+import com.letscareer.calendar.application.ScheduleService;
 import com.letscareer.global.exception.CustomException;
 import com.letscareer.global.exception.ExceptionContent;
 import com.letscareer.recruitment.domain.Recruitment;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecruitmentService {
 
+    private final ScheduleService scheduleService;
     private final UserRepository userRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final StageRepository stageRepository;
@@ -43,7 +45,8 @@ public class RecruitmentService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
         Recruitment recruitment = recruitmentRepository.save(Recruitment.of(user, request.getCompanyName(), request.getIsFavorite(), request.getTask(), request.getIsRemind(), request.getAnnouncementUrl()));
-        stageRepository.save(Stage.of(recruitment,"서류", request.getStageStartDate(), request.getStageEndDate(), StageStatusType.PROGRESS,false));
+        Stage savedStage = stageRepository.save(Stage.of(recruitment,"서류", request.getStageStartDate(), request.getStageEndDate(), StageStatusType.PROGRESS,false));
+        scheduleService.addSchedule(userId, savedStage, recruitment.getCompanyName());
     }
 
     @Transactional(readOnly = true)
