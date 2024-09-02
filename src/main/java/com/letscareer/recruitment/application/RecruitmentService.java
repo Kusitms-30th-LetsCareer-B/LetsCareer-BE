@@ -8,6 +8,7 @@ import com.letscareer.recruitment.domain.StageStatusType;
 import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
 import com.letscareer.recruitment.domain.repository.StageRepository;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
+import com.letscareer.recruitment.dto.response.DetermineRecruitmentStatusRes;
 import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
 import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
 import com.letscareer.user.domain.User;
@@ -71,35 +72,33 @@ public class RecruitmentService {
 
     @Transactional(readOnly = true)
     public GetRecruitmentsStatusRes getRecruitmentsStatus(Long userId) {
-        int progress=0;
-        int passed=0;
-        int failed=0;
-
         List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
         int total=recruitments.size();
+        int progress=0, passed=0, failed=0;
 
         for (Recruitment recruitment : recruitments) {
-            boolean foundStatus = false;
             List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateDesc(recruitment.getId());
-            for (Stage stage : stages) {
-                if (stage.getStatus().equals(StageStatusType.FAILED)) {
-                    ++failed;
-                    foundStatus = true;
-                    break;
-                }
-                else if (stage.getStatus().equals(StageStatusType.PASSED)) {
-                    ++passed;
-                    foundStatus = true;
-                    break;
-                }
+            DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
+            switch (recruitmentStatus.getStatus()){
+                case PROGRESS -> ++progress;
+                case PASSED -> ++passed;
+                case FAILED -> ++failed;
             }
-            // 만약 PASSED나 FAILED 상태가 없었다면 progress를 증가시킴
-            if (!foundStatus) {
-                ++progress;
-            }
-
         }
-
-        return GetRecruitmentsStatusRes.of(total,progress,passed,failed);
+        return GetRecruitmentsStatusRes.of(total, progress, passed, failed);
     }
+
+    private DetermineRecruitmentStatusRes determineRecruitmentStatus(List<Stage> stages){
+        for (Stage stage : stages) {
+            if (stage.getStatus().equals(StageStatusType.FAILED)) {
+                return DetermineRecruitmentStatusRes.of(stage.getStageName(), StageStatusType.FAILED);
+            }
+            else if (stage.getStatus().equals(StageStatusType.PASSED)) {
+                return DetermineRecruitmentStatusRes.of(stage.getStageName(), StageStatusType.PASSED);
+            }
+        }
+        return DetermineRecruitmentStatusRes.of("서류", StageStatusType.PROGRESS);
+    }
+
+
 }
