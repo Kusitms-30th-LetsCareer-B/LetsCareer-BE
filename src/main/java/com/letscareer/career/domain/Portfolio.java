@@ -32,5 +32,17 @@ public class Portfolio extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String fileKey;
+
+    public static Portfolio createEmptyPortfolio(User user) {
+        return Portfolio.builder()
+                .user(user)
+                .build();
+    }
+
+    public void updatePortfolioFile(String fileName, String fileUrl, String fileKey) {
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.fileKey = fileKey;
+    }
 }
 

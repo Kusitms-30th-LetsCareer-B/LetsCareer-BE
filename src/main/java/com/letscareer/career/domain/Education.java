@@ -4,6 +4,7 @@ import com.letscareer.career.domain.enums.EducationType;
 import com.letscareer.career.domain.enums.GraduationStatus;
 import com.letscareer.career.domain.enums.MajorType;
 import com.letscareer.career.domain.enums.SchoolLocation;
+import com.letscareer.career.dto.request.CareerRequest;
 import com.letscareer.global.domain.BaseTimeEntity;
 import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
@@ -59,4 +60,22 @@ public class Education extends BaseTimeEntity {
     private MajorType subMajorType;
 
     private String subMajorName;
+
+    public static Education createEmptyEducation(User user) {
+        return Education.builder()
+                .user(user)
+                .build();
+    }
+    public void updateFromDto(CareerRequest.EducationRequest dto) {
+        this.educationType = EducationType.valueOf(dto.educationType());
+        this.schoolName = dto.schoolName();
+        this.schoolLocation = SchoolLocation.valueOf(dto.schoolLocation());
+        this.enrollmentDate = dto.enrollmentDate();
+        this.graduationDate = dto.graduationDate();
+        this.graduationStatus = GraduationStatus.valueOf(dto.graduationStatus());
+        this.majorType = MajorType.valueOf(dto.majorType());
+        this.majorName = dto.majorName();
+        this.subMajorType = dto.subMajorType() != null ? MajorType.valueOf(dto.subMajorType()) : null;
+        this.subMajorName = dto.subMajorName();
+    }
 }

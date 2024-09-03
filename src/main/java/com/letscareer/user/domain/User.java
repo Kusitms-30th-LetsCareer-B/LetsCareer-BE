@@ -1,6 +1,7 @@
 package com.letscareer.user.domain;
 
 import com.letscareer.career.domain.*;
+import com.letscareer.career.dto.request.CareerRequest;
 import com.letscareer.global.domain.BaseTimeEntity;
 import com.letscareer.recruitment.domain.Recruitment;
 import com.letscareer.user.dto.request.UserRequest;
@@ -68,5 +69,17 @@ public class User extends BaseTimeEntity {
                 .name(request.name())
                 .email(request.email())
                 .build();
+    }
+
+    public void updateProfileImage(String fileName, String fileUrl, String fileKey) {
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.fileKey = fileKey;
+    }
+
+    public void updateFromRequest(CareerRequest request) {
+        this.name = request.name();
+        this.gender = Gender.valueOf(request.gender());
+        this.birthDate = request.birthDate();
     }
 }

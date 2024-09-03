@@ -1,6 +1,7 @@
 package com.letscareer.career.domain;
 
 import com.letscareer.career.domain.enums.EmploymentType;
+import com.letscareer.career.dto.request.CareerRequest;
 import com.letscareer.global.domain.BaseTimeEntity;
 import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
@@ -45,5 +46,21 @@ public class WorkExperience extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String jobDescription;
+
+    public static WorkExperience createEmptyWorkExperience(User user) {
+        return WorkExperience.builder()
+                .user(user)
+                .build();
+    }
+
+    public void updateFromDto(CareerRequest.WorkExperienceRequest dto) {
+        this.employmentType = EmploymentType.valueOf(dto.employmentType());
+        this.companyName = dto.companyName();
+        this.departmentName = dto.departmentName();
+        this.startDate = dto.startDate();
+        this.endDate = dto.endDate();
+        this.jobTitle = dto.jobTitle();
+        this.jobDescription = dto.jobDescription();
+    }
 }
 

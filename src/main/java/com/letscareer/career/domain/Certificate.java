@@ -1,5 +1,6 @@
 package com.letscareer.career.domain;
 
+import com.letscareer.career.dto.request.CareerRequest;
 import com.letscareer.global.domain.BaseTimeEntity;
 import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
@@ -31,5 +32,17 @@ public class Certificate extends BaseTimeEntity {
 
     @Column(nullable = false)
     private LocalDate acquiredDate;
+
+    public static Certificate createEmptyCertificate(User user) {
+        return Certificate.builder()
+                .user(user)
+                .build();
+    }
+
+    public void updateFromDto(CareerRequest.CertificateRequest dto) {
+        this.certificateName = dto.certificateName();
+        this.certificateIssuer = dto.certificateIssuer();
+        this.acquiredDate = dto.acquiredDate();
+    }
 }
 
