@@ -6,6 +6,7 @@ import com.epages.restdocs.apispec.Schema;
 import com.letscareer.configuration.ControllerTestConfig;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
+import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
 import com.letscareer.recruitment.dto.response.GetRecruitmentRes;
 import com.letscareer.recruitment.presentation.RecruitmentController;
 import org.junit.jupiter.api.DisplayName;
@@ -92,7 +93,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
     @DisplayName("채용 일정 조회")
     public void testFindRecruitment() throws Exception {
         // given
-        GetRecruitmentRes getRecruitmentRes = GetRecruitmentRes.builder()
+        FindRecruitmentRes getRecruitmentRes = FindRecruitmentRes.builder()
                 .recruitmentId(1L)
                 .companyName("Test Company")
                 .isFavorite(true)

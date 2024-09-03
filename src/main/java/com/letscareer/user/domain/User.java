@@ -23,6 +23,7 @@ public class User extends BaseTimeEntity {
 
     // Recruitment 엔티티와의 일대다 관계 설정
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @Builder.Default
     private List<Recruitment> recruitments = new ArrayList<>();
 
     private String name;
