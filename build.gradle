@@ -88,7 +88,7 @@ def serverUrl = "http://localhost:8080"
 if (project.hasProperty("spring.profiles.active")) {
 	def activeProfile = project.property("spring.profiles.active")
 	if (activeProfile == "prod") {
-		serverUrl = System.getenv('PROD_SERVER_URL') ?: "https://default.prod.server.url"
+		serverUrl = System.getProperty('PROD_SERVER_URL') ?: "https://default.prod.server.url"
 	} else if (activeProfile == "local") {
 		serverUrl = "http://localhost:8080"
 	}
