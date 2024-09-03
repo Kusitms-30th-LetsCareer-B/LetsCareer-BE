@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/calendar/recruitment")
+@RequestMapping("/calendars/recruitment")
 public class ScheduleController {
     private final ScheduleService scheduleService;
 

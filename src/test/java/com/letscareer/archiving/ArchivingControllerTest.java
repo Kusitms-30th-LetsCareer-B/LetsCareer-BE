@@ -52,7 +52,7 @@ public class ArchivingControllerTest extends ControllerTestConfig {
                 """.getBytes());
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.multipart("/archiving")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.multipart("/archivings")
                 .file(file)
                 .file(archivingRequest)
                 .queryParam("recruitmentId", "1")
@@ -94,7 +94,7 @@ public class ArchivingControllerTest extends ControllerTestConfig {
                         new ArchivingResponse(2L, "Second Archiving")));
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/archiving/recruitment")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/archivings/recruitment")
                 .queryParam("recruitmentId", "1")
                 .queryParam("page", "0")
                 .queryParam("size", "5")
@@ -135,7 +135,7 @@ public class ArchivingControllerTest extends ControllerTestConfig {
                 .thenReturn(new ArchivingDetailResponse("Archiving Title", "Archiving Content", "test.txt"));
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/archiving/detail")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/archivings/detail")
                 .queryParam("archivingId", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -173,7 +173,7 @@ public class ArchivingControllerTest extends ControllerTestConfig {
                 .thenReturn(new ArchivingFileResponse("test.txt", "Test content".getBytes()));
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/archiving/download")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/archivings/download")
                 .queryParam("archivingId", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_OCTET_STREAM));
@@ -217,7 +217,7 @@ public class ArchivingControllerTest extends ControllerTestConfig {
             """.getBytes());
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.multipart("/archiving")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.multipart("/archivings")
                 .file(file)
                 .file(archivingRequest)
                 .queryParam("archivingId", "1")
@@ -261,7 +261,7 @@ public class ArchivingControllerTest extends ControllerTestConfig {
         Mockito.doNothing().when(archivingService).deleteArchiving(anyLong());
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/archiving")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/archivings")
                 .queryParam("archivingId", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
