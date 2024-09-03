@@ -19,8 +19,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<CommonResponse<?>> createUser(@RequestBody UserRequest userRequest) {
-        userService.create(userRequest);
-        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 생성에 성공하였습니다.", null));
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 생성에 성공하였습니다.", userService.create(userRequest)));
     }
 
     @DeleteMapping("")

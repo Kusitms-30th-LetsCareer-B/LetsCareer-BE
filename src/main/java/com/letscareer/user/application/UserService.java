@@ -16,9 +16,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void create(UserRequest userRequest) {
+    public Long create(UserRequest userRequest) {
         User user = User.from(userRequest);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return savedUser.getId();
     }
 
     public void delete(Long userId) {
