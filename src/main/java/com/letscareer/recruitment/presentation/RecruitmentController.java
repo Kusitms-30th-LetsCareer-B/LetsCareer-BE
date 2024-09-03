@@ -70,6 +70,12 @@ public class RecruitmentController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", recruitmentService.findAllRecruitments(userId)));
     }
 
+    /**
+     * 해당 타입의 채용일정 리스트를 반환한다.
+     * @param type
+     * @param userId
+     * @return
+     */
     @GetMapping("/recruitments/status")
     public ResponseEntity<CommonResponse<FindAllRecruitmentsByTypeRes>> findRecruitmentsByType(@RequestParam(name = "type") String type, @RequestParam(name = "userId") Long userId){
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", recruitmentService.findRecruitmentsByType(type, userId)));
