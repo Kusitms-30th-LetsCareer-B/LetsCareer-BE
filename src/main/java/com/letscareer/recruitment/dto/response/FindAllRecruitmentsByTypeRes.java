@@ -36,9 +36,8 @@ public class FindAllRecruitmentsByTypeRes {
         private StageStatusType status;
         private LocalDate endDate;
         private Long daysUntilEnd;
-        private Boolean isFinal;
 
-        public static FindAllRecruitmentsByTypeRes.RecruitmentInfo of(Recruitment recruitment, String stageName, StageStatusType status, LocalDate endDate, Long daysUntilEnd, Boolean isFinal) {
+        public static FindAllRecruitmentsByTypeRes.RecruitmentInfo of(Recruitment recruitment, String stageName, StageStatusType status, LocalDate endDate, Long daysUntilEnd) {
             return RecruitmentInfo
                     .builder()
                     .recruitmentId(recruitment.getId())
@@ -49,7 +48,6 @@ public class FindAllRecruitmentsByTypeRes {
                     .status(status)
                     .endDate(endDate)
                     .daysUntilEnd(daysUntilEnd)
-                    .isFinal(isFinal)
                     .build();
         }
     }

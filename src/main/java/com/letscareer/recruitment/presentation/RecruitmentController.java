@@ -3,6 +3,7 @@ package com.letscareer.recruitment.presentation;
 import com.letscareer.global.domain.ResponseDto;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
+import com.letscareer.recruitment.dto.response.FindAllRecruitmentsByTypeRes;
 import com.letscareer.recruitment.dto.response.FindAllRecruitmentsRes;
 import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
 import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
@@ -54,7 +55,7 @@ public class RecruitmentController {
      * @param userId 유저id
      * @return GetRecruitmentsStatusRes
      */
-    @GetMapping("/recruitments/status")
+    @GetMapping("/statuses")
     public ResponseEntity<ResponseDto<GetRecruitmentsStatusRes>> getRecruitmentsStatus(@RequestParam(name = "userId") Long userId){
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 총 채용일정 상태 개수가 반환되었습니다.",  recruitmentService.getRecruitmentsStatus(userId)));
     }
@@ -69,10 +70,9 @@ public class RecruitmentController {
         return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", recruitmentService.findAllRecruitments(userId)));
     }
 
-//    @GetMapping("/recruitments/{type}")
-//    public ResponseEntity<ResponseDto<Void>> findRecruitmentsByType(@PathVariable(name = "type") String type, @RequestParam(name = "userId") Long userId){
-//        recruitmentService.findRecruitmentsByType(type, userId);
-//        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", null));
-//    }
+    @GetMapping("/recruitments/status")
+    public ResponseEntity<ResponseDto<FindAllRecruitmentsByTypeRes>> findRecruitmentsByType(@RequestParam(name = "type") String type, @RequestParam(name = "userId") Long userId){
+        return ResponseEntity.ok().body(ResponseDto.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", recruitmentService.findRecruitmentsByType(type, userId)));
+    }
 
 }
