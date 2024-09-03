@@ -54,7 +54,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: prometheus,health,info
   endpoint:
     health:
       probes:

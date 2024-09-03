@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -26,33 +25,46 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final String DIR_NAME = "archiving_files";
-
-    public String upload(MultipartFile multipartFile) throws IOException {
+    public String upload(MultipartFile multipartFile, String fileKey) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-        return upload(uploadFile);
-    }
 
-    private String upload(File uploadFile) {
-        String originalFileName = uploadFile.getName();
-        String newFileName = DIR_NAME + "/" + UUID.randomUUID().toString() + "_" + originalFileName;
-        String uploadImageUrl = putS3(uploadFile, newFileName);
+        String uploadImageUrl = putS3(uploadFile, fileKey);
         removeNewFile(uploadFile);
         return uploadImageUrl;
     }
 
-    private String putS3(File uploadFile, String fileName) {
-        amazonS3.putObject(
-                new PutObjectRequest(bucket, fileName, uploadFile)
-//                        .withCannedAcl(CannedAccessControlList.PublicRead) //ACL을 사용하지 않는 S3 버킷에서는 사용 X
-        );
-        return amazonS3.getUrl(bucket, fileName).toString();
+    private String putS3(File uploadFile, String fileKey) {
+        amazonS3.putObject(new PutObjectRequest(bucket, fileKey, uploadFile));
+        return amazonS3.getUrl(bucket, fileKey).toString();
     }
 
-    public void deleteFile(String fileUrl) {
-        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, DIR_NAME + "/" + fileName));
+    public void deleteFile(String fileKey) {
+        if (amazonS3.doesObjectExist(bucket, fileKey)) {
+            log.info("파일이 존재합니다. 파일 삭제를 진행합니다. Key: {}", fileKey);
+            amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileKey));
+            log.info("파일 삭제 성공. Key: {}", fileKey);
+        } else {
+            log.warn("삭제할 파일이 존재하지 않습니다. Key: {}", fileKey);
+            throw new CustomException(ExceptionContent.NOT_FOUND_FILE);
+        }
+    }
+
+    public byte[] downloadFile(String fileKey) throws IOException {
+        try {
+            log.info("Downloading file from S3. Key: {}", fileKey);
+            S3Object s3Object = amazonS3.getObject(new GetObjectRequest(bucket, fileKey));
+            S3ObjectInputStream inputStream = s3Object.getObjectContent();
+            return inputStream.readAllBytes();
+        } catch (AmazonS3Exception e) {
+            log.error("Error downloading file from S3. Key: {}", fileKey, e);
+            if (e.getStatusCode() == 404) {
+                log.error("S3 파일을 찾을 수 없습니다. Key: {}", fileKey);
+                throw new CustomException(ExceptionContent.NOT_FOUND_FILE);
+            } else {
+                throw e;
+            }
+        }
     }
 
     private void removeNewFile(File targetFile) {
@@ -69,23 +81,5 @@ public class S3Service {
             fos.write(file.getBytes());
         }
         return Optional.of(convertFile);
-    }
-
-    public byte[] downloadFile(String fileUrl) throws IOException {
-        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-        String key = DIR_NAME + "/" + fileName;
-
-        try {
-            S3Object s3Object = amazonS3.getObject(new GetObjectRequest(bucket, key));
-            S3ObjectInputStream inputStream = s3Object.getObjectContent();
-            return inputStream.readAllBytes();
-        } catch (AmazonS3Exception e) {
-            if (e.getStatusCode() == 404) {
-                log.error("S3 파일을 찾을 수 없습니다. Key: {}", key);
-                throw new CustomException(ExceptionContent.NOT_FOUND_FILE);
-            } else {
-                throw e;
-            }
-        }
     }
 }

@@ -11,52 +11,6 @@
   "tags" : [ ],
   "paths" : {
     "/archiving" : {
-      "get" : {
-        "tags" : [ "아카이빙" ],
-        "summary" : "특정 아카이빙의 상세 정보 조회 및 파일 다운로드",
-        "description" : "특정 아카이빙의 상세 정보 조회 및 파일 다운로드",
-        "operationId" : "archiving/getArchivingDetailAndFile",
-        "parameters" : [ {
-          "name" : "archivingId",
-          "in" : "query",
-          "description" : "아카이빙 ID",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "200",
-            "headers" : {
-              "Content-Disposition" : {
-                "description" : "파일 첨부 헤더",
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Content-Type" : {
-                "description" : "파일의 MIME 타입",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            },
-            "content" : {
-              "application/octet-stream;charset=UTF-8" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/file"
-                },
-                "examples" : {
-                  "archiving/getArchivingDetailAndFile" : {
-                    "value" : "Test content"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "post" : {
         "tags" : [ "아카이빙" ],
         "summary" : "아카이빙 추가",
@@ -123,8 +77,8 @@
       },
       "patch" : {
         "tags" : [ "아카이빙" ],
-        "summary" : "아카이빙 수정",
-        "description" : "아카이빙 수정",
+        "summary" : "특정 아카이빙 수정(글, 내용, 파일 전부)",
+        "description" : "특정 아카이빙 수정(글, 내용, 파일 전부)",
         "operationId" : "archiving/updateArchiving",
         "parameters" : [ {
           "name" : "archivingId",
@@ -154,16 +108,114 @@
         }
       }
     },
+    "/archiving/detail" : {
+      "get" : {
+        "tags" : [ "아카이빙" ],
+        "summary" : "특정 아카이빙의 상세 정보 조회(파일 제외)",
+        "description" : "특정 아카이빙의 상세 정보 조회(파일 제외)",
+        "operationId" : "archiving/getArchivingDetail",
+        "parameters" : [ {
+          "name" : "archivingId",
+          "in" : "query",
+          "description" : "아카이빙 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArchivingDetailResponse"
+                },
+                "examples" : {
+                  "archiving/getArchivingDetail" : {
+                    "value" : "{\r\n  \"title\" : \"Archiving Title\",\r\n  \"content\" : \"Archiving Content\",\r\n  \"fileName\" : \"test.txt\"\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/archiving/download" : {
+      "get" : {
+        "tags" : [ "아카이빙" ],
+        "summary" : "특정 아카이빙의 파일만 조회",
+        "description" : "특정 아카이빙의 파일만 조회",
+        "operationId" : "archiving/downloadArchivingFile",
+        "parameters" : [ {
+          "name" : "archivingId",
+          "in" : "query",
+          "description" : "아카이빙 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "headers" : {
+              "Content-Disposition" : {
+                "description" : "파일 첨부 헤더",
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Content-Type" : {
+                "description" : "파일의 MIME 타입",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/octet-stream;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/file"
+                },
+                "examples" : {
+                  "archiving/downloadArchivingFile" : {
+                    "value" : "Test content"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/archiving/recruitment" : {
       "get" : {
         "tags" : [ "아카이빙" ],
-        "summary" : "특정 채용 일정에 해당하는 아카이빙 목록 조회",
-        "description" : "특정 채용 일정에 해당하는 아카이빙 목록 조회",
+        "summary" : "특정 채용 일정에 해당하는 아카이빙 목록 조회(페이징 적용)",
+        "description" : "특정 채용 일정에 해당하는 아카이빙 목록 조회(페이징 적용)",
         "operationId" : "archiving/getArchivingsByRecruitmentId",
         "parameters" : [ {
           "name" : "recruitmentId",
           "in" : "query",
           "description" : "채용 일정 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "페이지 번호",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "description" : "페이지 크기",
           "required" : true,
           "schema" : {
             "type" : "string"
@@ -510,7 +562,7 @@
                 },
                 "examples" : {
                   "user/createUser" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"유저 생성에 성공하였습니다.\",\r\n  \"data\" : null\r\n}"
+                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"유저 생성에 성공하였습니다.\",\r\n  \"data\" : 1\r\n}"
                   }
                 }
               }
@@ -566,9 +618,38 @@
             "type" : "number",
             "description" : "응답 코드"
           },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "number",
+                  "description" : "아카이빙 ID"
+                },
+                "title" : {
+                  "type" : "string",
+                  "description" : "아카이빙 제목"
+                }
+              }
+            }
+          },
           "message" : {
             "type" : "string",
             "description" : "응답 메시지"
+          }
+        }
+      },
+      "user1895104028" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "유저의 이름"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "유저의 이메일"
           }
         }
       },
@@ -751,16 +832,21 @@
           }
         }
       },
-      "user1895104028" : {
+      "ArchivingDetailResponse" : {
+        "title" : "ArchivingDetailResponse",
         "type" : "object",
         "properties" : {
-          "name" : {
+          "fileName" : {
             "type" : "string",
-            "description" : "유저의 이름"
+            "description" : "파일 이름"
           },
-          "email" : {
+          "title" : {
             "type" : "string",
-            "description" : "유저의 이메일"
+            "description" : "아카이빙 제목"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "아카이빙 내용"
           }
         }
       },

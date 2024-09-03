@@ -34,14 +34,14 @@ public class UserControllerTest extends ControllerTestConfig {
     @DisplayName("유저 생성")
     public void testCreateUser() throws Exception {
         // given
-        Mockito.doNothing().when(userService).create(any(UserRequest.class));
+        Mockito.when(userService.create(any(UserRequest.class))).thenReturn(1L);  // Mockito가 userService.create() 호출 시 1L을 반환하도록 수정
 
         String jsonRequest = """
-                {
-                    "name": "Hee Sang",
-                    "email": "heesang99@gmail.com"
-                }
-                """;
+            {
+                "name": "Hee Sang",
+                "email": "heesang99@gmail.com"
+            }
+            """;
 
         // when
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.post("/user")
@@ -65,13 +65,14 @@ public class UserControllerTest extends ControllerTestConfig {
                                         .responseFields(
                                                 fieldWithPath("code").description("응답 코드"),
                                                 fieldWithPath("message").description("응답 메시지"),
-                                                fieldWithPath("data").description("응답 데이터")
+                                                fieldWithPath("data").description("생성된 유저 ID")  // 생성된 유저 ID를 설명하는 부분으로 수정
                                         )
                                         .responseSchema(Schema.schema("CommonResponse"))
                                         .build()
                         )
                 ));
     }
+
 
     @Test
     @DisplayName("유저 삭제")

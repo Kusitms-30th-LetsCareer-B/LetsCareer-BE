@@ -27,21 +27,31 @@ public class Archiving extends BaseTimeEntity {
     @Column(nullable = false, length = 3000)
     private String content;
 
-    @Column(length = 1000)
+    @Column(nullable = false)
+    private String fileName;
+
+    @Column(nullable = false)
     private String fileUrl;
 
-    public static Archiving of(Recruitment recruitment, String title, String content, String fileUrl) {
+    @Column(nullable = false)
+    private String fileKey;  // fileKey 필드 추가
+
+    public static Archiving of(Recruitment recruitment, String title, String content, String fileName, String fileUrl, String fileKey) {
         return Archiving.builder()
                 .recruitment(recruitment)
                 .title(title)
                 .content(content)
+                .fileName(fileName)
                 .fileUrl(fileUrl)
+                .fileKey(fileKey)
                 .build();
     }
 
-    public void update(String title, String content, String fileUrl) {
+    public void update(String title, String content, String fileName, String fileUrl, String fileKey) {
         this.title = title;
         this.content = content;
+        this.fileName = fileName;
         this.fileUrl = fileUrl;
+        this.fileKey = fileKey;
     }
 }
