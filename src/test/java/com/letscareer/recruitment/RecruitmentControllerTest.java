@@ -7,7 +7,6 @@ import com.letscareer.configuration.ControllerTestConfig;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
 import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
-import com.letscareer.recruitment.dto.response.GetRecruitmentRes;
 import com.letscareer.recruitment.presentation.RecruitmentController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
