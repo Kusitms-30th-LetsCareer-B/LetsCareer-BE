@@ -1,4 +1,4 @@
-package com.letscareer.presentation;
+package com.letscareer.url;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;

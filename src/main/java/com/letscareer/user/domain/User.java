@@ -2,7 +2,7 @@ package com.letscareer.user.domain;
 
 import com.letscareer.global.domain.BaseTimeEntity;
 import com.letscareer.recruitment.domain.Recruitment;
-import com.letscareer.recruitment.domain.Stage;
+import com.letscareer.user.dto.request.UserRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +28,11 @@ public class User extends BaseTimeEntity {
     private String name;
 
     private String email;
+
+    public static User from(UserRequest request) {
+        return User.builder()
+                .name(request.name())
+                .email(request.email())
+                .build();
+    }
 }

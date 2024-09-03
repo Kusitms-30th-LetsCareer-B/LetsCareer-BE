@@ -1,6 +1,6 @@
 package com.letscareer.recruitment.presentation;
 
-import com.letscareer.global.domain.ResponseDto;
+import com.letscareer.global.domain.CommonResponse;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.application.StageService;
 import com.letscareer.recruitment.dto.request.CreateStageReq;
@@ -24,9 +24,9 @@ public class StageController {
      * @return null
      */
     @PostMapping("/stages")
-    public ResponseEntity<ResponseDto<Void>> createStage(@RequestParam(name = "recruitmentId") Long recruitmentId, @RequestBody CreateStageReq request){
+    public ResponseEntity<CommonResponse<Void>> createStage(@RequestParam(name = "recruitmentId") Long recruitmentId, @RequestBody CreateStageReq request){
         stageService.createStage(recruitmentId, request);
-        return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용전형을 추가하였습니다.", null));
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("채용전형을 추가하였습니다.", null));
     }
 
     /**
@@ -35,8 +35,8 @@ public class StageController {
      * @return FindStageRes
      */
     @GetMapping("/stages")
-    public ResponseEntity<ResponseDto<FindStageRes>> findStage(@RequestParam(name = "stageId") Long stageId){
-        return ResponseEntity.ok().body(ResponseDto.ofSuccess("해당 채용전형을 조회하였습니다.", stageService.findStage(stageId)));
+    public ResponseEntity<CommonResponse<FindStageRes>> findStage(@RequestParam(name = "stageId") Long stageId){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 채용전형을 조회하였습니다.", stageService.findStage(stageId)));
     }
 
     /**
@@ -46,9 +46,9 @@ public class StageController {
      * @return null
      */
     @PatchMapping("/stages")
-    public ResponseEntity<ResponseDto<Void>> modifyStage(@RequestParam(name = "stageId") Long stageId, @RequestBody ModifyStageReq request){
+    public ResponseEntity<CommonResponse<Void>> modifyStage(@RequestParam(name = "stageId") Long stageId, @RequestBody ModifyStageReq request){
         stageService.modifyStage(stageId, request);
-        return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 수정하였습니다.", null));
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("채용 전형을 수정하였습니다.", null));
     }
 
     /**
@@ -57,9 +57,9 @@ public class StageController {
      * @return null
      */
     @DeleteMapping("/stages")
-    public ResponseEntity<ResponseDto<Void>> deleteStage(@RequestParam(name = "stageId") Long stageId){
+    public ResponseEntity<CommonResponse<Void>> deleteStage(@RequestParam(name = "stageId") Long stageId){
         stageService.deleteStage(stageId);
-        return ResponseEntity.ok().body(ResponseDto.ofSuccess("채용 전형을 삭제하였습니다.", null));
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("채용 전형을 삭제하였습니다.", null));
     }
 
 }

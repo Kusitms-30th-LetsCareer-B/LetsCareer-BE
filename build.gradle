@@ -48,6 +48,7 @@ dependencies {
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.jsoup:jsoup:1.17.2'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
@@ -56,7 +57,7 @@ dependencies {
 	testImplementation 'com.h2database:h2'
 
 	//restdocs-api-spec 의존성 추가
-	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.17.1'
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.2'
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'com.squareup.okhttp3:mockwebserver'
@@ -82,8 +83,19 @@ sourceSets {
 	}
 }
 
+def serverUrl = "http://localhost:8080"
+
+if (project.hasProperty("spring.profiles.active")) {
+	def activeProfile = project.property("spring.profiles.active")
+	if (activeProfile == "prod") {
+		serverUrl = System.getProperty('PROD_SERVER_URL') ?: "https://default.prod.server.url"
+	} else if (activeProfile == "local") {
+		serverUrl = "http://localhost:8080"
+	}
+}
+
 openapi3 {
-	server = "http://localhost:8080"
+	server = serverUrl
 	title = "위대한레츠비 API 문서"
 	description = "Spring REST Docs with SwaggerUI."
 	version = "0.0.1"

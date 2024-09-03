@@ -1,5 +1,6 @@
 package com.letscareer.recruitment.domain;
 
+import com.letscareer.archiving.domain.Archiving;
 import com.letscareer.global.domain.BaseTimeEntity;
 import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
@@ -27,6 +28,9 @@ public class Recruitment extends BaseTimeEntity {
     // Stage 엔티티와의 일대다 관계 설정
     @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE)
     private List<Stage> stages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE)
+    private List<Archiving> archivings = new ArrayList<>();
 
     @Column(nullable = false)
     private String companyName;
