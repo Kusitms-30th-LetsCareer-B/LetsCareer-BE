@@ -1,19 +1,18 @@
 package com.letscareer.recruitment.domain;
 
-import com.letscareer.calendar.domain.Schedule;
+import com.letscareer.global.domain.BaseTimeEntity;
+import com.letscareer.recruitment.dto.request.ModifyStageReq;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class Stage {
+public class Stage extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +46,11 @@ public class Stage {
                 .status(status)
                 .isFinal(isFinal)
                 .build();
+    }
+
+    public void modifyStage(ModifyStageReq request) {
+            this.stageName = request.getStageName();
+            this.endDate = request.getEndDate();
+            this.status = StageStatusType.of(request.getStatus());
     }
 }

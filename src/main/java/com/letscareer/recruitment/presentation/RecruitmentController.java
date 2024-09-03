@@ -3,7 +3,10 @@ package com.letscareer.recruitment.presentation;
 import com.letscareer.global.domain.CommonResponse;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
-import com.letscareer.recruitment.dto.response.GetRecruitmentRes;
+import com.letscareer.recruitment.dto.response.FindAllRecruitmentsByTypeRes;
+import com.letscareer.recruitment.dto.response.FindAllRecruitmentsRes;
+import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
+import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +18,7 @@ public class RecruitmentController {
     private final RecruitmentService recruitmentService;
 
     /**
-     * 채용일정 등록 api
+     * 채용일정 등록
      * @param userId 유저id
      * @return null
      */
@@ -26,17 +29,17 @@ public class RecruitmentController {
     }
 
     /**
-     * 채용일정 단일 조회 api
+     * 채용일정 단일 조회
      * @param recruitmentId 채용일정id
      * @return GetRecruitmentRes
      */
-    @GetMapping("/recruitments")
-    public ResponseEntity<CommonResponse<GetRecruitmentRes>> findRecruitment(@RequestParam(name = "recruitmentId") Long recruitmentId){
+    @GetMapping("/recruitments/{recruitmentId}")
+    public ResponseEntity<CommonResponse<FindRecruitmentRes>> findRecruitment(@PathVariable(name = "recruitmentId") Long recruitmentId){
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("채용 일정을 조회하였습니다.", recruitmentService.findRecruitment(recruitmentId)));
     }
 
     /**
-     *
+     * 채용 일정 삭제
      * @param recruitmentId 채용일정id
      * @return null
      *
@@ -47,5 +50,35 @@ public class RecruitmentController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("채용 일정을 삭제하였습니다.", null));
     }
 
+    /**
+     * 유저 총 채용일정의 상태 개수를 반환한다.
+     * @param userId 유저id
+     * @return GetRecruitmentsStatusRes
+     */
+    @GetMapping("/statuses")
+    public ResponseEntity<CommonResponse<GetRecruitmentsStatusRes>> getRecruitmentsStatus(@RequestParam(name = "userId") Long userId){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저의 총 채용일정 상태 개수가 반환되었습니다.",  recruitmentService.getRecruitmentsStatus(userId)));
+    }
+
+    /**
+     * 유저의 채용일정 리스트들을 반환한다. (관심기업 먼저, 마감일 적게 남은 순)
+     * @param userId 유저id
+     * @return FindAllRecruitmentsRes
+     */
+    @GetMapping("/recruitments")
+    public ResponseEntity<CommonResponse<FindAllRecruitmentsRes>> findAllRecruitments(@RequestParam(name = "userId") Long userId){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", recruitmentService.findAllRecruitments(userId)));
+    }
+
+    /**
+     * 해당 타입의 채용일정 리스트를 반환한다.
+     * @param type
+     * @param userId
+     * @return
+     */
+    @GetMapping("/recruitments/status")
+    public ResponseEntity<CommonResponse<FindAllRecruitmentsByTypeRes>> findRecruitmentsByType(@RequestParam(name = "type") String type, @RequestParam(name = "userId") Long userId){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", recruitmentService.findRecruitmentsByType(type, userId)));
+    }
 
 }

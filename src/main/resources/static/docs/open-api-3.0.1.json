@@ -35,7 +35,7 @@
                 },
                 "examples" : {
                   "archiving/addArchiving" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"아카이빙 추가에 성공하였습니다.\",\r\n  \"data\" : 1\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 추가에 성공하였습니다.\",\n  \"data\" : 1\n}"
                   }
                 }
               }
@@ -67,7 +67,7 @@
                 },
                 "examples" : {
                   "archiving/deleteArchiving" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"아카이빙 삭제에 성공하였습니다.\",\r\n  \"data\" : null\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 삭제에 성공하였습니다.\",\n  \"data\" : null\n}"
                   }
                 }
               }
@@ -99,7 +99,7 @@
                 },
                 "examples" : {
                   "archiving/updateArchiving" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"아카이빙 수정에 성공하였습니다.\",\r\n  \"data\" : null\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 수정에 성공하였습니다.\",\n  \"data\" : null\n}"
                   }
                 }
               }
@@ -231,7 +231,7 @@
                 },
                 "examples" : {
                   "archiving/getArchivingsByRecruitmentId" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"아카이빙 목록 조회에 성공하였습니다.\",\r\n  \"data\" : [ {\r\n    \"id\" : 1,\r\n    \"title\" : \"First Archiving\"\r\n  }, {\r\n    \"id\" : 2,\r\n    \"title\" : \"Second Archiving\"\r\n  } ]\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"아카이빙 목록 조회에 성공하였습니다.\",\n  \"data\" : [ {\n    \"id\" : 1,\n    \"title\" : \"First Archiving\"\n  }, {\n    \"id\" : 2,\n    \"title\" : \"Second Archiving\"\n  } ]\n}"
                   }
                 }
               }
@@ -281,7 +281,7 @@
                 },
                 "examples" : {
                   "calendar/getPersonalScheduleForMonth" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \" 개인 일정 조회에 성공하였습니다.\",\r\n  \"data\" : [ {\r\n    \"personalScheduleId\" : 1,\r\n    \"date\" : \"2024-09-01\",\r\n    \"content\" : \"Meeting\"\r\n  } ]\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \" 개인 일정 조회에 성공하였습니다.\",\n  \"data\" : [ {\n    \"personalScheduleId\" : 1,\n    \"date\" : \"2024-09-01\",\n    \"content\" : \"Meeting\"\n  } ]\n}"
                   }
                 }
               }
@@ -311,7 +311,7 @@
               },
               "examples" : {
                 "calendar/addPersonalSchedule" : {
-                  "value" : "{\r\n  \"date\" : \"2024-09-01\",\r\n  \"content\" : \"Meeting with the team\"\r\n}"
+                  "value" : "{\n  \"date\" : \"2024-09-01\",\n  \"content\" : \"Meeting with the team\"\n}"
                 }
               }
             }
@@ -327,7 +327,7 @@
                 },
                 "examples" : {
                   "calendar/addPersonalSchedule" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"개인 일정 추가에 성공하였습니다.\",\r\n  \"data\" : null\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"개인 일정 추가에 성공하였습니다.\",\n  \"data\" : null\n}"
                   }
                 }
               }
@@ -377,7 +377,7 @@
                 },
                 "examples" : {
                   "calendar/getScheduleForMonth" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"캘린더 조회에 성공하였습니다.\",\r\n  \"data\" : [ {\r\n    \"scheduleId\" : 1,\r\n    \"date\" : \"2024-09-01\",\r\n    \"filter\" : \"PERSONAL\",\r\n    \"companyName\" : \"Naver\"\r\n  } ]\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"캘린더 조회에 성공하였습니다.\",\n  \"data\" : [ {\n    \"scheduleId\" : 1,\n    \"date\" : \"2024-09-01\",\n    \"filter\" : \"PERSONAL\",\n    \"companyName\" : \"Naver\"\n  } ]\n}"
                   }
                 }
               }
@@ -389,13 +389,13 @@
     "/recruitments" : {
       "get" : {
         "tags" : [ "채용 일정" ],
-        "summary" : "채용 일정 조회",
-        "description" : "채용 일정 조회",
-        "operationId" : "recruitment/findRecruitment",
+        "summary" : "유저의 채용일정 리스트 조회",
+        "description" : "유저의 채용일정 리스트 조회",
+        "operationId" : "recruitment/findAllRecruitments",
         "parameters" : [ {
-          "name" : "recruitmentId",
+          "name" : "userId",
           "in" : "query",
-          "description" : "조회할 채용 일정의 ID",
+          "description" : "유저의 ID",
           "required" : true,
           "schema" : {
             "type" : "string"
@@ -407,11 +407,11 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/GetRecruitmentRes"
+                  "$ref" : "#/components/schemas/CommonResponse"
                 },
                 "examples" : {
-                  "recruitment/findRecruitment" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"채용 일정을 조회하였습니다.\",\r\n  \"data\" : {\r\n    \"recruitmentId\" : 1,\r\n    \"companyName\" : \"Test Company\",\r\n    \"isFavorite\" : true,\r\n    \"task\" : \"Software Development\",\r\n    \"announcementUrl\" : \"http://example.com\",\r\n    \"stages\" : null\r\n  }\r\n}"
+                  "recruitment/findAllRecruitments" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"유저의 채용일정 리스트가 반환되었습니다.\",\n  \"data\" : {\n    \"recruitments\" : [ {\n      \"recruitmentId\" : 1,\n      \"companyName\" : \"Test Company\",\n      \"task\" : \"Software Development\",\n      \"isFavorite\" : true,\n      \"isRemind\" : true,\n      \"announcementUrl\" : \"http://example.com\",\n      \"stageName\" : \"면접\",\n      \"status\" : \"PROGRESS\",\n      \"endDate\" : \"2024-09-30\",\n      \"daysUntilEnd\" : 5\n    } ]\n  }\n}"
                   }
                 }
               }
@@ -441,7 +441,7 @@
               },
               "examples" : {
                 "recruitment/enrollRecruitment" : {
-                  "value" : "{\r\n  \"companyName\" : \"Test Company\",\r\n  \"isFavorite\" : true,\r\n  \"task\" : \"Software Development\",\r\n  \"isRemind\" : true,\r\n  \"announcementUrl\" : \"http://example.com\",\r\n  \"stageStartDate\" : \"2024-09-01\",\r\n  \"stageEndDate\" : \"2024-09-30\"\r\n}"
+                  "value" : "{\n  \"companyName\" : \"Test Company\",\n  \"isFavorite\" : true,\n  \"task\" : \"Software Development\",\n  \"isRemind\" : true,\n  \"announcementUrl\" : \"http://example.com\",\n  \"stageStartDate\" : \"2024-09-01\",\n  \"stageEndDate\" : \"2024-09-30\"\n}"
                 }
               }
             }
@@ -457,7 +457,7 @@
                 },
                 "examples" : {
                   "recruitment/enrollRecruitment" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"채용일정을 등록하였습니다.\",\r\n  \"data\" : null\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"채용일정을 등록하였습니다.\",\n  \"data\" : null\n}"
                   }
                 }
               }
@@ -489,7 +489,275 @@
                 },
                 "examples" : {
                   "recruitment/deleteRecruitment" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"채용 일정을 삭제하였습니다.\",\r\n  \"data\" : null\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"채용 일정을 삭제하였습니다.\",\n  \"data\" : null\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recruitments/status" : {
+      "get" : {
+        "tags" : [ "채용 일정" ],
+        "summary" : "유저의 타입별 채용일정 리스트 조회",
+        "description" : "유저의 타입별 채용일정 리스트 조회",
+        "operationId" : "recruitment/findRecruitmentsByType",
+        "parameters" : [ {
+          "name" : "type",
+          "in" : "query",
+          "description" : "조회할 채용 일정의 타입 (progress 또는 consequence)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "유저의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "recruitment/findRecruitmentsByType" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"유저 채용일정 리스트가 반환되었습니다.\",\n  \"data\" : {\n    \"recruitments\" : [ {\n      \"recruitmentId\" : 1,\n      \"companyName\" : \"Test Company\",\n      \"task\" : \"Software Development\",\n      \"isFavorite\" : true,\n      \"stageName\" : \"면접\",\n      \"status\" : \"PROGRESS\",\n      \"endDate\" : \"2024-09-30\",\n      \"daysUntilEnd\" : 5\n    } ]\n  }\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recruitments/{recruitmentId}" : {
+      "get" : {
+        "tags" : [ "채용 일정" ],
+        "summary" : "채용 일정 단일 조회",
+        "description" : "채용 일정 단일 조회",
+        "operationId" : "recruitment/findRecruitment",
+        "parameters" : [ {
+          "name" : "recruitmentId",
+          "in" : "path",
+          "description" : "조회할 채용 일정의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "recruitment/findRecruitment" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"채용 일정을 조회하였습니다.\",\n  \"data\" : {\n    \"recruitmentId\" : 1,\n    \"companyName\" : \"Test Company\",\n    \"isFavorite\" : true,\n    \"task\" : \"Software Development\",\n    \"announcementUrl\" : \"http://example.com\",\n    \"stages\" : [ {\n      \"stageId\" : 1,\n      \"stageName\" : \"서류 제출\",\n      \"startDate\" : \"2024-09-01\",\n      \"endDate\" : \"2024-09-30\",\n      \"status\" : \"PASSED\",\n      \"isFinal\" : false\n    } ]\n  }\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stages" : {
+      "get" : {
+        "tags" : [ "채용 전형" ],
+        "summary" : "특정 채용 전형 단일 조회",
+        "description" : "특정 채용 전형 단일 조회",
+        "operationId" : "stage/findStage",
+        "parameters" : [ {
+          "name" : "stageId",
+          "in" : "query",
+          "description" : "채용 전형의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "stage/findStage" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"해당 채용전형을 조회하였습니다.\",\n  \"data\" : {\n    \"stageName\" : \"면접\",\n    \"startDate\" : \"2024-09-01\",\n    \"endDate\" : \"2024-09-30\",\n    \"status\" : \"PROGRESS\",\n    \"isFinal\" : true\n  }\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "채용 전형" ],
+        "summary" : "채용 전형 추가",
+        "description" : "채용 전형 추가",
+        "operationId" : "stage/createStage",
+        "parameters" : [ {
+          "name" : "recruitmentId",
+          "in" : "query",
+          "description" : "채용 일정의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/stages1054090468"
+              },
+              "examples" : {
+                "stage/createStage" : {
+                  "value" : "{\n  \"stageName\" : \"면접\",\n  \"endDate\" : \"2024-09-30\",\n  \"isFinal\" : true\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "stage/createStage" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"채용전형을 추가하였습니다.\",\n  \"data\" : null\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "채용 전형" ],
+        "summary" : "채용 전형 삭제",
+        "description" : "채용 전형 삭제",
+        "operationId" : "stage/delete",
+        "parameters" : [ {
+          "name" : "stageId",
+          "in" : "query",
+          "description" : "채용 전형의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "stage/delete" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"채용 전형을 삭제하였습니다.\",\n  \"data\" : null\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "채용 전형" ],
+        "summary" : "채용 전형 수정",
+        "description" : "채용 전형 수정",
+        "operationId" : "stage/modifyStage",
+        "parameters" : [ {
+          "name" : "stageId",
+          "in" : "query",
+          "description" : "채용 전형의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/stages1320066878"
+              },
+              "examples" : {
+                "stage/modifyStage" : {
+                  "value" : "{\n  \"stageName\" : \"면접\",\n  \"endDate\" : \"2024-09-30\",\n  \"status\" : \"PROGRESS\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "stage/modifyStage" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"채용 전형을 수정하였습니다.\",\n  \"data\" : null\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statuses" : {
+      "get" : {
+        "tags" : [ "채용 일정" ],
+        "summary" : "유저의 총 채용일정 상태 개수 조회",
+        "description" : "유저의 총 채용일정 상태 개수 조회",
+        "operationId" : "recruitment/getRecruitmentsStatus",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "유저의 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse"
+                },
+                "examples" : {
+                  "recruitment/getRecruitmentsStatus" : {
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"유저의 총 채용일정 상태 개수가 반환되었습니다.\",\n  \"data\" : {\n    \"total\" : 10,\n    \"progress\" : 4,\n    \"passed\" : 3,\n    \"failed\" : 3\n  }\n}"
                   }
                 }
               }
@@ -523,7 +791,7 @@
                 },
                 "examples" : {
                   "url/getMetadata" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"요청 성공\",\r\n  \"data\" : {\r\n    \"title\" : \"Test Title\",\r\n    \"description\" : \"Test Description\",\r\n    \"iconUrl\" : \"https://example.com/favicon.ico\",\r\n    \"url\" : \"https://example.com\"\r\n  }\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"요청 성공\",\n  \"data\" : {\n    \"title\" : \"Test Title\",\n    \"description\" : \"Test Description\",\n    \"iconUrl\" : \"https://example.com/favicon.ico\",\n    \"url\" : \"https://example.com\"\n  }\n}"
                   }
                 }
               }
@@ -546,7 +814,7 @@
               },
               "examples" : {
                 "user/createUser" : {
-                  "value" : "{\r\n  \"name\" : \"Hee Sang\",\r\n  \"email\" : \"heesang99@gmail.com\"\r\n}"
+                  "value" : "{\n  \"name\" : \"Hee Sang\",\n  \"email\" : \"heesang99@gmail.com\"\n}"
                 }
               }
             }
@@ -562,7 +830,9 @@
                 },
                 "examples" : {
                   "user/createUser" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"유저 생성에 성공하였습니다.\",\r\n  \"data\" : 1\r\n}"
+
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"유저 생성에 성공하였습니다.\",\n  \"data\" : null\n}"
+
                   }
                 }
               }
@@ -594,7 +864,7 @@
                 },
                 "examples" : {
                   "user/deleteUser" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"유저 삭제에 성공하였습니다.\",\r\n  \"data\" : null\r\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"유저 삭제에 성공하였습니다.\",\n  \"data\" : null\n}"
                   }
                 }
               }
@@ -619,17 +889,48 @@
             "description" : "응답 코드"
           },
           "data" : {
-            "type" : "array",
-            "items" : {
-              "type" : "object",
-              "properties" : {
-                "id" : {
-                  "type" : "number",
-                  "description" : "아카이빙 ID"
-                },
-                "title" : {
-                  "type" : "string",
-                  "description" : "아카이빙 제목"
+
+            "type" : "object",
+            "properties" : {
+              "recruitments" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "stageName" : {
+                      "type" : "string",
+                      "description" : "채용 단계 이름"
+                    },
+                    "task" : {
+                      "type" : "string",
+                      "description" : "직무"
+                    },
+                    "endDate" : {
+                      "type" : "string",
+                      "description" : "채용 단계 종료 날짜"
+                    },
+                    "companyName" : {
+                      "type" : "string",
+                      "description" : "회사 이름"
+                    },
+                    "daysUntilEnd" : {
+                      "type" : "number",
+                      "description" : "마감일까지 남은 일수"
+                    },
+                    "recruitmentId" : {
+                      "type" : "number",
+                      "description" : "채용 일정 ID"
+                    },
+                    "status" : {
+                      "type" : "string",
+                      "description" : "채용 단계 상태"
+                    },
+                    "isFavorite" : {
+                      "type" : "boolean",
+                      "description" : "즐겨찾기 여부"
+                    }
+                  }
+
                 }
               }
             }
@@ -653,6 +954,42 @@
           }
         }
       },
+
+      "stages1320066878" : {
+        "type" : "object",
+        "properties" : {
+          "stageName" : {
+            "type" : "string",
+            "description" : "전형 이름"
+          },
+          "endDate" : {
+            "type" : "string",
+            "description" : "전형 종료 날짜"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "채용 전형 상태"
+          }
+        }
+      },
+      "stages1054090468" : {
+        "type" : "object",
+        "properties" : {
+          "stageName" : {
+            "type" : "string",
+            "description" : "전형 이름"
+          },
+          "endDate" : {
+            "type" : "string",
+            "description" : "전형 종료 날짜"
+          },
+          "isFinal" : {
+            "type" : "boolean",
+            "description" : "최종 전형 여부"
+          }
+        }
+      },
+
       "ScheduleResponse" : {
         "title" : "ScheduleResponse",
         "type" : "object",
@@ -717,45 +1054,6 @@
               "url" : {
                 "type" : "string",
                 "description" : "원본 URL"
-              }
-            }
-          },
-          "message" : {
-            "type" : "string",
-            "description" : "응답 메시지"
-          }
-        }
-      },
-      "GetRecruitmentRes" : {
-        "title" : "GetRecruitmentRes",
-        "type" : "object",
-        "properties" : {
-          "code" : {
-            "type" : "number",
-            "description" : "응답 코드"
-          },
-          "data" : {
-            "type" : "object",
-            "properties" : {
-              "announcementUrl" : {
-                "type" : "string",
-                "description" : "공고 URL"
-              },
-              "task" : {
-                "type" : "string",
-                "description" : "직무"
-              },
-              "companyName" : {
-                "type" : "string",
-                "description" : "회사 이름"
-              },
-              "recruitmentId" : {
-                "type" : "number",
-                "description" : "채용 일정 ID"
-              },
-              "isFavorite" : {
-                "type" : "boolean",
-                "description" : "즐겨찾기 여부"
               }
             }
           },
@@ -832,24 +1130,7 @@
           }
         }
       },
-      "ArchivingDetailResponse" : {
-        "title" : "ArchivingDetailResponse",
-        "type" : "object",
-        "properties" : {
-          "fileName" : {
-            "type" : "string",
-            "description" : "파일 이름"
-          },
-          "title" : {
-            "type" : "string",
-            "description" : "아카이빙 제목"
-          },
-          "content" : {
-            "type" : "string",
-            "description" : "아카이빙 내용"
-          }
-        }
-      },
+
       "calendar-personal-546565965" : {
         "type" : "object",
         "properties" : {

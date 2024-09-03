@@ -26,10 +26,12 @@ public class Recruitment extends BaseTimeEntity {
     private User user;
 
     // Stage 엔티티와의 일대다 관계 설정
-    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE)
+    @Builder.Default
     private List<Stage> stages = new ArrayList<>();
 
     @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE)
+    @Builder.Default
     private List<Archiving> archivings = new ArrayList<>();
 
     @Column(nullable = false)
@@ -39,14 +41,16 @@ public class Recruitment extends BaseTimeEntity {
     private String task;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isFavorite = false;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isRemind = true;
 
     private String announcementUrl;
 
-    public static Recruitment of(User user, String companyName,  Boolean isFavorite, String task, Boolean isRemind, String announcementUrl) {
+    public static Recruitment of(User user, String companyName, Boolean isFavorite, String task, Boolean isRemind, String announcementUrl) {
         return Recruitment.builder()
                 .user(user)
                 .companyName(companyName)
