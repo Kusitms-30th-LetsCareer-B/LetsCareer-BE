@@ -32,8 +32,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Set environment variable for PROD_SERVER_URL
+        run: echo "PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }}" >> $GITHUB_ENV
+
       - name: Build with Gradle
-        run: export PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} ./gradlew build -Pspring.profiles.active=prod
+        run: ./gradlew build -Pspring.profiles.active=prod
 
       - name: Docker build & push to prod
         if: contains(github.ref, 'develop')
