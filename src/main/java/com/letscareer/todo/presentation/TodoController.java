@@ -76,5 +76,12 @@ public class TodoController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 투두를 삭제하였습니다.", null));
     }
 
+    @PatchMapping("/todos/{todoId}/delay")
+    public ResponseEntity<CommonResponse<Void>> delayTodo(@PathVariable(name = "todoId") Long todoId){
+        todoService.delayTodo(todoId);
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 투두의 일정을 하루 미뤘습니다.", null));
+    }
+
+
 
 }

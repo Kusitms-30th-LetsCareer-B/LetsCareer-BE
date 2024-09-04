@@ -56,4 +56,8 @@ public class Todo extends BaseTimeEntity {
     public void modifyTodoIsCompleted() {
         this.isCompleted = !this.isCompleted;
     }
+
+    public void delayDate() {
+        this.date = this.date.plusDays(1);
+    }
 }
