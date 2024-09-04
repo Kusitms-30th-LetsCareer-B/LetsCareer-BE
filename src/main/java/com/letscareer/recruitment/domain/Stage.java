@@ -1,11 +1,14 @@
 package com.letscareer.recruitment.domain;
 
+import com.letscareer.calendar.domain.Schedule;
 import com.letscareer.global.domain.BaseTimeEntity;
 import com.letscareer.recruitment.dto.request.ModifyStageReq;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -22,6 +25,10 @@ public class Stage extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruitment_id", nullable = false)
     private Recruitment recruitment;
+
+    @OneToMany(mappedBy = "stage", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Schedule> schedules = new ArrayList<>();
 
     @Column(nullable = false)
     private String stageName;

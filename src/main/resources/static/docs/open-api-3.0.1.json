@@ -10,7 +10,55 @@
   } ],
   "tags" : [ ],
   "paths" : {
-    "/archivings" : {
+
+    "/archiving" : {
+      "get" : {
+        "tags" : [ "아카이빙" ],
+        "summary" : "특정 아카이빙의 상세 정보 조회 및 파일 다운로드",
+        "description" : "특정 아카이빙의 상세 정보 조회 및 파일 다운로드",
+        "operationId" : "archiving/getArchivingDetailAndFile",
+        "parameters" : [ {
+          "name" : "archivingId",
+          "in" : "query",
+          "description" : "아카이빙 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "headers" : {
+              "Content-Disposition" : {
+                "description" : "파일 첨부 헤더",
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Content-Type" : {
+                "description" : "파일의 MIME 타입",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/octet-stream;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/file"
+                },
+                "examples" : {
+                  "archiving/getArchivingDetailAndFile" : {
+                    "value" : "Test content"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
       "post" : {
         "tags" : [ "아카이빙" ],
         "summary" : "아카이빙 추가",
@@ -133,7 +181,7 @@
                 },
                 "examples" : {
                   "archiving/getArchivingDetail" : {
-                    "value" : "{\r\n  \"title\" : \"Archiving Title\",\r\n  \"content\" : \"Archiving Content\",\r\n  \"fileName\" : \"test.txt\"\r\n}"
+                    "value" : "{\n  \"title\" : \"Archiving Title\",\n  \"content\" : \"Archiving Content\",\n  \"fileName\" : \"test.txt\"\n}"
                   }
                 }
               }
@@ -1120,7 +1168,9 @@
                 },
                 "examples" : {
                   "user/createUser" : {
-                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"유저 생성에 성공하였습니다.\",\r\n  \"data\" : 1\r\n}"
+
+                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"유저 생성에 성공하였습니다.\",\n  \"data\" : 1\n}"
+
                   }
                 }
               }
@@ -1510,214 +1560,9 @@
           }
         }
       },
-      "CareerDetailResponse" : {
-        "title" : "CareerDetailResponse",
-        "type" : "object",
-        "properties" : {
-          "code" : {
-            "type" : "number",
-            "description" : "응답 코드"
-          },
-          "data" : {
-            "type" : "object",
-            "properties" : {
-              "portfolioFileKey" : {
-                "type" : "string",
-                "description" : "포트폴리오 파일 키"
-              },
-              "gender" : {
-                "type" : "string",
-                "description" : "사용자 성별"
-              },
-              "portfolioFileName" : {
-                "type" : "string",
-                "description" : "포트폴리오 파일 이름"
-              },
-              "workExperiences" : {
-                "type" : "array",
-                "description" : "경력 정보 리스트",
-                "items" : {
-                  "type" : "object",
-                  "properties" : {
-                    "departmentName" : {
-                      "type" : "string",
-                      "description" : "부서 이름"
-                    },
-                    "endDate" : {
-                      "type" : "string",
-                      "description" : "근무 종료 날짜"
-                    },
-                    "employmentType" : {
-                      "type" : "string",
-                      "description" : "고용 유형"
-                    },
-                    "jobTitle" : {
-                      "type" : "string",
-                      "description" : "직무 제목"
-                    },
-                    "companyName" : {
-                      "type" : "string",
-                      "description" : "회사 이름"
-                    },
-                    "jobDescription" : {
-                      "type" : "string",
-                      "description" : "직무 설명"
-                    },
-                    "id" : {
-                      "type" : "number",
-                      "description" : "경력 ID"
-                    },
-                    "startDate" : {
-                      "type" : "string",
-                      "description" : "근무 시작 날짜"
-                    }
-                  }
-                }
-              },
-              "educations" : {
-                "type" : "array",
-                "description" : "교육 정보 리스트",
-                "items" : {
-                  "type" : "object",
-                  "properties" : {
-                    "majorType" : {
-                      "type" : "string",
-                      "description" : "전공 유형"
-                    },
-                    "graduationStatus" : {
-                      "type" : "string",
-                      "description" : "졸업 상태"
-                    },
-                    "graduationDate" : {
-                      "type" : "string",
-                      "description" : "졸업 날짜"
-                    },
-                    "educationType" : {
-                      "type" : "string",
-                      "description" : "교육 유형"
-                    },
-                    "enrollmentDate" : {
-                      "type" : "string",
-                      "description" : "입학 날짜"
-                    },
-                    "majorName" : {
-                      "type" : "string",
-                      "description" : "전공 이름"
-                    },
-                    "schoolLocation" : {
-                      "type" : "string",
-                      "description" : "학교 위치"
-                    },
-                    "id" : {
-                      "type" : "number",
-                      "description" : "교육 ID"
-                    },
-                    "schoolName" : {
-                      "type" : "string",
-                      "description" : "학교 이름"
-                    }
-                  }
-                }
-              },
-              "imageFileUrl" : {
-                "type" : "string",
-                "description" : "프로필 이미지 URL"
-              },
-              "birthDate" : {
-                "type" : "string",
-                "description" : "사용자 생년월일"
-              },
-              "userId" : {
-                "type" : "number",
-                "description" : "사용자 ID"
-              },
-              "portfolioFileUrl" : {
-                "type" : "string",
-                "description" : "포트폴리오 파일 URL"
-              },
-              "portfolioId" : {
-                "type" : "number",
-                "description" : "포트폴리오 ID"
-              },
-              "certificates" : {
-                "type" : "array",
-                "description" : "자격증 정보 리스트",
-                "items" : {
-                  "type" : "object",
-                  "properties" : {
-                    "acquiredDate" : {
-                      "type" : "string",
-                      "description" : "자격증 취득 날짜"
-                    },
-                    "certificateIssuer" : {
-                      "type" : "string",
-                      "description" : "자격증 발행 기관"
-                    },
-                    "certificateName" : {
-                      "type" : "string",
-                      "description" : "자격증 이름"
-                    },
-                    "id" : {
-                      "type" : "number",
-                      "description" : "자격증 ID"
-                    }
-                  }
-                }
-              },
-              "portfolioOrganizationUrl" : {
-                "type" : "string",
-                "description" : "포트폴리오 기관 URL"
-              },
-              "activities" : {
-                "type" : "array",
-                "description" : "활동 정보 리스트",
-                "items" : {
-                  "type" : "object",
-                  "properties" : {
-                    "activeType" : {
-                      "type" : "string",
-                      "description" : "활동 유형"
-                    },
-                    "endDate" : {
-                      "type" : "string",
-                      "description" : "활동 종료 날짜"
-                    },
-                    "organization" : {
-                      "type" : "string",
-                      "description" : "조직 이름"
-                    },
-                    "activeUrl" : {
-                      "type" : "string",
-                      "description" : "활동 URL"
-                    },
-                    "id" : {
-                      "type" : "number",
-                      "description" : "활동 ID"
-                    },
-                    "isActive" : {
-                      "type" : "boolean",
-                      "description" : "활동 여부"
-                    },
-                    "startDate" : {
-                      "type" : "string",
-                      "description" : "활동 시작 날짜"
-                    }
-                  }
-                }
-              },
-              "name" : {
-                "type" : "string",
-                "description" : "사용자 이름"
-              }
-            }
-          },
-          "message" : {
-            "type" : "string",
-            "description" : "응답 메시지"
-          }
-        }
-      },
-      "stages1054090468" : {
+
+      "stages1320066878" : {
+
         "type" : "object",
         "properties" : {
           "stageName" : {

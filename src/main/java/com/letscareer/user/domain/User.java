@@ -27,7 +27,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+
+    // Recruitment 엔티티와의 일대다 관계 설정
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+
     @Builder.Default
     private List<Recruitment> recruitments = new ArrayList<>();
 

@@ -25,7 +25,12 @@ public enum ExceptionContent {
     NOT_FOUND_STAGE(NOT_FOUND, "존재하는 않는 일정 전형입니다."),
     NOT_FOUND_ARCHIVING(NOT_FOUND, "존재하지 않는 아카이빙입니다."),
     NOT_FOUND_FILE(NOT_FOUND,"S3 파일을 찾을 수 없습니다."),
+
+    NOT_FOUND_TODO(NOT_FOUND, "해당 투두를 찾을 수 없습니다."),
+    NOT_FOUND_ROUTINE(NOT_FOUND, "해당 루을를 찾을 수 없습니다."),
+
     NOT_FOUND_SPECIAL_SKILL(NOT_FOUND,"필살기 경험을 찾을 수 없습니다.");
+
 
 
     private final HttpStatus httpStatus;
