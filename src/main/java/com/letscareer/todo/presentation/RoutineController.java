@@ -32,8 +32,8 @@ public class RoutineController {
      * @param routineId
      * @return
      */
-    @DeleteMapping("/routines")
-    public ResponseEntity<CommonResponse<Void>> deleteRoutine(@RequestParam(name="routineId") Long routineId){
+    @DeleteMapping("/routines/{routineId}")
+    public ResponseEntity<CommonResponse<Void>> deleteRoutine(@PathVariable(name="routineId") Long routineId){
         routineService.deleteRoutine(routineId);
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 루틴를 삭제하였습니다.", null));
     }
