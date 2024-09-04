@@ -73,4 +73,17 @@ public class Review extends BaseTimeEntity {
                 .reviewName(reviewType == ReviewType.ETC ? reviewName : reviewType.getName())  // 기타일 경우 이름 저장
                 .build();
     }
+
+    public void updateReview(SatisfactionType satisfaction, ReviewType reviewType, List<ReviewPointType> wellDonePoints,
+                             List<ReviewPointType> shortcomingPoints, DifficultyType difficulty, String wellDoneMemo,
+                             String shortcomingMemo, String reviewName) {
+        this.satisfaction = satisfaction;
+        this.reviewType = reviewType;
+        this.wellDonePoints = reviewType == ReviewType.ETC ? null : wellDonePoints;
+        this.shortcomingPoints = reviewType == ReviewType.ETC ? null : shortcomingPoints;
+        this.difficulty = reviewType == ReviewType.ETC ? difficulty : null;
+        this.wellDoneMemo = wellDoneMemo;
+        this.shortcomingMemo = shortcomingMemo;
+        this.reviewName = reviewType == ReviewType.ETC ? reviewName : reviewType.getName();
+    }
 }
