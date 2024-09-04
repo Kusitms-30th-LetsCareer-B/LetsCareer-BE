@@ -21,16 +21,12 @@ public class Portfolio extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
     private String organizationUrl;
 
-    @Column(nullable = false)
     private String fileName;
 
-    @Column(nullable = false)
     private String fileUrl;
 
-    @Column(nullable = false)
     private String fileKey;
 
     public static Portfolio createEmptyPortfolio(User user) {

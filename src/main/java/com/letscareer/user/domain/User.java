@@ -7,10 +7,13 @@ import com.letscareer.recruitment.domain.Recruitment;
 import com.letscareer.user.dto.request.UserRequest;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,19 +33,19 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Builder.Default
-    private List<Education> educations = new ArrayList<>();
+    private Set<Education> educations = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Builder.Default
-    private List<Certificate> certificates = new ArrayList<>();
+    private Set<Certificate> certificates = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Builder.Default
-    private List<WorkExperience> workExperiences = new ArrayList<>();
+    private Set<WorkExperience> workExperiences = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Builder.Default
-    private List<Activity> activities = new ArrayList<>();
+    private Set<Activity> activities = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Portfolio portfolio;

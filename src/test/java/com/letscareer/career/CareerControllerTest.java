@@ -105,7 +105,7 @@ public class CareerControllerTest extends ControllerTestConfig {
                                                 fieldWithPath("data.name").description("사용자 이름"),
                                                 fieldWithPath("data.gender").description("사용자 성별"),
                                                 fieldWithPath("data.birthDate").description("사용자 생년월일").optional(),
-                                                fieldWithPath("data.fileUrl").description("프로필 이미지 URL").optional(),
+                                                fieldWithPath("data.imageFileUrl").description("프로필 이미지 URL").optional(),
                                                 fieldWithPath("data.educations").description("교육 정보 리스트").optional(),
                                                 fieldWithPath("data.educations[].id").description("교육 ID"),
                                                 fieldWithPath("data.educations[].educationType").description("교육 유형"),

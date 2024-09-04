@@ -12,7 +12,7 @@ public record CareerDetailResponse(
         String name,
         String gender,
         LocalDate birthDate,
-        String fileUrl,
+        String imageFileUrl,
         List<EducationResponse> educations,
         List<CertificateResponse> certificates,
         List<WorkExperienceResponse> workExperiences,
