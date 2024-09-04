@@ -29,7 +29,7 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public ReviewResponse getReviewsByRecruitmentId(Long recruitmentId) {
-        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
+        recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
 
         List<Review> reviews = reviewRepository.findByRecruitmentId(recruitmentId);
@@ -38,22 +38,16 @@ public class ReviewService {
 
     @Transactional
     public void saveOrUpdateReviews(ReviewRequest request) {
-        List<Long> reviewIds = List.of(
-                saveOrUpdateReview(request.document()),  // 서류
-                saveOrUpdateReview(request.interview())  // 면접
-        );
+        saveOrUpdateReview(request.document(), ReviewType.DOCUMENT);  // 서류
+        saveOrUpdateReview(request.interview(), ReviewType.INTERVIEW);  // 면접
 
         // 기타 리뷰는 여러 개가 들어올 수 있음
-        List<Long> etcReviewIds = request.etc().stream()
-                .map(this::saveOrUpdateReview)
-                .toList();
-
-        reviewIds.addAll(etcReviewIds);
+        request.etc().forEach(this::saveOrUpdateEtcReview);
     }
 
-    private Long saveOrUpdateReview(ReviewRequest.ReviewDto reviewDto) {
+    private void saveOrUpdateReview(ReviewRequest.ReviewDto reviewDto, ReviewType reviewType) {
         if (reviewDto == null) {
-            return null;
+            return;
         }
 
         Recruitment recruitment = recruitmentRepository.findById(reviewDto.recruitmentId())
@@ -64,20 +58,40 @@ public class ReviewService {
 
         if (existingReview.isPresent()) {
             Review review = existingReview.get();
-            updateReview(review, reviewDto);
+            updateReview(review, reviewDto, reviewType);
             reviewRepository.save(review);
-            return review.getId();
         } else {
-            Review review = createReview(recruitment, reviewDto);
+            Review review = createReview(recruitment, reviewDto, reviewType);
             reviewRepository.save(review);
-            return review.getId();
         }
     }
 
-    private Review createReview(Recruitment recruitment, ReviewRequest.ReviewDto dto) {
+    private void saveOrUpdateEtcReview(ReviewRequest.EtcReviewDto reviewDto) {
+        if (reviewDto == null) {
+            return;
+        }
+
+        Recruitment recruitment = recruitmentRepository.findById(reviewDto.recruitmentId())
+                .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
+
+        Optional<Review> existingReview = Optional.ofNullable(reviewDto.id())
+                .flatMap(reviewRepository::findById);
+
+        DifficultyType difficulty = reviewDto.difficulty() != null ? DifficultyType.of(reviewDto.difficulty()) : null;
+
+        if (existingReview.isPresent()) {
+            Review review = existingReview.get();
+            updateReview(review, reviewDto, difficulty);
+            reviewRepository.save(review);
+        } else {
+            Review review = createReview(recruitment, reviewDto, difficulty);
+            reviewRepository.save(review);
+        }
+    }
+
+    // 오버로드된 createReview 메서드 (서류 및 면접용)
+    private Review createReview(Recruitment recruitment, ReviewRequest.ReviewDto dto, ReviewType reviewType) {
         SatisfactionType satisfaction = dto.satisfaction() != null ? SatisfactionType.of(dto.satisfaction()) : null;
-        ReviewType reviewType = ReviewType.of(dto.reviewType());
-        DifficultyType difficulty = reviewType == ReviewType.ETC ? DifficultyType.of(dto.difficulty()) : null;
 
         List<ReviewPointType> wellDonePoints = dto.wellDonePoints() != null ?
                 dto.wellDonePoints().stream().map(ReviewPointType::of).collect(Collectors.toList()) : null;
@@ -91,17 +105,39 @@ public class ReviewService {
                 reviewType,
                 wellDonePoints,
                 shortcomingPoints,
-                difficulty,
+                null,  // 서류와 면접은 난이도가 없으므로 null
                 dto.wellDoneMemo(),
                 dto.shortcomingMemo(),
-                dto.reviewName()
+                reviewType.getName()  // 서류/면접은 타입 이름 사용
         );
     }
 
-    private void updateReview(Review review, ReviewRequest.ReviewDto dto) {
+    // 오버로드된 createReview 메서드 (기타 리뷰용)
+    private Review createReview(Recruitment recruitment, ReviewRequest.EtcReviewDto dto, DifficultyType difficulty) {
         SatisfactionType satisfaction = dto.satisfaction() != null ? SatisfactionType.of(dto.satisfaction()) : null;
-        ReviewType reviewType = ReviewType.of(dto.reviewType());
-        DifficultyType difficulty = reviewType == ReviewType.ETC ? DifficultyType.of(dto.difficulty()) : null;
+
+        List<ReviewPointType> wellDonePoints = dto.wellDonePoints() != null ?
+                dto.wellDonePoints().stream().map(ReviewPointType::of).collect(Collectors.toList()) : null;
+
+        List<ReviewPointType> shortcomingPoints = dto.shortcomingPoints() != null ?
+                dto.shortcomingPoints().stream().map(ReviewPointType::of).collect(Collectors.toList()) : null;
+
+        return Review.create(
+                recruitment,
+                satisfaction,
+                ReviewType.ETC,
+                wellDonePoints,
+                shortcomingPoints,
+                difficulty,
+                dto.wellDoneMemo(),
+                dto.shortcomingMemo(),
+                dto.reviewName()  // 기타 리뷰는 reviewName 사용
+        );
+    }
+
+    // 오버로드된 updateReview 메서드 (서류 및 면접용)
+    private void updateReview(Review review, ReviewRequest.ReviewDto dto, ReviewType reviewType) {
+        SatisfactionType satisfaction = dto.satisfaction() != null ? SatisfactionType.of(dto.satisfaction()) : null;
 
         List<ReviewPointType> wellDonePoints = dto.wellDonePoints() != null ?
                 dto.wellDonePoints().stream().map(ReviewPointType::of).collect(Collectors.toList()) : null;
@@ -114,10 +150,32 @@ public class ReviewService {
                 reviewType,
                 wellDonePoints,
                 shortcomingPoints,
+                null,  // 서류와 면접은 난이도가 없으므로 null
+                dto.wellDoneMemo(),
+                dto.shortcomingMemo(),
+                reviewType.getName()  // 서류/면접은 타입 이름 사용
+        );
+    }
+
+    // 오버로드된 updateReview 메서드 (기타 리뷰용)
+    private void updateReview(Review review, ReviewRequest.EtcReviewDto dto, DifficultyType difficulty) {
+        SatisfactionType satisfaction = dto.satisfaction() != null ? SatisfactionType.of(dto.satisfaction()) : null;
+
+        List<ReviewPointType> wellDonePoints = dto.wellDonePoints() != null ?
+                dto.wellDonePoints().stream().map(ReviewPointType::of).collect(Collectors.toList()) : null;
+
+        List<ReviewPointType> shortcomingPoints = dto.shortcomingPoints() != null ?
+                dto.shortcomingPoints().stream().map(ReviewPointType::of).collect(Collectors.toList()) : null;
+
+        review.updateReview(
+                satisfaction,
+                ReviewType.ETC,
+                wellDonePoints,
+                shortcomingPoints,
                 difficulty,
                 dto.wellDoneMemo(),
                 dto.shortcomingMemo(),
-                dto.reviewName()
+                dto.reviewName()  // 기타 리뷰는 reviewName 사용
         );
     }
 }

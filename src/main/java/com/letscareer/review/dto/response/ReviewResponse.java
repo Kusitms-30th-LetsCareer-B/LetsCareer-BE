@@ -35,18 +35,18 @@ public record ReviewResponse(
 
     public static record ReviewDto(Long id, String reviewName, String satisfaction, List<String> wellDonePoints,
                                    List<String> shortcomingPoints, String wellDoneMemo, String shortcomingMemo,
-                                   String difficulty) {  // 난이도 필드 추가
+                                   String difficulty) {
 
         public static ReviewDto from(Review review) {
             return new ReviewDto(
                     review.getId(),
                     review.getReviewName(),
-                    review.getSatisfaction() != null ? review.getSatisfaction().name() : null, // 만족도는 null일 수 있음
-                    review.getWellDonePoints() != null ? review.getWellDonePoints().stream().map(Enum::name).collect(Collectors.toList()) : null,
-                    review.getShortcomingPoints() != null ? review.getShortcomingPoints().stream().map(Enum::name).collect(Collectors.toList()) : null,
+                    review.getSatisfaction() != null ? review.getSatisfaction().getName() : null, // 한글 이름으로 변환
+                    review.getWellDonePoints() != null ? review.getWellDonePoints().stream().map(point -> point.getName()).collect(Collectors.toList()) : null, // 한글 이름으로 변환
+                    review.getShortcomingPoints() != null ? review.getShortcomingPoints().stream().map(point -> point.getName()).collect(Collectors.toList()) : null, // 한글 이름으로 변환
                     review.getWellDoneMemo(),
                     review.getShortcomingMemo(),
-                    review.getDifficulty() != null ? review.getDifficulty().name() : null  // 난이도는 기타 리뷰에만 있음
+                    review.getDifficulty() != null ? review.getDifficulty().getName() : null  // 한글 이름으로 변환
             );
         }
     }

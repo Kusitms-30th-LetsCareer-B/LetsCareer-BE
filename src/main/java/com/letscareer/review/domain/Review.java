@@ -34,7 +34,6 @@ public class Review extends BaseTimeEntity {
     @Column(nullable = false)
     private ReviewType reviewType;
 
-    @Column(nullable = false)
     private String reviewName;  // 리뷰 이름 (기타의 경우 커스텀)
 
     @ElementCollection
@@ -65,12 +64,12 @@ public class Review extends BaseTimeEntity {
                 .recruitment(recruitment)
                 .satisfaction(satisfaction)
                 .reviewType(reviewType)
-                .wellDonePoints(reviewType == ReviewType.ETC ? null : wellDonePoints)
-                .shortcomingPoints(reviewType == ReviewType.ETC ? null : shortcomingPoints)
-                .difficulty(reviewType == ReviewType.ETC ? difficulty : null)  // ETC 타입일 때만 난이도 저장
+                .wellDonePoints(wellDonePoints)
+                .shortcomingPoints(shortcomingPoints)
+                .difficulty(difficulty)
                 .wellDoneMemo(wellDoneMemo)
                 .shortcomingMemo(shortcomingMemo)
-                .reviewName(reviewType == ReviewType.ETC ? reviewName : reviewType.getName())  // 기타일 경우 이름 저장
+                .reviewName(reviewType == ReviewType.ETC ? reviewName : null)  // 기타 리뷰에만 reviewName 설정
                 .build();
     }
 
@@ -79,11 +78,11 @@ public class Review extends BaseTimeEntity {
                              String shortcomingMemo, String reviewName) {
         this.satisfaction = satisfaction;
         this.reviewType = reviewType;
-        this.wellDonePoints = reviewType == ReviewType.ETC ? null : wellDonePoints;
-        this.shortcomingPoints = reviewType == ReviewType.ETC ? null : shortcomingPoints;
+        this.wellDonePoints = wellDonePoints;
+        this.shortcomingPoints = shortcomingPoints;
         this.difficulty = reviewType == ReviewType.ETC ? difficulty : null;
         this.wellDoneMemo = wellDoneMemo;
         this.shortcomingMemo = shortcomingMemo;
-        this.reviewName = reviewType == ReviewType.ETC ? reviewName : reviewType.getName();
+        this.reviewName = reviewType == ReviewType.ETC ? reviewName : null;  // 기타 리뷰에만 reviewName 설정
     }
 }
