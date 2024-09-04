@@ -11,22 +11,22 @@ public record SpecialSkillResponse(
         List<Skill> collaboration
 ) {
     public static SpecialSkillResponse from(List<SpecialSkill> specialSkills) {
-        List<Skill> successSkills = specialSkills.stream()
+        List<Skill> success = specialSkills.stream()
                 .filter(skill -> skill.getExperienceType() == ExperienceType.SUCCESS)
                 .map(Skill::from)
                 .toList();
 
-        List<Skill> taskSkills = specialSkills.stream()
+        List<Skill> job = specialSkills.stream()
                 .filter(skill -> skill.getExperienceType() == ExperienceType.JOB)
                 .map(Skill::from)
                 .toList();
 
-        List<Skill> collaborationSkills = specialSkills.stream()
+        List<Skill> collaboration = specialSkills.stream()
                 .filter(skill -> skill.getExperienceType() == ExperienceType.COLLABORATION)
                 .map(Skill::from)
                 .toList();
 
-        return new SpecialSkillResponse(successSkills, taskSkills, collaborationSkills);
+        return new SpecialSkillResponse(success, job, collaboration);
     }
 
     public static record Skill(Long id, String title, String content) {
