@@ -52,4 +52,8 @@ public class Todo extends BaseTimeEntity {
         this.content = request.getContent();
         this.date = request.getDate();
     }
+
+    public void modifyTodoIsCompleted() {
+        this.isCompleted = !this.isCompleted;
+    }
 }

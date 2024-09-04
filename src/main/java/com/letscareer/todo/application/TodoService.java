@@ -68,9 +68,15 @@ public class TodoService {
         return CompanyTodosRes.of(todos);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void modifyTodo(Long todoId, ModifyTodoReq request) {
         Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_TODO));
         todo.modifyTodo(request);
+    }
+
+    @Transactional
+    public void modifyTodoIsCompleted(Long todoId) {
+        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_TODO));
+        todo.modifyTodoIsCompleted();
     }
 }

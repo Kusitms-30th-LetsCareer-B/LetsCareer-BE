@@ -64,5 +64,11 @@ public class TodoController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 투두를 수정하였습니다.", null));
     }
 
+    @PatchMapping("/todos/{todoId}/check")
+    public ResponseEntity<CommonResponse<Void>> modifyTodoIsCompleted(@PathVariable(name = "todoId") Long todoId){
+        todoService.modifyTodoIsCompleted(todoId);
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 투두 완료 유무를 수정하였습니다.", null));
+    }
+
 
 }
