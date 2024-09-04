@@ -29,6 +29,11 @@ public class Todo extends BaseTimeEntity {
     @JoinColumn(name = "recruitment_id", nullable = false)
     private Recruitment recruitment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "routine_id", nullable = true)
+    @Builder.Default
+    private Routine routine = null;
+
     @Column(nullable = false)
     private LocalDate date;
 
@@ -42,6 +47,17 @@ public class Todo extends BaseTimeEntity {
         return Todo.builder()
                 .user(user)
                 .recruitment(recruitment)
+                .date(date)
+                .content(content)
+                .isCompleted(isCompleted)
+                .build();
+    }
+
+    public static Todo ofRoutine(User user, Recruitment recruitment, Routine routine, LocalDate date, String content, Boolean isCompleted) {
+        return Todo.builder()
+                .user(user)
+                .recruitment(recruitment)
+                .routine(routine)
                 .date(date)
                 .content(content)
                 .isCompleted(isCompleted)
