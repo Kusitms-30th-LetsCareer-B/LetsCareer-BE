@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/archiving")
+@RequestMapping("/archivings")
 public class ArchivingController {
 
     private final ArchivingService archivingService;

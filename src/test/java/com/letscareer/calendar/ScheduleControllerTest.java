@@ -45,7 +45,7 @@ public class ScheduleControllerTest extends ControllerTestConfig {
             .thenReturn(Collections.singletonList(scheduleResponse));
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/calendar/recruitment")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/calendars/recruitment")
             .param("userId", "1")
             .param("year", "2024")
             .param("month", "9")
