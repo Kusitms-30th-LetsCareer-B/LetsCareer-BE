@@ -1,5 +1,6 @@
 package com.letscareer.review.domain;
 
+import com.letscareer.review.domain.enums.DifficultyType;
 import com.letscareer.review.domain.enums.SatisfactionType;
 import com.letscareer.review.domain.enums.ReviewPointType;
 import com.letscareer.review.domain.enums.ReviewType;
@@ -48,6 +49,9 @@ public class Review extends BaseTimeEntity {
     @Column(name = "shortcoming_point")
     private List<ReviewPointType> shortcomingPoints;
 
+    @Enumerated(EnumType.STRING)
+    private DifficultyType difficulty;
+
     @Column(length = 500)
     private String wellDoneMemo;
 
@@ -56,13 +60,14 @@ public class Review extends BaseTimeEntity {
 
     public static Review create(Recruitment recruitment, SatisfactionType satisfaction, ReviewType reviewType,
                                 List<ReviewPointType> wellDonePoints, List<ReviewPointType> shortcomingPoints,
-                                String wellDoneMemo, String shortcomingMemo, String reviewName) {
+                                DifficultyType difficulty, String wellDoneMemo, String shortcomingMemo, String reviewName) {
         return Review.builder()
                 .recruitment(recruitment)
                 .satisfaction(satisfaction)
                 .reviewType(reviewType)
-                .wellDonePoints(wellDonePoints)
-                .shortcomingPoints(shortcomingPoints)
+                .wellDonePoints(reviewType == ReviewType.ETC ? null : wellDonePoints)
+                .shortcomingPoints(reviewType == ReviewType.ETC ? null : shortcomingPoints)
+                .difficulty(reviewType == ReviewType.ETC ? difficulty : null)  // ETC 타입일 때만 난이도 저장
                 .wellDoneMemo(wellDoneMemo)
                 .shortcomingMemo(shortcomingMemo)
                 .reviewName(reviewType == ReviewType.ETC ? reviewName : reviewType.getName())  // 기타일 경우 이름 저장
