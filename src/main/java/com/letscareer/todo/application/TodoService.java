@@ -79,4 +79,10 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_TODO));
         todo.modifyTodoIsCompleted();
     }
+
+    @Transactional
+    public void deleteTodo(Long todoId) {
+        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_TODO));
+        todoRepository.delete(todo);
+    }
 }

@@ -70,5 +70,11 @@ public class TodoController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 투두 완료 유무를 수정하였습니다.", null));
     }
 
+    @DeleteMapping("/todos/{todoId}")
+    public ResponseEntity<CommonResponse<Void>> deleteTodo(@PathVariable(name = "todoId") Long todoId){
+        todoService.deleteTodo(todoId);
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 투두를 삭제하였습니다.", null));
+    }
+
 
 }
