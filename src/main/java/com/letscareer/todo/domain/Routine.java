@@ -2,10 +2,10 @@ package com.letscareer.todo.domain;
 
 
 import com.letscareer.recruitment.domain.Recruitment;
+import com.letscareer.todo.dto.request.RoutineReq;
 import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,5 +52,11 @@ public class Routine {
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
+    }
+
+    public void modifyRoutine(RoutineReq request) {
+        this.content = request.getContent();
+        this.startDate = request.getStartDate();
+        this.endDate = request.getEndDate();
     }
 }

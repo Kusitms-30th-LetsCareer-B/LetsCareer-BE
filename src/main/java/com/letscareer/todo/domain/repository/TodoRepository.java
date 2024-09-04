@@ -13,4 +13,6 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     List<Todo> findAllByUserAndDate(User user, LocalDate date);
 
     List<Todo> findAllByRecruitmentAndDate(Recruitment recruitment, LocalDate date);
+
+    void deleteByRoutineId(Long routineId);
 }
