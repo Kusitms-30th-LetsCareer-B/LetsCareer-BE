@@ -34,17 +34,19 @@ public record ReviewResponse(
     }
 
     public static record ReviewDto(Long id, String reviewName, String satisfaction, List<String> wellDonePoints,
-                                   List<String> shortcomingPoints, String wellDoneMemo, String shortcomingMemo) {
+                                   List<String> shortcomingPoints, String wellDoneMemo, String shortcomingMemo,
+                                   String difficulty) {  // 난이도 필드 추가
 
         public static ReviewDto from(Review review) {
             return new ReviewDto(
                     review.getId(),
                     review.getReviewName(),
-                    review.getSatisfaction().name(),
-                    review.getWellDonePoints().stream().map(Enum::name).collect(Collectors.toList()),
-                    review.getShortcomingPoints().stream().map(Enum::name).collect(Collectors.toList()),
+                    review.getSatisfaction() != null ? review.getSatisfaction().name() : null, // 만족도는 null일 수 있음
+                    review.getWellDonePoints() != null ? review.getWellDonePoints().stream().map(Enum::name).collect(Collectors.toList()) : null,
+                    review.getShortcomingPoints() != null ? review.getShortcomingPoints().stream().map(Enum::name).collect(Collectors.toList()) : null,
                     review.getWellDoneMemo(),
-                    review.getShortcomingMemo()
+                    review.getShortcomingMemo(),
+                    review.getDifficulty() != null ? review.getDifficulty().name() : null  // 난이도는 기타 리뷰에만 있음
             );
         }
     }

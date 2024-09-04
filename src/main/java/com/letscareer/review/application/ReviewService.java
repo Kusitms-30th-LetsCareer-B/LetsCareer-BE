@@ -37,7 +37,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public List<Long> saveOrUpdateReviews(ReviewRequest request) {
+    public void saveOrUpdateReviews(ReviewRequest request) {
         List<Long> reviewIds = List.of(
                 saveOrUpdateReview(request.document()),  // 서류
                 saveOrUpdateReview(request.interview())  // 면접
@@ -46,10 +46,9 @@ public class ReviewService {
         // 기타 리뷰는 여러 개가 들어올 수 있음
         List<Long> etcReviewIds = request.etc().stream()
                 .map(this::saveOrUpdateReview)
-                .collect(Collectors.toList());
+                .toList();
 
         reviewIds.addAll(etcReviewIds);
-        return reviewIds;
     }
 
     private Long saveOrUpdateReview(ReviewRequest.ReviewDto reviewDto) {

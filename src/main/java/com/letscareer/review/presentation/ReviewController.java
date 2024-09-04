@@ -36,10 +36,10 @@ public class ReviewController {
      * @param reviewRequest 리뷰 요청 데이터
      * @return 저장된 리뷰 ID 목록
      */
-    @PostMapping("/save")
-    public ResponseEntity<CommonResponse<List<Long>>> saveOrUpdateReviews(
+    @PutMapping("/save")
+    public ResponseEntity<CommonResponse<?>> saveOrUpdateReviews(
             @RequestBody ReviewRequest reviewRequest) {
-        List<Long> reviewIds = reviewService.saveOrUpdateReviews(reviewRequest);
-        return ResponseEntity.ok(CommonResponse.ofSuccess("리뷰 저장/수정에 성공하였습니다.", reviewIds));
+        reviewService.saveOrUpdateReviews(reviewRequest);
+        return ResponseEntity.ok(CommonResponse.ofSuccess("리뷰 저장/수정에 성공하였습니다.", null));
     }
 }
