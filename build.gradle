@@ -94,25 +94,6 @@ if (project.hasProperty("spring.profiles.active")) {
 	}
 }
 
-// 필요한 파일 및 디렉터리 생성하는 태스크
-tasks.register("prepareOpenApiFile") {
-	doLast {
-		def docsDir = file('build/resources/main/static/docs')
-		if (!docsDir.exists()) {
-			docsDir.mkdirs()
-		}
-		def apiFile = file('build/resources/main/static/docs/open-api-3.0.1.json')
-		if (!apiFile.exists()) {
-			apiFile.createNewFile()
-		}
-	}
-}
-
-// openapi3 태스크 실행 전에 파일을 생성하도록 설정
-tasks.named('openapi3').configure {
-	dependsOn 'prepareOpenApiFile'
-}
-
 // openapi3 설정
 openapi3 {
 	server = serverUrl
@@ -145,6 +126,18 @@ tasks.named('test') {
 	useJUnitPlatform()
 	outputs.dir 'snippetsDir' // test 스니펫 디렉터리를 출력으로 추가하도록 작업을 구성
 	finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport 동작
+
+	// 파일 생성 로직 추가
+	doFirst {
+		def docsDir = file('build/resources/main/static/docs')
+		if (!docsDir.exists()) {
+			docsDir.mkdirs()
+		}
+		def apiFile = file('build/resources/main/static/docs/open-api-3.0.1.json')
+		if (!apiFile.exists()) {
+			apiFile.createNewFile()
+		}
+	}
 }
 
 // 기존에 존재하던 docs 삭제
