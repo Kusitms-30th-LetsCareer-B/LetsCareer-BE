@@ -10,55 +10,7 @@
   } ],
   "tags" : [ ],
   "paths" : {
-
-    "/archiving" : {
-      "get" : {
-        "tags" : [ "아카이빙" ],
-        "summary" : "특정 아카이빙의 상세 정보 조회 및 파일 다운로드",
-        "description" : "특정 아카이빙의 상세 정보 조회 및 파일 다운로드",
-        "operationId" : "archiving/getArchivingDetailAndFile",
-        "parameters" : [ {
-          "name" : "archivingId",
-          "in" : "query",
-          "description" : "아카이빙 ID",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "200",
-            "headers" : {
-              "Content-Disposition" : {
-                "description" : "파일 첨부 헤더",
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Content-Type" : {
-                "description" : "파일의 MIME 타입",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            },
-            "content" : {
-              "application/octet-stream;charset=UTF-8" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/file"
-                },
-                "examples" : {
-                  "archiving/getArchivingDetailAndFile" : {
-                    "value" : "Test content"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-
+    "/archivings" : {
       "post" : {
         "tags" : [ "아카이빙" ],
         "summary" : "아카이빙 추가",
@@ -181,7 +133,7 @@
                 },
                 "examples" : {
                   "archiving/getArchivingDetail" : {
-                    "value" : "{\n  \"title\" : \"Archiving Title\",\n  \"content\" : \"Archiving Content\",\n  \"fileName\" : \"test.txt\"\n}"
+                    "value" : "{\r\n  \"title\" : \"Archiving Title\",\r\n  \"content\" : \"Archiving Content\",\r\n  \"fileName\" : \"test.txt\"\r\n}"
                   }
                 }
               }
@@ -879,15 +831,24 @@
         "summary" : "리뷰 저장 또는 수정",
         "description" : "리뷰 저장 또는 수정",
         "operationId" : "reviews/saveOrUpdateReviews",
+        "parameters" : [ {
+          "name" : "recruitmentId",
+          "in" : "query",
+          "description" : "채용 일정 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "requestBody" : {
           "content" : {
             "application/json;charset=UTF-8" : {
               "schema" : {
-                "$ref" : "#/components/schemas/reviews-save2101798708"
+                "$ref" : "#/components/schemas/reviews-save-945210885"
               },
               "examples" : {
                 "reviews/saveOrUpdateReviews" : {
-                  "value" : "{\r\n  \"document\" : {\r\n    \"id\" : 1,\r\n    \"recruitmentId\" : 1,\r\n    \"satisfaction\" : \"만족\",\r\n    \"wellDonePoints\" : [ \"지원동기\", \"논리적 구성\" ],\r\n    \"shortcomingPoints\" : [ \"명확한 표현\" ],\r\n    \"wellDoneMemo\" : \"잘한 점 설명\",\r\n    \"shortcomingMemo\" : \"개선할 점 설명\"\r\n  },\r\n  \"interview\" : {\r\n    \"id\" : 2,\r\n    \"recruitmentId\" : 1,\r\n    \"satisfaction\" : \"보통\",\r\n    \"wellDonePoints\" : [ \"직무 적합성\", \"경험 활용\" ],\r\n    \"shortcomingPoints\" : [ \"산업 이해도\" ],\r\n    \"wellDoneMemo\" : \"면접 잘한 점\",\r\n    \"shortcomingMemo\" : \"면접 개선할 점\"\r\n  },\r\n  \"etc\" : [ {\r\n    \"id\" : 3,\r\n    \"recruitmentId\" : 1,\r\n    \"reviewName\" : \"기타 리뷰 1\",\r\n    \"satisfaction\" : \"만족\",\r\n    \"difficulty\" : \"상\",\r\n    \"wellDoneMemo\" : \"기타 잘한 점 1\",\r\n    \"shortcomingMemo\" : \"기타 개선할 점 1\"\r\n  }, {\r\n    \"id\" : 4,\r\n    \"recruitmentId\" : 1,\r\n    \"reviewName\" : \"기타 리뷰 2\",\r\n    \"satisfaction\" : \"보통\",\r\n    \"difficulty\" : \"중\",\r\n    \"wellDoneMemo\" : \"기타 잘한 점 2\",\r\n    \"shortcomingMemo\" : \"기타 개선할 점 2\"\r\n  } ]\r\n}"
+                  "value" : "{\r\n  \"document\" : {\r\n    \"id\" : 1,\r\n    \"satisfaction\" : \"만족\",\r\n    \"wellDonePoints\" : [ \"지원동기\", \"논리적 구성\" ],\r\n    \"shortcomingPoints\" : [ \"명확한 표현\" ],\r\n    \"wellDoneMemo\" : \"잘한 점 설명\",\r\n    \"shortcomingMemo\" : \"개선할 점 설명\"\r\n  },\r\n  \"interview\" : {\r\n    \"id\" : 2,\r\n    \"satisfaction\" : \"보통\",\r\n    \"wellDonePoints\" : [ \"직무 적합성\", \"경험 활용\" ],\r\n    \"shortcomingPoints\" : [ \"산업 이해도\" ],\r\n    \"wellDoneMemo\" : \"면접 잘한 점\",\r\n    \"shortcomingMemo\" : \"면접 개선할 점\"\r\n  },\r\n  \"etc\" : [ {\r\n    \"id\" : 3,\r\n    \"reviewName\" : \"기타 리뷰 1\",\r\n    \"satisfaction\" : \"만족\",\r\n    \"difficulty\" : \"상\",\r\n    \"wellDoneMemo\" : \"기타 잘한 점 1\",\r\n    \"shortcomingMemo\" : \"기타 개선할 점 1\"\r\n  }, {\r\n    \"id\" : 4,\r\n    \"reviewName\" : \"기타 리뷰 2\",\r\n    \"satisfaction\" : \"보통\",\r\n    \"difficulty\" : \"중\",\r\n    \"wellDoneMemo\" : \"기타 잘한 점 2\",\r\n    \"shortcomingMemo\" : \"기타 개선할 점 2\"\r\n  } ]\r\n}"
                 }
               }
             }
@@ -1168,9 +1129,7 @@
                 },
                 "examples" : {
                   "user/createUser" : {
-
-                    "value" : "{\n  \"code\" : 200,\n  \"message\" : \"유저 생성에 성공하였습니다.\",\n  \"data\" : 1\n}"
-
+                    "value" : "{\r\n  \"code\" : 200,\r\n  \"message\" : \"유저 생성에 성공하였습니다.\",\r\n  \"data\" : 1\r\n}"
                   }
                 }
               }
@@ -1481,6 +1440,145 @@
           }
         }
       },
+      "reviews-save-945210885" : {
+        "type" : "object",
+        "properties" : {
+          "etc" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "difficulty" : {
+                  "type" : "string",
+                  "description" : "기타 리뷰 난이도"
+                },
+                "shortcomingMemo" : {
+                  "type" : "string",
+                  "description" : "기타 개선할 점 설명"
+                },
+                "reviewName" : {
+                  "type" : "string",
+                  "description" : "기타 리뷰 이름"
+                },
+                "id" : {
+                  "type" : "number",
+                  "description" : "기타 리뷰 ID"
+                },
+                "satisfaction" : {
+                  "type" : "string",
+                  "description" : "기타 리뷰 만족도"
+                },
+                "wellDoneMemo" : {
+                  "type" : "string",
+                  "description" : "기타 잘한 점 설명"
+                }
+              }
+            }
+          },
+          "document" : {
+            "type" : "object",
+            "properties" : {
+              "shortcomingMemo" : {
+                "type" : "string",
+                "description" : "서류 개선할 점 설명"
+              },
+              "id" : {
+                "type" : "number",
+                "description" : "서류 리뷰 ID"
+              },
+              "satisfaction" : {
+                "type" : "string",
+                "description" : "서류 만족도"
+              },
+              "shortcomingPoints" : {
+                "type" : "array",
+                "description" : "서류 개선할 점",
+                "items" : {
+                  "oneOf" : [ {
+                    "type" : "object"
+                  }, {
+                    "type" : "boolean"
+                  }, {
+                    "type" : "string"
+                  }, {
+                    "type" : "number"
+                  } ]
+                }
+              },
+              "wellDonePoints" : {
+                "type" : "array",
+                "description" : "서류 잘한 점",
+                "items" : {
+                  "oneOf" : [ {
+                    "type" : "object"
+                  }, {
+                    "type" : "boolean"
+                  }, {
+                    "type" : "string"
+                  }, {
+                    "type" : "number"
+                  } ]
+                }
+              },
+              "wellDoneMemo" : {
+                "type" : "string",
+                "description" : "서류 잘한 점 설명"
+              }
+            }
+          },
+          "interview" : {
+            "type" : "object",
+            "properties" : {
+              "shortcomingMemo" : {
+                "type" : "string",
+                "description" : "면접 개선할 점 설명"
+              },
+              "id" : {
+                "type" : "number",
+                "description" : "면접 리뷰 ID"
+              },
+              "satisfaction" : {
+                "type" : "string",
+                "description" : "면접 만족도"
+              },
+              "shortcomingPoints" : {
+                "type" : "array",
+                "description" : "면접 개선할 점",
+                "items" : {
+                  "oneOf" : [ {
+                    "type" : "object"
+                  }, {
+                    "type" : "boolean"
+                  }, {
+                    "type" : "string"
+                  }, {
+                    "type" : "number"
+                  } ]
+                }
+              },
+              "wellDonePoints" : {
+                "type" : "array",
+                "description" : "면접 잘한 점",
+                "items" : {
+                  "oneOf" : [ {
+                    "type" : "object"
+                  }, {
+                    "type" : "boolean"
+                  }, {
+                    "type" : "string"
+                  }, {
+                    "type" : "number"
+                  } ]
+                }
+              },
+              "wellDoneMemo" : {
+                "type" : "string",
+                "description" : "면접 잘한 점 설명"
+              }
+            }
+          }
+        }
+      },
       "UrlMetadataResponse" : {
         "title" : "UrlMetadataResponse",
         "type" : "object",
@@ -1560,9 +1658,214 @@
           }
         }
       },
-
-      "stages1320066878" : {
-
+      "CareerDetailResponse" : {
+        "title" : "CareerDetailResponse",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "description" : "응답 코드"
+          },
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "portfolioFileKey" : {
+                "type" : "string",
+                "description" : "포트폴리오 파일 키"
+              },
+              "gender" : {
+                "type" : "string",
+                "description" : "사용자 성별"
+              },
+              "portfolioFileName" : {
+                "type" : "string",
+                "description" : "포트폴리오 파일 이름"
+              },
+              "workExperiences" : {
+                "type" : "array",
+                "description" : "경력 정보 리스트",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "departmentName" : {
+                      "type" : "string",
+                      "description" : "부서 이름"
+                    },
+                    "endDate" : {
+                      "type" : "string",
+                      "description" : "근무 종료 날짜"
+                    },
+                    "employmentType" : {
+                      "type" : "string",
+                      "description" : "고용 유형"
+                    },
+                    "jobTitle" : {
+                      "type" : "string",
+                      "description" : "직무 제목"
+                    },
+                    "companyName" : {
+                      "type" : "string",
+                      "description" : "회사 이름"
+                    },
+                    "jobDescription" : {
+                      "type" : "string",
+                      "description" : "직무 설명"
+                    },
+                    "id" : {
+                      "type" : "number",
+                      "description" : "경력 ID"
+                    },
+                    "startDate" : {
+                      "type" : "string",
+                      "description" : "근무 시작 날짜"
+                    }
+                  }
+                }
+              },
+              "educations" : {
+                "type" : "array",
+                "description" : "교육 정보 리스트",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "majorType" : {
+                      "type" : "string",
+                      "description" : "전공 유형"
+                    },
+                    "graduationStatus" : {
+                      "type" : "string",
+                      "description" : "졸업 상태"
+                    },
+                    "graduationDate" : {
+                      "type" : "string",
+                      "description" : "졸업 날짜"
+                    },
+                    "educationType" : {
+                      "type" : "string",
+                      "description" : "교육 유형"
+                    },
+                    "enrollmentDate" : {
+                      "type" : "string",
+                      "description" : "입학 날짜"
+                    },
+                    "majorName" : {
+                      "type" : "string",
+                      "description" : "전공 이름"
+                    },
+                    "schoolLocation" : {
+                      "type" : "string",
+                      "description" : "학교 위치"
+                    },
+                    "id" : {
+                      "type" : "number",
+                      "description" : "교육 ID"
+                    },
+                    "schoolName" : {
+                      "type" : "string",
+                      "description" : "학교 이름"
+                    }
+                  }
+                }
+              },
+              "imageFileUrl" : {
+                "type" : "string",
+                "description" : "프로필 이미지 URL"
+              },
+              "birthDate" : {
+                "type" : "string",
+                "description" : "사용자 생년월일"
+              },
+              "userId" : {
+                "type" : "number",
+                "description" : "사용자 ID"
+              },
+              "portfolioFileUrl" : {
+                "type" : "string",
+                "description" : "포트폴리오 파일 URL"
+              },
+              "portfolioId" : {
+                "type" : "number",
+                "description" : "포트폴리오 ID"
+              },
+              "certificates" : {
+                "type" : "array",
+                "description" : "자격증 정보 리스트",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "acquiredDate" : {
+                      "type" : "string",
+                      "description" : "자격증 취득 날짜"
+                    },
+                    "certificateIssuer" : {
+                      "type" : "string",
+                      "description" : "자격증 발행 기관"
+                    },
+                    "certificateName" : {
+                      "type" : "string",
+                      "description" : "자격증 이름"
+                    },
+                    "id" : {
+                      "type" : "number",
+                      "description" : "자격증 ID"
+                    }
+                  }
+                }
+              },
+              "portfolioOrganizationUrl" : {
+                "type" : "string",
+                "description" : "포트폴리오 기관 URL"
+              },
+              "activities" : {
+                "type" : "array",
+                "description" : "활동 정보 리스트",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "activeType" : {
+                      "type" : "string",
+                      "description" : "활동 유형"
+                    },
+                    "endDate" : {
+                      "type" : "string",
+                      "description" : "활동 종료 날짜"
+                    },
+                    "organization" : {
+                      "type" : "string",
+                      "description" : "조직 이름"
+                    },
+                    "activeUrl" : {
+                      "type" : "string",
+                      "description" : "활동 URL"
+                    },
+                    "id" : {
+                      "type" : "number",
+                      "description" : "활동 ID"
+                    },
+                    "isActive" : {
+                      "type" : "boolean",
+                      "description" : "활동 여부"
+                    },
+                    "startDate" : {
+                      "type" : "string",
+                      "description" : "활동 시작 날짜"
+                    }
+                  }
+                }
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "사용자 이름"
+              }
+            }
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "응답 메시지"
+          }
+        }
+      },
+      "stages1054090468" : {
         "type" : "object",
         "properties" : {
           "stageName" : {
@@ -1576,157 +1879,6 @@
           "isFinal" : {
             "type" : "boolean",
             "description" : "최종 전형 여부"
-          }
-        }
-      },
-      "reviews-save2101798708" : {
-        "type" : "object",
-        "properties" : {
-          "etc" : {
-            "type" : "array",
-            "items" : {
-              "type" : "object",
-              "properties" : {
-                "difficulty" : {
-                  "type" : "string",
-                  "description" : "기타 리뷰 난이도"
-                },
-                "shortcomingMemo" : {
-                  "type" : "string",
-                  "description" : "기타 개선할 점 설명"
-                },
-                "reviewName" : {
-                  "type" : "string",
-                  "description" : "기타 리뷰 이름"
-                },
-                "recruitmentId" : {
-                  "type" : "number",
-                  "description" : "리크루트먼트 ID"
-                },
-                "id" : {
-                  "type" : "number",
-                  "description" : "기타 리뷰 ID"
-                },
-                "satisfaction" : {
-                  "type" : "string",
-                  "description" : "기타 리뷰 만족도"
-                },
-                "wellDoneMemo" : {
-                  "type" : "string",
-                  "description" : "기타 잘한 점 설명"
-                }
-              }
-            }
-          },
-          "document" : {
-            "type" : "object",
-            "properties" : {
-              "shortcomingMemo" : {
-                "type" : "string",
-                "description" : "서류 개선할 점 설명"
-              },
-              "recruitmentId" : {
-                "type" : "number",
-                "description" : "리크루트먼트 ID"
-              },
-              "id" : {
-                "type" : "number",
-                "description" : "서류 리뷰 ID"
-              },
-              "satisfaction" : {
-                "type" : "string",
-                "description" : "서류 만족도"
-              },
-              "shortcomingPoints" : {
-                "type" : "array",
-                "description" : "서류 개선할 점",
-                "items" : {
-                  "oneOf" : [ {
-                    "type" : "object"
-                  }, {
-                    "type" : "boolean"
-                  }, {
-                    "type" : "string"
-                  }, {
-                    "type" : "number"
-                  } ]
-                }
-              },
-              "wellDonePoints" : {
-                "type" : "array",
-                "description" : "서류 잘한 점",
-                "items" : {
-                  "oneOf" : [ {
-                    "type" : "object"
-                  }, {
-                    "type" : "boolean"
-                  }, {
-                    "type" : "string"
-                  }, {
-                    "type" : "number"
-                  } ]
-                }
-              },
-              "wellDoneMemo" : {
-                "type" : "string",
-                "description" : "서류 잘한 점 설명"
-              }
-            }
-          },
-          "interview" : {
-            "type" : "object",
-            "properties" : {
-              "shortcomingMemo" : {
-                "type" : "string",
-                "description" : "면접 개선할 점 설명"
-              },
-              "recruitmentId" : {
-                "type" : "number",
-                "description" : "리크루트먼트 ID"
-              },
-              "id" : {
-                "type" : "number",
-                "description" : "면접 리뷰 ID"
-              },
-              "satisfaction" : {
-                "type" : "string",
-                "description" : "면접 만족도"
-              },
-              "shortcomingPoints" : {
-                "type" : "array",
-                "description" : "면접 개선할 점",
-                "items" : {
-                  "oneOf" : [ {
-                    "type" : "object"
-                  }, {
-                    "type" : "boolean"
-                  }, {
-                    "type" : "string"
-                  }, {
-                    "type" : "number"
-                  } ]
-                }
-              },
-              "wellDonePoints" : {
-                "type" : "array",
-                "description" : "면접 잘한 점",
-                "items" : {
-                  "oneOf" : [ {
-                    "type" : "object"
-                  }, {
-                    "type" : "boolean"
-                  }, {
-                    "type" : "string"
-                  }, {
-                    "type" : "number"
-                  } ]
-                }
-              },
-              "wellDoneMemo" : {
-                "type" : "string",
-                "description" : "면접 잘한 점 설명"
-              }
-            }
           }
         }
       },
