@@ -30,7 +30,7 @@ public class Archiving extends BaseTimeEntity {
     @Column(nullable = false)
     private String fileName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String fileUrl;
 
     @Column(nullable = false)
