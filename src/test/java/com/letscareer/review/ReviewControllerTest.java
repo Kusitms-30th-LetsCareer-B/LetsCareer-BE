@@ -127,13 +127,12 @@ public class ReviewControllerTest extends ControllerTestConfig {
     @DisplayName("리뷰 저장 또는 수정")
     public void testSaveOrUpdateReviews() throws Exception {
         // given
-        Mockito.doNothing().when(reviewService).saveOrUpdateReviews(any(ReviewRequest.class));
+        Mockito.doNothing().when(reviewService).saveOrUpdateReviews(anyLong(), any(ReviewRequest.class));
 
         String reviewRequestJson = """
     {
         "document": {
             "id": 1,
-            "recruitmentId": 1,
             "satisfaction": "만족",
             "wellDonePoints": ["지원동기", "논리적 구성"],
             "shortcomingPoints": ["명확한 표현"],
@@ -142,7 +141,6 @@ public class ReviewControllerTest extends ControllerTestConfig {
         },
         "interview": {
             "id": 2,
-            "recruitmentId": 1,
             "satisfaction": "보통",
             "wellDonePoints": ["직무 적합성", "경험 활용"],
             "shortcomingPoints": ["산업 이해도"],
@@ -152,7 +150,6 @@ public class ReviewControllerTest extends ControllerTestConfig {
         "etc": [
             {
                 "id": 3,
-                "recruitmentId": 1,
                 "reviewName": "기타 리뷰 1",
                 "satisfaction": "만족",
                 "difficulty": "상",
@@ -161,7 +158,6 @@ public class ReviewControllerTest extends ControllerTestConfig {
             },
             {
                 "id": 4,
-                "recruitmentId": 1,
                 "reviewName": "기타 리뷰 2",
                 "satisfaction": "보통",
                 "difficulty": "중",
@@ -172,9 +168,9 @@ public class ReviewControllerTest extends ControllerTestConfig {
     }
     """;
 
-
         // when
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.put("/reviews/save")
+                .queryParam("recruitmentId", "1") // recruitmentId는 RequestParam으로 처리
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reviewRequestJson)
                 .accept(MediaType.APPLICATION_JSON));
@@ -188,25 +184,25 @@ public class ReviewControllerTest extends ControllerTestConfig {
                                 ResourceSnippetParameters.builder()
                                         .tag("복기 노트")
                                         .description("리뷰 저장 또는 수정")
+                                        .queryParameters(
+                                                parameterWithName("recruitmentId").description("채용 일정 ID")
+                                        )
                                         .requestFields(
                                                 fieldWithPath("document.id").description("서류 리뷰 ID"),
-                                                fieldWithPath("document.recruitmentId").description("리크루트먼트 ID"),
                                                 fieldWithPath("document.satisfaction").description("서류 만족도"),
                                                 fieldWithPath("document.wellDonePoints").description("서류 잘한 점"),
                                                 fieldWithPath("document.shortcomingPoints").description("서류 개선할 점"),
                                                 fieldWithPath("document.wellDoneMemo").description("서류 잘한 점 설명"),
                                                 fieldWithPath("document.shortcomingMemo").description("서류 개선할 점 설명"),
                                                 fieldWithPath("interview.id").description("면접 리뷰 ID"),
-                                                fieldWithPath("interview.recruitmentId").description("리크루트먼트 ID"),
                                                 fieldWithPath("interview.satisfaction").description("면접 만족도"),
                                                 fieldWithPath("interview.wellDonePoints").description("면접 잘한 점"),
                                                 fieldWithPath("interview.shortcomingPoints").description("면접 개선할 점"),
                                                 fieldWithPath("interview.wellDoneMemo").description("면접 잘한 점 설명"),
                                                 fieldWithPath("interview.shortcomingMemo").description("면접 개선할 점 설명"),
                                                 fieldWithPath("etc[].id").description("기타 리뷰 ID"),
-                                                fieldWithPath("etc[].recruitmentId").description("리크루트먼트 ID"),
                                                 fieldWithPath("etc[].reviewName").description("기타 리뷰 이름"),
-                                                fieldWithPath("etc[].satisfaction").description("기타 리뷰 만족도"),  // 기타 리뷰 만족도 추가
+                                                fieldWithPath("etc[].satisfaction").description("기타 리뷰 만족도"),
                                                 fieldWithPath("etc[].difficulty").description("기타 리뷰 난이도"),
                                                 fieldWithPath("etc[].wellDoneMemo").description("기타 잘한 점 설명"),
                                                 fieldWithPath("etc[].shortcomingMemo").description("기타 개선할 점 설명")
@@ -221,5 +217,4 @@ public class ReviewControllerTest extends ControllerTestConfig {
                         )
                 ));
     }
-
 }

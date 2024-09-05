@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reviews")
@@ -33,13 +31,15 @@ public class ReviewController {
     /**
      * 한 번에 여러 리뷰를 생성 또는 수정
      *
+     * @param recruitmentId 리크루트먼트 ID
      * @param reviewRequest 리뷰 요청 데이터
      * @return 저장된 리뷰 ID 목록
      */
     @PutMapping("/save")
     public ResponseEntity<CommonResponse<?>> saveOrUpdateReviews(
+            @RequestParam Long recruitmentId,
             @RequestBody ReviewRequest reviewRequest) {
-        reviewService.saveOrUpdateReviews(reviewRequest);
+        reviewService.saveOrUpdateReviews(recruitmentId, reviewRequest);
         return ResponseEntity.ok(CommonResponse.ofSuccess("리뷰 저장/수정에 성공하였습니다.", null));
     }
 }
