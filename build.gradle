@@ -95,9 +95,9 @@ if (project.hasProperty("spring.profiles.active")) {
 }
 
 // openapi3 태스크가 실행되기 전에 파일을 미리 생성하도록 별도의 태스크 정의
-tasks.register("prepareOpenApiFile", Copy) {
-	def docsDir = file('build/resources/main/static/docs')
+tasks.register("prepareOpenApiFile") {
 	doLast {
+		def docsDir = file('build/resources/main/static/docs')
 		if (!docsDir.exists()) {
 			docsDir.mkdirs()
 		}
@@ -109,6 +109,11 @@ tasks.register("prepareOpenApiFile", Copy) {
 }
 
 // openapi3 태스크가 'prepareOpenApiFile' 태스크에 의존하도록 설정
+tasks.named('openapi3Generate') {
+	dependsOn 'prepareOpenApiFile'
+}
+
+// openapi3 설정
 openapi3 {
 	server = serverUrl
 	title = "위대한레츠비 API 문서"
@@ -117,13 +122,11 @@ openapi3 {
 	outputFileNamePrefix = 'open-api-3.0.1'
 	format = 'json'
 	outputDirectory = 'build/resources/main/static/docs'
-
-	dependsOn 'prepareOpenApiFile'
 }
 
 // GenerateSwaggerUI 태스크가, openapi3 task 를 의존하도록 설정
 tasks.withType(GenerateSwaggerUI).configureEach {
-	dependsOn 'openapi3'
+	dependsOn 'openapi3Generate'
 
 	// 기존 파일 삭제 후 json 파일 복사
 	delete file('src/main/resources/static/docs/')
@@ -132,6 +135,7 @@ tasks.withType(GenerateSwaggerUI).configureEach {
 		into "src/main/resources/static/docs/"
 	}
 }
+
 
 // 테스트를 통해 생성된 snippets 출력 위치 정의
 tasks.register("ext") {
