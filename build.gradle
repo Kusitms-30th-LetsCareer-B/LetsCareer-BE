@@ -109,7 +109,7 @@ tasks.register("prepareOpenApiFile") {
 }
 
 // openapi3 태스크가 'prepareOpenApiFile' 태스크에 의존하도록 설정
-tasks.named('openapi3Generate') {
+tasks.named('generateOpenApiDocs') {
 	dependsOn 'prepareOpenApiFile'
 }
 
@@ -126,7 +126,7 @@ openapi3 {
 
 // GenerateSwaggerUI 태스크가, openapi3 task 를 의존하도록 설정
 tasks.withType(GenerateSwaggerUI).configureEach {
-	dependsOn 'openapi3Generate'
+	dependsOn 'generateOpenApiDocs'
 
 	// 기존 파일 삭제 후 json 파일 복사
 	delete file('src/main/resources/static/docs/')
@@ -135,6 +135,7 @@ tasks.withType(GenerateSwaggerUI).configureEach {
 		into "src/main/resources/static/docs/"
 	}
 }
+
 
 
 // 테스트를 통해 생성된 snippets 출력 위치 정의
