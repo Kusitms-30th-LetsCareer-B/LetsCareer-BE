@@ -431,7 +431,8 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 							fieldWithPath("data.recruitments[].stageName").description("채용 단계 이름"),
 							fieldWithPath("data.recruitments[].status").description("채용 단계 상태"),
 							fieldWithPath("data.recruitments[].endDate").description("채용 단계 종료 날짜"),
-							fieldWithPath("data.recruitments[].daysUntilEnd").description("마감일까지 남은 일수")
+							fieldWithPath("data.recruitments[].daysUntilEnd").description("마감일까지 남은 일수"),
+							fieldWithPath("data.recruitments[].isFinal").description("현재전형이 최종인지 유무")
 						)
 						.responseSchema(Schema.schema("CommonResponse"))
 						.build()
