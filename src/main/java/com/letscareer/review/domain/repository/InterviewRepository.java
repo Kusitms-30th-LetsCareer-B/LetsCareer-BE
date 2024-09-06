@@ -13,6 +13,5 @@ import java.util.Optional;
 public interface InterviewRepository extends JpaRepository<Interview, Long> {
     List<Interview> findAllByRecruitmentId(Long recruitmentId);
     Optional<Interview> findByRecruitmentAndOrderIndex(Recruitment recruitment, int order);
-
     List<Interview> findAllByRecruitmentAndType(Recruitment recruitment, InterviewStatusType statusType);
 }

@@ -4,6 +4,7 @@ import com.letscareer.global.domain.CommonResponse;
 import com.letscareer.introduce.application.IntroduceService;
 import com.letscareer.introduce.dto.request.IntroduceReq;
 import com.letscareer.introduce.dto.request.ReactionReq;
+import com.letscareer.introduce.dto.response.GetAdditionalIntroduceRes;
 import com.letscareer.introduce.dto.response.GetIntroduceRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,11 @@ public class IntroduceController {
     public ResponseEntity<CommonResponse<Void>> modifyReaction(@PathVariable Long introduceId,@RequestBody ReactionReq request){
         introduceService.modifyReaction(introduceId, request);
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("자기소개서 질문에 대한 반응을 남겼습니다", null));
+    }
+
+    @GetMapping("/introduces/additional")
+    public ResponseEntity<CommonResponse<List<GetAdditionalIntroduceRes>>> getAdditionalIntroduces(@RequestParam Long recruitmentId){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("다시 보면 좋을 자기소개서 질문 조회를 하였습니다..", introduceService.getAdditionalIntroduces(recruitmentId)));
     }
 
 
