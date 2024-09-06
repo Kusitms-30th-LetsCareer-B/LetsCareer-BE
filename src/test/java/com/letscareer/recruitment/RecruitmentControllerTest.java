@@ -280,7 +280,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
                 .daysUntilEnd(5)
                 .build();
 
-        FindAllRecruitmentsRes findAllRecruitmentsRes = FindAllRecruitmentsRes.of(List.of(recruitmentInfo));
+        FindAllRecruitmentsRes findAllRecruitmentsRes = FindAllRecruitmentsRes.of(1L,1L,1L,List.of(recruitmentInfo));
 
         Mockito.when(recruitmentService.findAllRecruitments(userId, page)).thenReturn(findAllRecruitmentsRes);
 
@@ -340,6 +340,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
         // given
         Long userId = 1L;
         String type = "progress";
+        Long page = 6L;
 
         FindAllRecruitmentsByTypeRes.RecruitmentInfo recruitmentInfo = FindAllRecruitmentsByTypeRes.RecruitmentInfo.builder()
                 .recruitmentId(1L)
@@ -352,9 +353,9 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
                 .daysUntilEnd(5L)
                 .build();
 
-        FindAllRecruitmentsByTypeRes findAllRecruitmentsByTypeRes = FindAllRecruitmentsByTypeRes.of(List.of(recruitmentInfo));
+        FindAllRecruitmentsByTypeRes findAllRecruitmentsByTypeRes = FindAllRecruitmentsByTypeRes.of(1L,1L,1L,List.of(recruitmentInfo));
 
-        Mockito.when(recruitmentService.findRecruitmentsByType(type, userId)).thenReturn(findAllRecruitmentsByTypeRes);
+        Mockito.when(recruitmentService.findRecruitmentsByType(type, userId, page)).thenReturn(findAllRecruitmentsByTypeRes);
 
         // when
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/recruitments/status")

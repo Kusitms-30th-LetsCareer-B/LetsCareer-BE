@@ -157,41 +157,38 @@ public class RecruitmentService {
     }
 
     @Transactional(readOnly = true)
-    public FindAllRecruitmentsByTypeRes findRecruitmentsByType(String type, Long userId) {
-        List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
+    public FindAllRecruitmentsByTypeRes findRecruitmentsByType(String type, Long userId, Long page) {
+        long offset = (page - 1) * RECRUITMENT_PAGE_SIZE;
+        long limit = RECRUITMENT_PAGE_SIZE;
+        LocalDate today = LocalDate.now();
 
+
+        // QueryDSL로 필터링된 채용 정보 가져오기
+        List<Recruitment> recruitments = recruitmentRepository.findRecruitmentsByTypeAndUser(type, userId, today, offset, limit);
+
+        // 필터링된 전체 데이터 개수
+        long totalRecruitmentsCount = recruitmentRepository.countRecruitmentsByTypeAndUser(type, userId, today);
+        long totalPages = (totalRecruitmentsCount + RECRUITMENT_PAGE_SIZE - 1) / RECRUITMENT_PAGE_SIZE;
+
+        // recruitments 리스트를 RecruitmentInfo로 변환
         List<FindAllRecruitmentsByTypeRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
-                .filter(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
-                    DetermineRecruitmentStatusRes statusRes = determineRecruitmentStatus(stages);
-
-                    // type이 PROGRESS일 경우,
-                    if (type.equals("progress")) {
-                        return statusRes.getStatus().equals(StageStatusType.PROGRESS) || (statusRes.getStatus().equals(StageStatusType.PASSED) && !statusRes.getIsFinal());
-                    }
-                    // type이 CONSEQUENCE일 경우, FAILED 또는 PASSED 상태를 필터링
-                    else if (type.equals("consequence")) {
-                        return statusRes.getStatus().equals(StageStatusType.FAILED) || (statusRes.getStatus().equals(StageStatusType.PASSED) && statusRes.getIsFinal());
-                    }
-                    return false;
-                })
                 .map(recruitment -> {
-                            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
-                            DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
+                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+                    DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
 
-                            return FindAllRecruitmentsByTypeRes.RecruitmentInfo.of(
-                                    recruitment,
-                                    recruitmentStatus.getStageName(),
-                                    recruitmentStatus.getStatus(),
-                                    recruitmentStatus.getEndDate(),
-                                    recruitmentStatus.getDaysUntilFinal()
-                            );
-                        })
-                .sorted(Comparator.comparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getIsFavorite).reversed()  // isFavorite이 true인 것을 앞으로
-                        .thenComparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getDaysUntilEnd))  // 며칠 남았는지 오름차순으로 정렬
+                    return FindAllRecruitmentsByTypeRes.RecruitmentInfo.of(
+                            recruitment,
+                            recruitmentStatus.getStageName(),
+                            recruitmentStatus.getStatus(),
+                            recruitmentStatus.getEndDate(),
+                            recruitmentStatus.getDaysUntilFinal()
+                    );
+                })
+                .sorted(Comparator.comparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getIsFavorite).reversed()
+                        .thenComparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getDaysUntilEnd))
                 .toList();
 
-        return FindAllRecruitmentsByTypeRes.of(recruitmentInfos);
+        return FindAllRecruitmentsByTypeRes.of(totalPages, page, totalRecruitmentsCount, recruitmentInfos);
     }
 
     @Transactional

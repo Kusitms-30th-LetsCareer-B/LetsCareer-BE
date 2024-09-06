@@ -77,8 +77,10 @@ public class RecruitmentController {
      * @return
      */
     @GetMapping("/recruitments/status")
-    public ResponseEntity<CommonResponse<FindAllRecruitmentsByTypeRes>> findRecruitmentsByType(@RequestParam(name = "type") String type, @RequestParam(name = "userId") Long userId){
-        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", recruitmentService.findRecruitmentsByType(type, userId)));
+    public ResponseEntity<CommonResponse<FindAllRecruitmentsByTypeRes>> findRecruitmentsByType(@RequestParam(name = "type") String type,
+                                                                                               @RequestParam(name = "userId") Long userId,
+                                                                                               @RequestParam(name = "page") Long page){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", recruitmentService.findRecruitmentsByType(type, userId, page)));
     }
 
     @PatchMapping("/recruitments/{recruitmentId}/favorite")

@@ -9,5 +9,6 @@ public interface RecruitmentRepositoryCustom {
     Recruitment findRecruitmentWithStagesByAsc(Long recruitmentId);
     List<Recruitment> findRecruitmentsWithUpcomingStages(Long userId, LocalDate today, long offset, long limit);
     Long countRecruitmentsWithUpcomingStages(Long userId, LocalDate today);
-
+    List<Recruitment> findRecruitmentsByTypeAndUser(String type, Long userId, LocalDate today, long offset, long limit);
+    Long countRecruitmentsByTypeAndUser(String type, Long userId, LocalDate today);
 }
