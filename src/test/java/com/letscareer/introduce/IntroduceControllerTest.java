@@ -134,7 +134,7 @@ public class IntroduceControllerTest extends ControllerTestConfig {
 							fieldWithPath("data.[].order").description("질문 순서"),
 							fieldWithPath("data.[].question").description("자기소개서 질문"),
 							fieldWithPath("data.[].answer").description("자기소개서 답변"),
-							fieldWithPath("data.[].type").description("자기소개서 상태 (GOOD, BAD)")
+							fieldWithPath("data.[].type").description("자기소개서 상태 (잘했어요, 아쉬워요)")
 						)
 						.responseSchema(Schema.schema("CommonResponse"))
 						.build()

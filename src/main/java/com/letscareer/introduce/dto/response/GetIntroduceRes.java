@@ -16,7 +16,7 @@ public class GetIntroduceRes {
     private int order;
     private String question;
     private String answer;
-    private IntroduceStatusType type;
+    private String type;
 
     public static GetIntroduceRes of (Introduce introduce) {
         return GetIntroduceRes.builder()
@@ -24,7 +24,7 @@ public class GetIntroduceRes {
                 .order(introduce.getOrderIndex())
                 .question(introduce.getQuestion())
                 .answer(introduce.getAnswer())
-                .type(introduce.getType())
+                .type(introduce.getType() != null ? introduce.getType().getName() : null)
                 .build();
     }
 }
