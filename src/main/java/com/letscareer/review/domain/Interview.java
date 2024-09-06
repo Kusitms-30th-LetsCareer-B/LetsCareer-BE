@@ -2,7 +2,7 @@ package com.letscareer.review.domain;
 
 import com.letscareer.introduce.domain.Introduce;
 import com.letscareer.introduce.domain.IntroduceStatusType;
-import com.letscareer.introduce.dto.request.ReactionReq;
+import com.letscareer.review.dto.request.ReactionReq;
 import com.letscareer.recruitment.domain.Recruitment;
 import com.letscareer.review.domain.enums.InterviewStatusType;
 import jakarta.persistence.*;
