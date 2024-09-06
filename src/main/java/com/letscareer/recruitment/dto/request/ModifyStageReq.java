@@ -16,5 +16,7 @@ public class ModifyStageReq {
     private LocalDate endDate;
     @NotNull(message = "채용 전형을 함께 전달해주세요.")
     private String status;
+    @NotNull(message = "최종 단계 여부를 함께 전달해주세요.")
+    private Boolean isFinal;
 
 }

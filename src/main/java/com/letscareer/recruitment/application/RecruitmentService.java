@@ -162,16 +162,11 @@ public class RecruitmentService {
         long limit = RECRUITMENT_PAGE_SIZE;
         LocalDate today = LocalDate.now();
 
+        // 모든 Recruitment를 가져옴
+        List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
 
-        // QueryDSL로 필터링된 채용 정보 가져오기
-        List<Recruitment> recruitments = recruitmentRepository.findRecruitmentsByTypeAndUser(type, userId, today, offset, limit);
-
-        // 필터링된 전체 데이터 개수
-        long totalRecruitmentsCount = recruitmentRepository.countRecruitmentsByTypeAndUser(type, userId, today);
-        long totalPages = (totalRecruitmentsCount + RECRUITMENT_PAGE_SIZE - 1) / RECRUITMENT_PAGE_SIZE;
-
-        // recruitments 리스트를 RecruitmentInfo로 변환
-        List<FindAllRecruitmentsByTypeRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
+        // 각 Recruitment의 상태를 계산하고 필터링
+        List<FindAllRecruitmentsByTypeRes.RecruitmentInfo> filteredRecruitments = recruitments.stream()
                 .map(recruitment -> {
                     List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
                     DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
@@ -181,14 +176,38 @@ public class RecruitmentService {
                             recruitmentStatus.getStageName(),
                             recruitmentStatus.getStatus(),
                             recruitmentStatus.getEndDate(),
-                            recruitmentStatus.getDaysUntilFinal()
+                            recruitmentStatus.getDaysUntilFinal(),
+                            recruitmentStatus.getIsFinal()
                     );
+                })
+                .filter(recruitmentInfo -> {
+                    // progress 필터링: status가 PROGRESS이거나 PASSED && isFinal이 false
+                    if (type.equalsIgnoreCase("progress")) {
+                        return recruitmentInfo.getStatus() == StageStatusType.PROGRESS ||
+                                (recruitmentInfo.getStatus() == StageStatusType.PASSED && !recruitmentInfo.getIsFinal());
+                    }
+                    // consequence 필터링: status가 FAILED이거나 PASSED && isFinal이 true
+                    else if (type.equalsIgnoreCase("consequence")) {
+                        return recruitmentInfo.getStatus() == StageStatusType.FAILED ||
+                                (recruitmentInfo.getStatus() == StageStatusType.PASSED && recruitmentInfo.getIsFinal());
+                    }
+                    return false;
                 })
                 .sorted(Comparator.comparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getIsFavorite).reversed()
                         .thenComparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getDaysUntilEnd))
                 .toList();
 
-        return FindAllRecruitmentsByTypeRes.of(totalPages, page, totalRecruitmentsCount, recruitmentInfos);
+        // 필터링된 전체 데이터 개수
+        long totalRecruitmentsCount = filteredRecruitments.size();
+        long totalPages = (totalRecruitmentsCount + RECRUITMENT_PAGE_SIZE - 1) / RECRUITMENT_PAGE_SIZE;
+
+        // 페이지네이션 적용 (6개씩 잘라서 반환)
+        List<FindAllRecruitmentsByTypeRes.RecruitmentInfo> paginatedRecruitments = filteredRecruitments.stream()
+                .skip(offset)
+                .limit(limit)
+                .toList();
+
+        return FindAllRecruitmentsByTypeRes.of(totalPages, page, totalRecruitmentsCount, paginatedRecruitments);
     }
 
     @Transactional
