@@ -34,7 +34,8 @@ public enum ExceptionContent {
 
     NOT_FOUND_SPECIAL_SKILL(NOT_FOUND,"필살기 경험을 찾을 수 없습니다."),
 
-    NOT_FOUND_INTRODUCE(NOT_FOUND,"해당 자기소개 질문을 찾을 수 없습니다.");
+    NOT_FOUND_INTRODUCE(NOT_FOUND,"해당 자기소개 질문을 찾을 수 없습니다."),
+    NOT_FOUND_INTERVIEW(NOT_FOUND, "해당 복기노트 면접 질문을 찾을 수 없습니다." );
 
 
 

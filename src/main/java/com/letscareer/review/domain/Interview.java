@@ -4,6 +4,7 @@ import com.letscareer.introduce.domain.Introduce;
 import com.letscareer.introduce.domain.IntroduceStatusType;
 import com.letscareer.introduce.dto.request.ReactionReq;
 import com.letscareer.recruitment.domain.Recruitment;
+import com.letscareer.review.domain.enums.InterviewStatusType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,10 +35,10 @@ public class Interview {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private IntroduceStatusType type = null;
+    private InterviewStatusType type = null;
 
-    public static Introduce of(Recruitment recruitment, Integer orderIndex, String question, String answer) {
-        return Introduce.builder()
+    public static Interview of(Recruitment recruitment, Integer orderIndex, String question, String answer) {
+        return Interview.builder()
                 .recruitment(recruitment)
                 .orderIndex(orderIndex)
                 .question(question)
@@ -46,7 +47,7 @@ public class Interview {
     }
 
     public void modifyReaction(ReactionReq request) {
-        this.type = IntroduceStatusType.of(request.getReaction());
+        this.type = InterviewStatusType.of(request.getReaction());
     }
 
     public void update(String question, String answer) {
