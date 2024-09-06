@@ -37,60 +37,69 @@ public class ReviewService {
     }
 
     @Transactional
-    public void saveOrUpdateReviews(ReviewRequest request) {
-        saveOrUpdateReview(request.document(), ReviewType.DOCUMENT);  // 서류
-        saveOrUpdateReview(request.interview(), ReviewType.INTERVIEW);  // 면접
+    public void saveOrUpdateReviews(Long recruitmentId, ReviewRequest request) {
+        // 서류 및 면접 리뷰 처리
+        handleDocumentAndInterviewReviews(recruitmentId, request);
 
-        // 기타 리뷰는 여러 개가 들어올 수 있음
-        request.etc().forEach(this::saveOrUpdateEtcReview);
+        // 기타 리뷰 처리
+        handleEtcReviews(recruitmentId, request);
     }
 
-    private void saveOrUpdateReview(ReviewRequest.ReviewDto reviewDto, ReviewType reviewType) {
-        if (reviewDto == null) {
-            return;
+    private void handleDocumentAndInterviewReviews(Long recruitmentId, ReviewRequest request) {
+        List<Review> existingReviews = reviewRepository.findByRecruitmentId(recruitmentId);
+
+        // 서류 처리
+        saveOrUpdateReview(recruitmentId, request.document(), existingReviews, ReviewType.DOCUMENT);
+
+        // 면접 처리
+        saveOrUpdateReview(recruitmentId, request.interview(), existingReviews, ReviewType.INTERVIEW);
+    }
+
+    private void handleEtcReviews(Long recruitmentId, ReviewRequest request) {
+        List<Review> existingEtcReviews = reviewRepository.findEtcReviewsByRecruitmentId(recruitmentId);
+
+        // 기타 리뷰 처리 (생성 또는 수정)
+        for (ReviewRequest.EtcReviewDto etcDto : request.etc()) {
+            Optional<Review> existingReview = existingEtcReviews.stream()
+                    .filter(review -> review.getReviewName().equals(etcDto.reviewName()))
+                    .findFirst();
+
+            if (existingReview.isPresent()) {
+                updateReview(existingReview.get(), etcDto, DifficultyType.of(etcDto.difficulty()));
+            } else {
+                Review savedReview = createReview(recruitmentId, etcDto, DifficultyType.of(etcDto.difficulty()));
+                reviewRepository.save(savedReview);
+            }
         }
 
-        Recruitment recruitment = recruitmentRepository.findById(reviewDto.recruitmentId())
-                .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
+        // 요청 데이터에 없는 기타 리뷰 삭제
+        List<String> incomingReviewNames = request.etc().stream()
+                .map(ReviewRequest.EtcReviewDto::reviewName)
+                .collect(Collectors.toList());
 
-        Optional<Review> existingReview = Optional.ofNullable(reviewDto.id())
-                .flatMap(reviewRepository::findById);
+        existingEtcReviews.stream()
+                .filter(review -> !incomingReviewNames.contains(review.getReviewName()))
+                .forEach(reviewRepository::delete);
+    }
+
+    private void saveOrUpdateReview(Long recruitmentId,ReviewRequest.ReviewDto reviewDto, List<Review> existingReviews, ReviewType reviewType) {
+        Optional<Review> existingReview = existingReviews.stream()
+                .filter(review -> review.getReviewType() == reviewType)
+                .findFirst();
 
         if (existingReview.isPresent()) {
-            Review review = existingReview.get();
-            updateReview(review, reviewDto, reviewType);
-            reviewRepository.save(review);
+            updateReview(existingReview.get(), reviewDto, reviewType);
         } else {
-            Review review = createReview(recruitment, reviewDto, reviewType);
-            reviewRepository.save(review);
+            Review savedReview = createReview(recruitmentId, reviewDto, reviewType);
+            reviewRepository.save(savedReview);
         }
     }
 
-    private void saveOrUpdateEtcReview(ReviewRequest.EtcReviewDto reviewDto) {
-        if (reviewDto == null) {
-            return;
-        }
-
-        Recruitment recruitment = recruitmentRepository.findById(reviewDto.recruitmentId())
+    // createReview 메서드 (서류 및 면접용)
+    private Review createReview(Long recruitmentId, ReviewRequest.ReviewDto dto, ReviewType reviewType) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
 
-        Optional<Review> existingReview = Optional.ofNullable(reviewDto.id())
-                .flatMap(reviewRepository::findById);
-
-        DifficultyType difficulty = reviewDto.difficulty() != null ? DifficultyType.of(reviewDto.difficulty()) : null;
-
-        if (existingReview.isPresent()) {
-            Review review = existingReview.get();
-            updateReview(review, reviewDto, difficulty);
-            reviewRepository.save(review);
-        } else {
-            Review review = createReview(recruitment, reviewDto, difficulty);
-            reviewRepository.save(review);
-        }
-    }
-
-    // 오버로드된 createReview 메서드 (서류 및 면접용)
-    private Review createReview(Recruitment recruitment, ReviewRequest.ReviewDto dto, ReviewType reviewType) {
         SatisfactionType satisfaction = dto.satisfaction() != null ? SatisfactionType.of(dto.satisfaction()) : null;
 
         List<ReviewPointType> wellDonePoints = dto.wellDonePoints() != null ?
@@ -112,8 +121,11 @@ public class ReviewService {
         );
     }
 
-    // 오버로드된 createReview 메서드 (기타 리뷰용)
-    private Review createReview(Recruitment recruitment, ReviewRequest.EtcReviewDto dto, DifficultyType difficulty) {
+    // createReview 메서드 (기타 리뷰용)
+    private Review createReview(Long recruitmentId, ReviewRequest.EtcReviewDto dto, DifficultyType difficulty) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
+                .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
+
         SatisfactionType satisfaction = dto.satisfaction() != null ? SatisfactionType.of(dto.satisfaction()) : null;
 
         List<ReviewPointType> wellDonePoints = dto.wellDonePoints() != null ?
@@ -135,7 +147,7 @@ public class ReviewService {
         );
     }
 
-    // 오버로드된 updateReview 메서드 (서류 및 면접용)
+    // updateReview 메서드 (서류 및 면접용)
     private void updateReview(Review review, ReviewRequest.ReviewDto dto, ReviewType reviewType) {
         SatisfactionType satisfaction = dto.satisfaction() != null ? SatisfactionType.of(dto.satisfaction()) : null;
 
@@ -157,7 +169,7 @@ public class ReviewService {
         );
     }
 
-    // 오버로드된 updateReview 메서드 (기타 리뷰용)
+    // updateReview 메서드 (기타 리뷰용)
     private void updateReview(Review review, ReviewRequest.EtcReviewDto dto, DifficultyType difficulty) {
         SatisfactionType satisfaction = dto.satisfaction() != null ? SatisfactionType.of(dto.satisfaction()) : null;
 

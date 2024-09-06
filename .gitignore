@@ -41,3 +41,6 @@ out/
 
 ### applicaion 제외 ###
 src/main/resources/application.yaml
+
+### open-api-3.0.1.json 제외 ###
+src/main/resources/static/docs/open-api-3.0.1.json

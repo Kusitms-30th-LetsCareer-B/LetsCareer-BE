@@ -94,6 +94,7 @@ if (project.hasProperty("spring.profiles.active")) {
 	}
 }
 
+// openapi3 설정
 openapi3 {
 	server = serverUrl
 	title = "위대한레츠비 API 문서"
@@ -101,23 +102,18 @@ openapi3 {
 	version = "0.0.1"
 	outputFileNamePrefix = 'open-api-3.0.1'
 	format = 'json'
-
-	// /static/docs/open-api-3.0.1.json 생성 → jar 파일만 배포할 예정이기에 build 에 출력
 	outputDirectory = 'build/resources/main/static/docs'
 }
 
-
-// Task 및 설정 추가
-// GenerateSwaggerUI 태스크가, openapi3 task 를 의존하도록 설정
+// GenerateSwaggerUI 태스크가 openapi3 태스크에 의존하도록 설정
 tasks.withType(GenerateSwaggerUI).configureEach {
 	dependsOn 'openapi3'
 
-//    기존 파일 삭제했다가, build 에 출력한 json 정적파일 복사 (안해도 됨 → local 확인용)
+	// 기존 파일 삭제 후 json 파일 복사
 	delete file('src/main/resources/static/docs/')
 	copy {
 		from "build/resources/main/static/docs"
 		into "src/main/resources/static/docs/"
-
 	}
 }
 
@@ -130,6 +126,18 @@ tasks.named('test') {
 	useJUnitPlatform()
 	outputs.dir 'snippetsDir' // test 스니펫 디렉터리를 출력으로 추가하도록 작업을 구성
 	finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport 동작
+
+	// 파일 생성 로직 추가
+	doFirst {
+		def docsDir = file('build/resources/main/static/docs')
+		if (!docsDir.exists()) {
+			docsDir.mkdirs()
+		}
+		def apiFile = file('build/resources/main/static/docs/open-api-3.0.1.json')
+		if (!apiFile.exists()) {
+			apiFile.createNewFile()
+		}
+	}
 }
 
 // 기존에 존재하던 docs 삭제
