@@ -175,7 +175,8 @@ public class StageControllerTest extends ControllerTestConfig {
 			{
 			    "stageName": "면접",
 			    "endDate": "2024-09-30",
-			    "status": "PROGRESS"
+			    "status": "PROGRESS",
+			    "isFinal": "true"
 			}
 			""";
 
@@ -203,7 +204,8 @@ public class StageControllerTest extends ControllerTestConfig {
 						.requestFields(
 							fieldWithPath("stageName").description("전형 이름"),
 							fieldWithPath("endDate").description("전형 종료 날짜"),
-							fieldWithPath("status").description("채용 전형 상태")
+							fieldWithPath("status").description("채용 전형 상태"),
+							fieldWithPath("isFinal").description("최종 전형 유무")
 						)
 						.responseFields(
 							fieldWithPath("code").description("응답 코드"),
