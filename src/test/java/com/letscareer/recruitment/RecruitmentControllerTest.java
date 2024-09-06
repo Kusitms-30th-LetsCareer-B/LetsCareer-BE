@@ -406,6 +406,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 			.andExpect(jsonPath("$.data.recruitments[0].status").value("PROGRESS"))
 			.andExpect(jsonPath("$.data.recruitments[0].endDate").value("2024-09-30"))
 			.andExpect(jsonPath("$.data.recruitments[0].daysUntilEnd").value(5))
+			.andExpect(jsonPath("$.data.recruitments[0].isFinal").value(true))
 			.andDo(MockMvcRestDocumentationWrapper.document("recruitment/findRecruitmentsByType",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
