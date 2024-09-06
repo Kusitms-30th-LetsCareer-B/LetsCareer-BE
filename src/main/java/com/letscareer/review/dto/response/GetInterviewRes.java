@@ -16,7 +16,7 @@ public class GetInterviewRes {
     private int order;
     private String question;
     private String answer;
-    private InterviewStatusType type;
+    private String type;
 
     public static GetInterviewRes of (Interview interview) {
         return GetInterviewRes.builder()
@@ -24,7 +24,7 @@ public class GetInterviewRes {
                 .order(interview.getOrderIndex())
                 .question(interview.getQuestion())
                 .answer(interview.getAnswer())
-                .type(interview.getType())
+                .type(interview.getType() != null ? interview.getType().getName() : null)
                 .build();
     }
 }
