@@ -9,7 +9,7 @@ import com.letscareer.review.domain.Interview;
 import com.letscareer.review.domain.enums.InterviewStatusType;
 import com.letscareer.review.domain.repository.InterviewRepository;
 import com.letscareer.review.dto.request.InterviewReq;
-import com.letscareer.review.dto.response.GetAdditonalInterviewRes;
+import com.letscareer.review.dto.response.GetAdditionalInterviewRes;
 import com.letscareer.review.dto.response.GetInterviewRes;
 import com.letscareer.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -102,9 +102,9 @@ public class InterviewService {
      * @return the additional interviews
      */
     @Transactional(readOnly = true)
-    public List<GetAdditonalInterviewRes> getAdditionalInterviews(Long recruitmentId) {
+    public List<GetAdditionalInterviewRes> getAdditionalInterviews(Long recruitmentId) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
 
-        return interviewRepository.findAllByRecruitmentAndType(recruitment, InterviewStatusType.of("아쉬워요")).stream().map(GetAdditonalInterviewRes::of).toList();
+        return interviewRepository.findAllByRecruitmentAndType(recruitment, InterviewStatusType.of("아쉬워요")).stream().map(GetAdditionalInterviewRes::of).toList();
     }
 }

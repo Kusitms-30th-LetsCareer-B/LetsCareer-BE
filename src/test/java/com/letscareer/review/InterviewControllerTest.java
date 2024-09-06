@@ -2,9 +2,8 @@ package com.letscareer.review;
 
 import com.letscareer.configuration.ControllerTestConfig;
 import com.letscareer.review.application.InterviewService;
-import com.letscareer.review.dto.request.InterviewReq;
 import com.letscareer.review.dto.request.ReactionReq;
-import com.letscareer.review.dto.response.GetAdditonalInterviewRes;
+import com.letscareer.review.dto.response.GetAdditionalInterviewRes;
 import com.letscareer.review.dto.response.GetInterviewRes;
 import com.letscareer.review.presentation.InterviewController;
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
@@ -208,8 +207,8 @@ public class InterviewControllerTest extends ControllerTestConfig {
 	@Test
 	@DisplayName("한번 더 보면 좋을 면접 질문 조회")
 	public void testGetAdditionalInterviews() throws Exception {
-		List<GetAdditonalInterviewRes> response = List.of(
-			GetAdditonalInterviewRes.builder()
+		List<GetAdditionalInterviewRes> response = List.of(
+			GetAdditionalInterviewRes.builder()
 				.interviewId(1L)
 				.question("최근 해결한 기술적 어려움은 무엇인가요?")
 				.build()
