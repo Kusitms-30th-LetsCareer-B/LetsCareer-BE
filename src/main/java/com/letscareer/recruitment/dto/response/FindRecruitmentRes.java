@@ -20,15 +20,22 @@ public class FindRecruitmentRes {
     private Boolean isFavorite;
     private String task;
     private String announcementUrl;
+    private String stageName;
+    private StageStatusType status;
+    private long daysUntilEnd;
     private List<StageRes> stages;
 
-    public static FindRecruitmentRes of (Recruitment recruitment, List<StageRes> stages) {
+
+    public static FindRecruitmentRes of (Recruitment recruitment, List<StageRes> stages, String stageName, StageStatusType status, Long daysUntilEnd) {
         return FindRecruitmentRes.builder()
                 .recruitmentId(recruitment.getId())
                 .companyName(recruitment.getCompanyName())
                 .isFavorite(recruitment.getIsFavorite())
                 .task(recruitment.getTask())
                 .announcementUrl(recruitment.getAnnouncementUrl())
+                .stageName(stageName)
+                .status(status)
+                .daysUntilEnd(daysUntilEnd)
                 .stages(stages)
                 .build();
     }

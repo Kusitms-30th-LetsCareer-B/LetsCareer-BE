@@ -15,11 +15,17 @@ import java.util.List;
 @Builder
 public class FindAllRecruitmentsByTypeRes {
 
+    private long totalPages;
+    private long currentPage;
+    private long totalElementsCount;
     private List<RecruitmentInfo> recruitments;
 
-    public static FindAllRecruitmentsByTypeRes of(List<RecruitmentInfo> recruitments) {
+    public static FindAllRecruitmentsByTypeRes of(Long totalPages, Long currentPage, Long totalElementsCount, List<RecruitmentInfo> recruitments) {
         return FindAllRecruitmentsByTypeRes
                 .builder()
+                .totalPages(totalPages)
+                .currentPage(currentPage)
+                .totalElementsCount(totalElementsCount)
                 .recruitments(recruitments)
                 .build();
     }

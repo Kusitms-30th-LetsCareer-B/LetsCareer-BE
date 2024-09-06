@@ -25,7 +25,7 @@ public class StageService {
     public void createStage(Long recruitmentId, CreateStageReq request) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(()-> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
-        stageRepository.save(Stage.of(recruitment, request.getStageName(), null, request.getEndDate(), StageStatusType.PROGRESS, request.getIsFinal()));
+        stageRepository.save(Stage.of(recruitment, request.getStageName(), null, request.getEndDate(), StageStatusType.of(request.getStatus()), request.getIsFinal()));
     }
 
     @Transactional(readOnly = true)

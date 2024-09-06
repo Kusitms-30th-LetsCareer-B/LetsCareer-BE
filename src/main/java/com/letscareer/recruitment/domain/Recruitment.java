@@ -61,4 +61,8 @@ public class Recruitment extends BaseTimeEntity {
                 .announcementUrl(announcementUrl != null ? announcementUrl : "")
                 .build();
     }
+
+    public void modifyFavorite() {
+        this.isFavorite = !this.isFavorite;
+    }
 }

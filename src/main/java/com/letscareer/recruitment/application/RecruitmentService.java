@@ -10,16 +10,13 @@ import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
 import com.letscareer.recruitment.domain.repository.StageRepository;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
 import com.letscareer.recruitment.dto.response.*;
-import com.letscareer.recruitment.presentation.RecruitmentController;
 import com.letscareer.user.domain.User;
 import com.letscareer.user.domain.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +29,8 @@ public class RecruitmentService {
     private final UserRepository userRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final StageRepository stageRepository;
+
+    private static final int RECRUITMENT_PAGE_SIZE = 6;
 
     @Transactional
     public void enrollRecruitment(Long userId, EnrollRecruitmentReq request) {
@@ -49,7 +48,10 @@ public class RecruitmentService {
             List<FindRecruitmentRes.StageRes> stageResponses = recruitment.getStages().stream()
                     .map(FindRecruitmentRes.StageRes::from)
                     .toList();
-            return FindRecruitmentRes.of(recruitment, stageResponses);
+            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+            DetermineRecruitmentStatusRes statusRes = determineRecruitmentStatus(stages);
+
+            return FindRecruitmentRes.of(recruitment, stageResponses, statusRes.getStageName(), statusRes.getStatus(), statusRes.getDaysUntilFinal());
         }
         catch(Exception e){
             throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);
@@ -119,76 +121,86 @@ public class RecruitmentService {
     }
 
     @Transactional(readOnly = true)
-    public FindAllRecruitmentsRes findAllRecruitments(Long userId) {
-        List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
+    public FindAllRecruitmentsRes findAllRecruitments(Long userId, Long page) {
+        long offset = (page - 1) * RECRUITMENT_PAGE_SIZE;
+        long limit = RECRUITMENT_PAGE_SIZE;
         LocalDate today = LocalDate.now();
 
+        // QueryDSL로 필터링된 채용 정보 가져오기
+        List<Recruitment> recruitments = recruitmentRepository.findRecruitmentsWithUpcomingStages(userId, today, offset, limit);
+
+        // 전체 데이터 개수 계산 (총 페이지 수 및 총 개수 계산에 사용)
+        long totalRecruitmentsCount = recruitmentRepository.countRecruitmentsWithUpcomingStages(userId, today);
+        long totalPages = (totalRecruitmentsCount + RECRUITMENT_PAGE_SIZE - 1) / RECRUITMENT_PAGE_SIZE;
+
+
+        // recruitments 리스트를 RecruitmentInfo로 변환 및 정렬
         List<FindAllRecruitmentsRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
                 .map(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
-                    List<Stage> nextFilteredStages = stages
-                            .stream()
-                            .filter(stage -> !stage.getEndDate().isBefore(today))
-                            .toList();
+                    List<Stage> stages = stageRepository.findAllStagesByRecruitmentId(recruitment.getId());
 
-                    // 빈 리스트일 경우 null을 반환하여 후속 단계에서 제외될 수 있게 함
-                    if (nextFilteredStages.isEmpty()) {
-                        return null; // 필터링을 통해 제거할 수 있게 null 반환
-                    } else {
-                        DetermineRecruitmentStatusRes recruitmentStatus = DetermineRecruitmentStatusRes.from(nextFilteredStages.get(0));
-                        return FindAllRecruitmentsRes.RecruitmentInfo.of(
-                                recruitment,
-                                recruitmentStatus.getStageName(),
-                                recruitmentStatus.getStatus(),
-                                recruitmentStatus.getEndDate(),
-                                recruitmentStatus.getDaysUntilFinal()
-                        );
-                    }
+                    // 필터링 후 첫 번째 단계로 상태 추출
+                    DetermineRecruitmentStatusRes recruitmentStatus = DetermineRecruitmentStatusRes.from(stages.get(0));
+                    return FindAllRecruitmentsRes.RecruitmentInfo.of(
+                            recruitment,
+                            recruitmentStatus.getStageName(),
+                            recruitmentStatus.getStatus(),
+                            recruitmentStatus.getEndDate(),
+                            recruitmentStatus.getDaysUntilFinal()
+                    );
                 })
-                .filter(Objects::nonNull)
-                .sorted(Comparator.comparing(FindAllRecruitmentsRes.RecruitmentInfo::getIsFavorite).reversed()  // isFavorite이 true인 것을 앞으로
-                        .thenComparing(FindAllRecruitmentsRes.RecruitmentInfo::getDaysUntilEnd))  // 며칠 남았는지 오름차순으로 정렬
-                .limit(6)
+                .sorted(Comparator.comparing(FindAllRecruitmentsRes.RecruitmentInfo::getIsFavorite).reversed()  // isFavorite이 true인 것을 먼저
+                        .thenComparing(FindAllRecruitmentsRes.RecruitmentInfo::getDaysUntilEnd))  // 남은 일수 오름차순으로 정렬
                 .toList();
 
-        return FindAllRecruitmentsRes.of(recruitmentInfos);
+        return FindAllRecruitmentsRes.of(totalPages, page, totalRecruitmentsCount, recruitmentInfos);
     }
 
     @Transactional(readOnly = true)
-    public FindAllRecruitmentsByTypeRes findRecruitmentsByType(String type, Long userId) {
-        List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
+    public FindAllRecruitmentsByTypeRes findRecruitmentsByType(String type, Long userId, Long page) {
+        long offset = (page - 1) * RECRUITMENT_PAGE_SIZE;
+        long limit = RECRUITMENT_PAGE_SIZE;
+        LocalDate today = LocalDate.now();
 
+
+        // QueryDSL로 필터링된 채용 정보 가져오기
+        List<Recruitment> recruitments = recruitmentRepository.findRecruitmentsByTypeAndUser(type, userId, today, offset, limit);
+
+        // 필터링된 전체 데이터 개수
+        long totalRecruitmentsCount = recruitmentRepository.countRecruitmentsByTypeAndUser(type, userId, today);
+        long totalPages = (totalRecruitmentsCount + RECRUITMENT_PAGE_SIZE - 1) / RECRUITMENT_PAGE_SIZE;
+
+        // recruitments 리스트를 RecruitmentInfo로 변환
         List<FindAllRecruitmentsByTypeRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
-                .filter(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
-                    DetermineRecruitmentStatusRes statusRes = determineRecruitmentStatus(stages);
-
-                    // type이 PROGRESS일 경우,
-                    if (type.equals("progress")) {
-                        return statusRes.getStatus().equals(StageStatusType.PROGRESS) || (statusRes.getStatus().equals(StageStatusType.PASSED) && !statusRes.getIsFinal());
-                    }
-                    // type이 CONSEQUENCE일 경우, FAILED 또는 PASSED 상태를 필터링
-                    else if (type.equals("consequence")) {
-                        return statusRes.getStatus().equals(StageStatusType.FAILED) || (statusRes.getStatus().equals(StageStatusType.PASSED) && statusRes.getIsFinal());
-                    }
-                    return false;
-                })
                 .map(recruitment -> {
-                            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
-                            DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
+                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+                    DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
 
-                            return FindAllRecruitmentsByTypeRes.RecruitmentInfo.of(
-                                    recruitment,
-                                    recruitmentStatus.getStageName(),
-                                    recruitmentStatus.getStatus(),
-                                    recruitmentStatus.getEndDate(),
-                                    recruitmentStatus.getDaysUntilFinal()
-                            );
-                        })
-                .sorted(Comparator.comparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getIsFavorite).reversed()  // isFavorite이 true인 것을 앞으로
-                        .thenComparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getDaysUntilEnd))  // 며칠 남았는지 오름차순으로 정렬
+                    return FindAllRecruitmentsByTypeRes.RecruitmentInfo.of(
+                            recruitment,
+                            recruitmentStatus.getStageName(),
+                            recruitmentStatus.getStatus(),
+                            recruitmentStatus.getEndDate(),
+                            recruitmentStatus.getDaysUntilFinal()
+                    );
+                })
+                .sorted(Comparator.comparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getIsFavorite).reversed()
+                        .thenComparing(FindAllRecruitmentsByTypeRes.RecruitmentInfo::getDaysUntilEnd))
                 .toList();
 
-        return FindAllRecruitmentsByTypeRes.of(recruitmentInfos);
+        return FindAllRecruitmentsByTypeRes.of(totalPages, page, totalRecruitmentsCount, recruitmentInfos);
+    }
+
+    @Transactional
+    public void modifyRecruitmentFavorite(Long recruitmentId) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
+        recruitment.modifyFavorite();
+    }
+
+    @Transactional(readOnly = true)
+    public List<GetRecruitmentsNameRes> getRecruitmentsName(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
+        List<Recruitment> recruitments = recruitmentRepository.findAllByUser(user);
+        return recruitments.stream().map(GetRecruitmentsNameRes::from).toList();
     }
 }
