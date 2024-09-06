@@ -59,5 +59,6 @@ public class Stage extends BaseTimeEntity {
             this.stageName = request.getStageName();
             this.endDate = request.getEndDate();
             this.status = StageStatusType.of(request.getStatus());
+            this.isFinal = request.getIsFinal();
     }
 }
