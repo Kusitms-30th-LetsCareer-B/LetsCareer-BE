@@ -83,6 +83,12 @@ public class RecruitmentController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", recruitmentService.findRecruitmentsByType(type, userId, page)));
     }
 
+    /**
+     * 특정 기업의 관심 여부 변경
+     *
+     * @param recruitmentId the recruitment id
+     * @return the response entity
+     */
     @PatchMapping("/recruitments/{recruitmentId}/favorite")
     public ResponseEntity<CommonResponse<Void>> modifyRecruitmentFavorite(@PathVariable Long recruitmentId){
         recruitmentService.modifyRecruitmentFavorite(recruitmentId);
