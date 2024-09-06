@@ -17,7 +17,7 @@ public enum ExceptionContent {
     BAD_REQUEST_STAGE_STATUS_TYPE(BAD_REQUEST, "잘못된 요청입니다. 유효하지 않은 채용 상태입니다. (준비중, 합격, 불합격으로 입력해주세요.)"),
     BAD_REQUEST_INTRODUCE_STATUS_TYPE(BAD_REQUEST, "잘못된 요청입니다. 유효하지 않은 자기소개 상태입니다. (잘했어요, 아쉬워요으로 입력해주세요.)"),
     BAD_REQUEST_EXPERIENCE_TYPE(BAD_REQUEST,"잘못된 필살기 경험 타입입니다."),
-
+    BAD_REQUEST_INTERVIEW_STATUS_TYPE(BAD_REQUEST, "잘못된 면접 상태입니다. " ),
     BAD_REQUEST_REVIEW_TYPE(BAD_REQUEST, "잘못된 리뷰 타입입니다."),
     BAD_REQUEST_SATISFACTION_TYPE(BAD_REQUEST, "잘못된 만족도 타입입니다."),
     BAD_REQUEST_REVIEW_POINT_TYPE(BAD_REQUEST, "잘못된 리뷰 포인트 타입입니다."),
@@ -34,7 +34,8 @@ public enum ExceptionContent {
 
     NOT_FOUND_SPECIAL_SKILL(NOT_FOUND,"필살기 경험을 찾을 수 없습니다."),
 
-    NOT_FOUND_INTRODUCE(NOT_FOUND,"해당 자기소개 질문을 찾을 수 없습니다.");
+    NOT_FOUND_INTRODUCE(NOT_FOUND,"해당 자기소개 질문을 찾을 수 없습니다."),
+    NOT_FOUND_INTERVIEW(NOT_FOUND, "해당 복기노트 면접 질문을 찾을 수 없습니다." );
 
 
 

@@ -4,9 +4,9 @@ import com.letscareer.configuration.ControllerTestConfig;
 import com.letscareer.introduce.application.IntroduceService;
 import com.letscareer.introduce.domain.Introduce;
 import com.letscareer.introduce.dto.request.ReactionReq;
+import com.letscareer.introduce.dto.response.GetAdditionalIntroduceRes;
 import com.letscareer.introduce.dto.response.GetIntroduceRes;
 import com.letscareer.introduce.presentation.IntroduceController;
-import com.letscareer.review.presentation.ReviewController;
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
@@ -222,6 +222,44 @@ public class IntroduceControllerTest extends ControllerTestConfig {
 						.build()
 				)
 			));
+	}
+
+	@Test
+	@DisplayName("한번 더 보면 좋을 자기소개서 질문 조회")
+	public void testGetAdditionalIntroduces() throws Exception {
+		List<GetAdditionalIntroduceRes> response = List.of(
+				GetAdditionalIntroduceRes.builder()
+						.introduceId(1L)
+						.question("최근 해결한 기술적 어려움은 무엇인가요?")
+						.build()
+		);
+
+		Mockito.when(introduceService.getAdditionalIntroduces(anyLong())).thenReturn(response);
+
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/introduces/additional")
+				.queryParam("recruitmentId", "1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		resultActions.andExpect(status().isOk())
+				.andDo(MockMvcRestDocumentationWrapper.document("introduce/getAdditionalIntroduces",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(
+								ResourceSnippetParameters.builder()
+										.tag("자기소개서")
+										.description("한번 더 보면 좋을 자기소개서 질문 조회")
+										.queryParameters(parameterWithName("recruitmentId").description("채용 일정 ID"))
+										.responseFields(
+												fieldWithPath("code").description("응답 코드"),
+												fieldWithPath("message").description("응답 메시지"),
+												fieldWithPath("data.[].introduceId").description("자기소개서 질문 ID"),
+												fieldWithPath("data.[].question").description("자기소개서 질문")
+										)
+										.responseSchema(Schema.schema("CommonResponse"))
+										.build()
+						)
+				));
 	}
 
 }

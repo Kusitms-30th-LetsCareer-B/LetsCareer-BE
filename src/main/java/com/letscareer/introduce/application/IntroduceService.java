@@ -3,9 +3,11 @@ package com.letscareer.introduce.application;
 import com.letscareer.global.exception.CustomException;
 import com.letscareer.global.exception.ExceptionContent;
 import com.letscareer.introduce.domain.Introduce;
+import com.letscareer.introduce.domain.IntroduceStatusType;
 import com.letscareer.introduce.domain.repository.IntroduceRepository;
 import com.letscareer.introduce.dto.request.IntroduceReq;
 import com.letscareer.introduce.dto.request.ReactionReq;
+import com.letscareer.introduce.dto.response.GetAdditionalIntroduceRes;
 import com.letscareer.introduce.dto.response.GetIntroduceRes;
 import com.letscareer.recruitment.domain.Recruitment;
 import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
@@ -69,5 +71,10 @@ public class IntroduceService {
         introduce.modifyReaction(request);
     }
 
+    @Transactional(readOnly = true)
+    public List<GetAdditionalIntroduceRes> getAdditionalIntroduces(Long recruitmentId) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
+        return introduceRepository.findAllByRecruitmentAndType(recruitment, IntroduceStatusType.of("아쉬워요")).stream().map(GetAdditionalIntroduceRes::of).toList();
+    }
 
 }

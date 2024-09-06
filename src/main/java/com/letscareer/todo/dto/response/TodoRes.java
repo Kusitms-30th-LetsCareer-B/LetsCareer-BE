@@ -17,6 +17,7 @@ public class TodoRes {
     private Boolean isCompleted;
     private LocalDate date;
     private Long recruitmentId;
+    private Boolean isRoutine;
 
     public static TodoRes from(Todo todo) {
         return TodoRes.builder()
@@ -24,7 +25,8 @@ public class TodoRes {
                 .content(todo.getContent())
                 .isCompleted(todo.getIsCompleted())
                 .date(todo.getDate())
-                .recruitmentId(todo.getRecruitment().getId()) // Recruitment 엔티티에 접근할 필요 없음
+                .recruitmentId(todo.getRecruitment().getId())
+                .isRoutine(todo.getRoutine() != null)
                 .build();
     }
 }
