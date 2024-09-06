@@ -3,7 +3,9 @@ package com.letscareer.review.presentation;
 import com.letscareer.global.domain.CommonResponse;
 import com.letscareer.introduce.dto.request.ReactionReq;
 import com.letscareer.review.application.InterviewService;
+import com.letscareer.review.domain.Interview;
 import com.letscareer.review.dto.request.InterviewReq;
+import com.letscareer.review.dto.response.GetAdditonalInterviewRes;
 import com.letscareer.review.dto.response.GetInterviewRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +44,9 @@ public class InterviewController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("복기노트 면접 질문에 대한 반응을 남겼습니다", null));
     }
 
+    @GetMapping("/interviews/additional")
+    public ResponseEntity<CommonResponse<List<GetAdditonalInterviewRes>>> getAdditionalInterviews(@RequestParam Long recruitmentId){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("복기노트 한번 더 보면 좋을 질문들 목록을 조회하였습니다.", interviewService.getAdditionalInterviews(recruitmentId)));
+    }
 
 }

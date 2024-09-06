@@ -6,8 +6,10 @@ import com.letscareer.introduce.dto.request.ReactionReq;
 import com.letscareer.recruitment.domain.Recruitment;
 import com.letscareer.recruitment.domain.repository.RecruitmentRepository;
 import com.letscareer.review.domain.Interview;
+import com.letscareer.review.domain.enums.InterviewStatusType;
 import com.letscareer.review.domain.repository.InterviewRepository;
 import com.letscareer.review.dto.request.InterviewReq;
+import com.letscareer.review.dto.response.GetAdditonalInterviewRes;
 import com.letscareer.review.dto.response.GetInterviewRes;
 import com.letscareer.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -69,5 +71,10 @@ public class InterviewService {
         interview.modifyReaction(request);
     }
 
+    @Transactional(readOnly = true)
+    public List<GetAdditonalInterviewRes> getAdditionalInterviews(Long recruitmentId) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
 
+        return interviewRepository.findAllByRecruitmentAndType(recruitment, InterviewStatusType.of("아쉬워요")).stream().map(GetAdditonalInterviewRes::of).toList();
+    }
 }
