@@ -3,13 +3,12 @@ package com.letscareer.recruitment.presentation;
 import com.letscareer.global.domain.CommonResponse;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
-import com.letscareer.recruitment.dto.response.FindAllRecruitmentsByTypeRes;
-import com.letscareer.recruitment.dto.response.FindAllRecruitmentsRes;
-import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
-import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
+import com.letscareer.recruitment.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -66,8 +65,9 @@ public class RecruitmentController {
      * @return FindAllRecruitmentsRes
      */
     @GetMapping("/recruitments")
-    public ResponseEntity<CommonResponse<FindAllRecruitmentsRes>> findAllRecruitments(@RequestParam(name = "userId") Long userId){
-        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", recruitmentService.findAllRecruitments(userId)));
+    public ResponseEntity<CommonResponse<FindAllRecruitmentsRes>> findAllRecruitments(@RequestParam(name = "userId") Long userId,
+                                                                                      @RequestParam(name = "page") Long page){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저의 채용일정 리스트가 반환되었습니다.", recruitmentService.findAllRecruitments(userId, page)));
     }
 
     /**
@@ -79,6 +79,22 @@ public class RecruitmentController {
     @GetMapping("/recruitments/status")
     public ResponseEntity<CommonResponse<FindAllRecruitmentsByTypeRes>> findRecruitmentsByType(@RequestParam(name = "type") String type, @RequestParam(name = "userId") Long userId){
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", recruitmentService.findRecruitmentsByType(type, userId)));
+    }
+
+    @PatchMapping("/recruitments/{recruitmentId}/favorite")
+    public ResponseEntity<CommonResponse<Void>> modifyRecruitmentFavorite(@PathVariable Long recruitmentId){
+        recruitmentService.modifyRecruitmentFavorite(recruitmentId);
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("관심 여부를 변경하였습니다", null));
+    }
+
+    /**
+     * 유저의 기업명 리스트 조회
+     * @param userId
+     * @return
+     */
+    @GetMapping("/recruitments/name")
+    public ResponseEntity<CommonResponse<List<GetRecruitmentsNameRes>>> getRecruitmentsName(@RequestParam Long userId){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저의 기업명을 조회하였습니다.", recruitmentService.getRecruitmentsName(userId)));
     }
 
 }

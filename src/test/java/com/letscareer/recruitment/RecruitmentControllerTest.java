@@ -266,7 +266,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
     public void testFindAllRecruitments() throws Exception {
         // given
         Long userId = 1L;
-
+        Long page = 6L;
         FindAllRecruitmentsRes.RecruitmentInfo recruitmentInfo = FindAllRecruitmentsRes.RecruitmentInfo.builder()
                 .recruitmentId(1L)
                 .companyName("Test Company")
@@ -282,7 +282,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 
         FindAllRecruitmentsRes findAllRecruitmentsRes = FindAllRecruitmentsRes.of(List.of(recruitmentInfo));
 
-        Mockito.when(recruitmentService.findAllRecruitments(userId)).thenReturn(findAllRecruitmentsRes);
+        Mockito.when(recruitmentService.findAllRecruitments(userId, page)).thenReturn(findAllRecruitmentsRes);
 
         // when
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/recruitments")
