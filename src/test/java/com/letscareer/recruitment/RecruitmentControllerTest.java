@@ -380,6 +380,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 			.status(StageStatusType.PROGRESS)
 			.endDate(LocalDate.of(2024, 9, 30))
 			.daysUntilEnd(5L)
+			.isFinal(true)
 			.build();
 
 		FindAllRecruitmentsByTypeRes findAllRecruitmentsByTypeRes = FindAllRecruitmentsByTypeRes.of(1L, 1L, 1L, List.of(recruitmentInfo));
