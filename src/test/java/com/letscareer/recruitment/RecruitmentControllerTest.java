@@ -332,6 +332,37 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 			));
 	}
 
+	@Test
+	@DisplayName("특정 기업의 관심 여부 변경")
+	public void testModifyRecruitmentFavorite() throws Exception {
+		Mockito.doNothing().when(recruitmentService).modifyRecruitmentFavorite(anyLong());
+
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/recruitments/{recruitmentId}/favorite", 1L)
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON));
+
+		resultActions.andExpect(status().isOk())
+			.andDo(MockMvcRestDocumentationWrapper.document("recruitment/modifyRecruitmentFavorite",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				resource(
+					ResourceSnippetParameters.builder()
+						.tag("채용 일정")
+						.description("특정 기업의 관심 여부 변경")
+						.pathParameters(
+							parameterWithName("recruitmentId").description("관심 여부를 변경할 채용 일정의 ID")
+						)
+						.responseFields(
+							fieldWithPath("code").description("응답 코드"),
+							fieldWithPath("message").description("응답 메시지"),
+							fieldWithPath("data").description("응답 데이터")
+						)
+						.responseSchema(Schema.schema("CommonResponse"))
+						.build()
+				)
+			));
+	}
+
 
 	@Test
 	@DisplayName("유저의 타입별 채용일정 리스트 조회")
