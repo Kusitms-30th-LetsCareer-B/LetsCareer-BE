@@ -17,7 +17,7 @@ public class FindStageRes {
     private String stageName;
     private LocalDate startDate;
     private LocalDate endDate;
-    private StageStatusType status;
+    private String status;
     private Boolean isFinal;
 
     public static FindStageRes from(Stage stage) {
@@ -26,7 +26,7 @@ public class FindStageRes {
                 .stageName(stage.getStageName())
                 .startDate(stage.getStartDate())
                 .endDate(stage.getEndDate())
-                .status(stage.getStatus())
+                .status(stage.getStatus() != null ? stage.getStatus().getName() : null)
                 .isFinal(stage.getIsFinal())
                 .build();
     }

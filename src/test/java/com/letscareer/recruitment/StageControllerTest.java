@@ -63,19 +63,20 @@ public class StageControllerTest extends ControllerTestConfig {
 		Long recruitmentId = 1L;
 
 		String jsonRequest = """
-			{
-			    "stageName": "면접",
-			    "endDate": "2024-09-30",
-			    "isFinal": true
-			}
-			""";
+        {
+            "stageName": "면접",
+            "endDate": "2024-09-30",
+            "status": "준비중",
+            "isFinal": true
+        }
+        """;
 
 		// Mock the service call to do nothing when createStage is called
 		Mockito.doNothing().when(stageService).createStage(anyLong(), any(CreateStageReq.class));
 
 		// when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.post("/stages")
-			.param("recruitmentId", recruitmentId.toString())
+			.queryParam("recruitmentId", recruitmentId.toString())
 			.content(jsonRequest)
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON));
@@ -97,6 +98,7 @@ public class StageControllerTest extends ControllerTestConfig {
 						.requestFields(
 							fieldWithPath("stageName").description("전형 이름"),
 							fieldWithPath("endDate").description("전형 종료 날짜"),
+							fieldWithPath("status").description("채용 전형 상태"),
 							fieldWithPath("isFinal").description("최종 전형 여부")
 						)
 						.responseFields(
@@ -119,7 +121,7 @@ public class StageControllerTest extends ControllerTestConfig {
 			.stageName("면접")
 			.startDate(LocalDate.of(2024, 9, 1))
 			.endDate(LocalDate.of(2024, 9, 30))
-			.status(StageStatusType.PROGRESS)
+			.status(StageStatusType.PROGRESS.getName()) // 실제로 한글로 출력할 상태 설정
 			.isFinal(true)
 			.build();
 
@@ -127,7 +129,7 @@ public class StageControllerTest extends ControllerTestConfig {
 
 		// when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/stages")
-			.param("stageId", stageId.toString())
+			.queryParam("stageId", stageId.toString())
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON));
 
@@ -138,7 +140,7 @@ public class StageControllerTest extends ControllerTestConfig {
 			.andExpect(jsonPath("$.data.stageName").value("면접"))
 			.andExpect(jsonPath("$.data.startDate").value("2024-09-01"))
 			.andExpect(jsonPath("$.data.endDate").value("2024-09-30"))
-			.andExpect(jsonPath("$.data.status").value("PROGRESS"))
+			.andExpect(jsonPath("$.data.status").value("준비중")) // 한글 상태로 검증
 			.andExpect(jsonPath("$.data.isFinal").value(true))
 			.andDo(MockMvcRestDocumentationWrapper.document("stage/findStage",
 				preprocessRequest(prettyPrint()),
@@ -156,7 +158,7 @@ public class StageControllerTest extends ControllerTestConfig {
 							fieldWithPath("data.stageName").description("전형 이름"),
 							fieldWithPath("data.startDate").description("전형 시작 날짜"),
 							fieldWithPath("data.endDate").description("전형 종료 날짜"),
-							fieldWithPath("data.status").description("전형 상태"),
+							fieldWithPath("data.status").description("전형 상태 (준비중, 합격, 불합격)"),
 							fieldWithPath("data.isFinal").description("최종 전형 여부")
 						)
 						.responseSchema(Schema.schema("CommonResponse"))
@@ -165,26 +167,25 @@ public class StageControllerTest extends ControllerTestConfig {
 			));
 	}
 
-
 	@Test
 	@DisplayName("채용 전형 수정")
 	public void testModifyStage() throws Exception {
 		Long stageId = 1L;
 
 		String jsonRequest = """
-			{
-			    "stageName": "면접",
-			    "endDate": "2024-09-30",
-			    "status": "PROGRESS",
-			    "isFinal": "true"
-			}
-			""";
+        {
+            "stageName": "면접",
+            "endDate": "2024-09-30",
+            "status": "준비중",
+            "isFinal": true
+        }
+        """;
 
 		Mockito.doNothing().when(stageService).modifyStage(anyLong(), any(ModifyStageReq.class));
 
 		// when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/stages")
-			.param("stageId", stageId.toString())
+			.queryParam("stageId", stageId.toString())
 			.content(jsonRequest)
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON));
@@ -204,8 +205,8 @@ public class StageControllerTest extends ControllerTestConfig {
 						.requestFields(
 							fieldWithPath("stageName").description("전형 이름"),
 							fieldWithPath("endDate").description("전형 종료 날짜"),
-							fieldWithPath("status").description("채용 전형 상태"),
-							fieldWithPath("isFinal").description("최종 전형 유무")
+							fieldWithPath("status").description("채용 전형 상태 (준비중, 합격, 불합격)"),
+							fieldWithPath("isFinal").description("최종 전형 여부")
 						)
 						.responseFields(
 							fieldWithPath("code").description("응답 코드"),
@@ -221,63 +222,22 @@ public class StageControllerTest extends ControllerTestConfig {
 	@Test
 	@DisplayName("채용 전형 삭제")
 	public void testDeleteStage() throws Exception {
+		Long stageId = 1L;
 
-		// given
-		Mockito.doNothing().when(recruitmentService).deleteRecruitment(anyLong());
+		// Mock the service call to do nothing when deleteStage is called
+		Mockito.doNothing().when(stageService).deleteStage(anyLong());
 
 		// when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/stages")
-			.queryParam("stageId", "1")
+			.queryParam("stageId", stageId.toString())
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON));
 
-//        Long stageId = 1L;
-//        Long recruitmentId = 1L;
-//        Long userId = 1L;
-//
-//        // Mock User entity
-//        User user = User.builder()
-//                .id(userId)
-//                .name("Test User")
-//                .email("testuser@example.com")
-//                .build();
-//
-//        // Mock Recruitment entity
-//        Recruitment recruitment = Recruitment.builder()
-//                .id(recruitmentId)
-//                .user(user)
-//                .companyName("Test Company")
-//                .task("Software Development")
-//                .isFavorite(false)
-//                .isRemind(true)
-//                .build();
-//
-//        // Mock Stage entity
-//        Stage stage = Stage.builder()
-//                .id(stageId)
-//                .recruitment(recruitment)
-//                .stageName("면접")
-//                .endDate(LocalDate.of(2024, 9, 30))
-//                .status(StageStatusType.PROGRESS)
-//                .isFinal(true)
-//                .build();
-//
-//        // Mock the repository call to return the recruitment and stage when findById is called
-//        Mockito.when(recruitmentRepository.findById(recruitmentId)).thenReturn(Optional.of(recruitment));
-//        Mockito.when(stageRepository.findById(stageId)).thenReturn(Optional.of(stage));
-//
-//        // Mock the service call to do nothing when deleteStage is called
-//        Mockito.doNothing().when(stageService).deleteStage(stageId);
-//
-//        // when
-//        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/stages")
-//                .param("stageId", stageId.toString())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON));
-
 		// then
 		resultActions.andExpect(status().isOk())
-			.andDo(MockMvcRestDocumentationWrapper.document("stage/delete",
+			.andExpect(jsonPath("$.code").value(200))
+			.andExpect(jsonPath("$.message").value("채용 전형을 삭제하였습니다."))
+			.andDo(MockMvcRestDocumentationWrapper.document("stage/deleteStage",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				resource(
@@ -285,7 +245,7 @@ public class StageControllerTest extends ControllerTestConfig {
 						.tag("채용 전형")
 						.description("채용 전형 삭제")
 						.queryParameters(
-							parameterWithName("stageId").description("채용 전형의 ID")
+							parameterWithName("stageId").description("삭제할 채용 전형의 ID")
 						)
 						.responseFields(
 							fieldWithPath("code").description("응답 코드"),
