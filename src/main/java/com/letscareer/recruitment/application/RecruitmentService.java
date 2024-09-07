@@ -173,7 +173,7 @@ public class RecruitmentService {
         // 각 Recruitment의 상태를 계산하고 필터링
         List<FindAllRecruitmentsByTypeRes.RecruitmentInfo> filteredRecruitments = recruitments.stream()
                 .map(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+                    List<Stage> stages = stageRepository.findAllStagesByRecruitmentId(recruitment.getId());
                     DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
 
                     return FindAllRecruitmentsByTypeRes.RecruitmentInfo.of(
