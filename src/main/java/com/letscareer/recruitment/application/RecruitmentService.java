@@ -112,12 +112,13 @@ public class RecruitmentService {
 
         // 필터링 후 아무런 stage도 남지 않은 경우 (모두 과거에 해당하는 경우)
         if (nextFilteredStages.isEmpty()) {
-            if (!stages.isEmpty()) {
-                return DetermineRecruitmentStatusRes.from(stages.get(stages.size() - 1));
-            } else {
-                // 만약 stages 리스트가 비어 있다면, 적절한 예외를 던지거나 기본값을 반환
-                throw new CustomException(ExceptionContent.NO_VALID_STAGE_FOUND);
-            }
+            return DetermineRecruitmentStatusRes.from(stages.get(stages.size() - 1));
+//            if (!stages.isEmpty()) {
+//                return DetermineRecruitmentStatusRes.from(stages.get(stages.size() - 1));
+//            } else {
+//                // 만약 stages 리스트가 비어 있다면, 적절한 예외를 던지거나 기본값을 반환
+//                throw new CustomException(ExceptionContent.NO_VALID_STAGE_FOUND);
+//            }
         }
 
         // 세 번째 조건: 이후 남은 단계 중 가장 마감일이 가까운 일정를 PROGRESS 상태로 반환
