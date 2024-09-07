@@ -46,7 +46,12 @@ public class StageService {
     public void deleteStage(Long stageId) {
         Stage stage = stageRepository.findById(stageId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_STAGE));
-        stageRepository.delete(stage);
+        if (!stage.getStageName().equals("서류")){
+            stageRepository.delete(stage);
+        }
+        else{
+            throw new CustomException(ExceptionContent.BAD_REQUEST_DOCUMENT);
+        }
     }
 
 }
