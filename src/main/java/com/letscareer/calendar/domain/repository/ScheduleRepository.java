@@ -10,4 +10,6 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAllByUserIdAndDateBetweenOrderByDateAsc(Long userId, LocalDate startDate, LocalDate endDate);
     void deleteByStageId(Long stageId);
+
+    List<Schedule> findAllByUserIdAndDate(Long userId, LocalDate date);
 }
