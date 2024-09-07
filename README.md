@@ -1,3 +1,160 @@
+### Server
+
+- ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJ%20IDEA-000000.svg?style=flat-square&logo=intellij-idea&logoColor=white)
+  ![Java](https://img.shields.io/badge/Java-FF9900?style=flat-square&logo=JAVA&logoColor=FFFFFF)
+  ![Springboot](https://img.shields.io/badge/Springboot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
+  ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=flat-square&logo=Gradle&logoColor=white)
+  ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=flat-square&logo=spring&logoColor=white)
+- ![MySQL](https://img.shields.io/badge/MySQL-%2300f.svg?style=flat-square&logo=mysql&logoColor=white)
+  ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=flat-square&logo=Hibernate&logoColor=white)
+- ![GitHub Actions](https://img.shields.io/badge/Github%20Actions-%232671E5.svg?style=flat-square&logo=githubactions&logoColor=white)
+  ![Docker](https://img.shields.io/badge/Docker-%230db7ed.svg?style=flat-square&logo=docker&logoColor=white)
+  ![Nginx](https://img.shields.io/badge/Nginx-%23009639.svg?style=flat-square&logo=nginx&logoColor=white)
+  ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=Redis&logoColor=FFFFFF)
+
+### Co-working Tool
+
+- ![Slack](https://img.shields.io/badge/Slack-4A154B.svg?style=flat-square&logo=slack&logoColor=white)
+  ![Notion](https://img.shields.io/badge/Notion-000000.svg?style=flat-square&logo=notion&logoColor=white)
+
+<br>
+
+## **🐾 기술 스택 선정 이유**
+
+### **📗 Server 스택 선정 이유**
+
+- spring boot(Java)
+
+프레임 워크로 spring boot를 사용
+
+다양한 라이브러리와 설정을 자동으로 제공하므로 개발자가 애플리케이션을 더 빠르게 만들 수 있음
+
+특정 환경이나 서버, 기술에 종속되지 않으며 유연한 애플리케이션을 개발할 수 있음
+
+기존 코드와의 호환성을 고려해 java 언어 선정
+
+- MySql
+
+RDBMS 로 테이블 형태로 연관관계를 형성해서 데이터를 관리하는 목적으로 사용
+
+- JPA
+
+데이터베이스 쿼리를 간단하게 작성할 수 있어 쿼리 작성에 필요한 노력과 시간을 크게 줄일 수 있음
+
+ORM(Object-Relational Mapping) 기능을 자동으로 제공하므로 객체와 데이터베이스 간의 매핑을 자동으로 처리할 수 있으며, 데이터베이스의 스키마 변경에도 유연하게 대응할 수 있음
+
+
+- QueryDsl
+
+QueryDsl을 사용하여 타입 안전한 쿼리를 작성함
+
+즉, 쿼리를 작성할 때 컴파일 타임에 오류를 잡을 수 있어 실행 중에 발생할 수 있는 쿼리 관련 오류를 방지할 수 있습니다.
+
+- docker
+
+컨테이너 기반의 오픈소스 가상화 플랫폼으로, 환경에 구애받지 않고 애플리케이션을 신속하게 구축, 테스트 및 배포
+
+다양한 프로그램들과 실행환경을 컨테이너로 규격화시켜 프로그램의 배포 및 관리를 단순화할 수 있어 편리
+
+- github action
+
+CI와 CD를 자동화하여 복잡성을 줄이고 효율적이고 간편한 CI/CD 파이프 라인 구축
+
+- Redis
+
+Redis를 활용하여 데이터 캐싱, 빠른 데이터 접근, 실시간 데이터 처리 및 유연한 데이터 구조 지원을 합니다.
+
+Redis는 인메모리 데이터 저장소로서 높은 성능과 다양한 기능을 제공하기 때문에 다양한 애플리케이션에서 사용됩니다. 
+
+- K6
+
+성능 테스트 및 부하 테스트를 수행하기 위한 오픈 소스 도구로, 주로 웹 애플리케이션, API의 성능을 검증하는 데 사용하였습니다. 
+ 
+이는 간편한 설정, 직관적인 스크립트 작성, 경량화된 성능 및 자동화 파이프라인과의 통합 용이성이 있습니다.
+
+- DDD(도메인 주도 설계)
+
+도메인은 서로 분리되고, 높은 응집력과 낮은 결합도로 변경과 확장에 용이한 설계
+
+<br>
+
+## 🔖 Naming Rules
+
+### 💻Backend
+
+- **Packages**
+  -  언더스코어(_)나 대문자를 섞지 않고 소문자를 사용하여 작성합니다.
+- **Classes**
+  - 클래스 이름은 명사나 명사절이어야 한다.
+  - 대문자 카멜표기법(Upper camel case)을 사용합니다.
+- **Interfaces**
+  - 인터페이스 이름도 클래스 이름과 같은 대문자 규칙을 적용한다.
+- **Methods**
+  - 메서드 이름은 동사/전치사로 시작하여야 한다.
+  - 소문자 카멜표기법(Lower camel case)를 사용합니다.
+  - 의도가 전달되도록 최대한 간결하게 표현합니다.
+- **Constants**
+  - 클래스 상수로 선언된 변수들과 상수들의 이름은 모두 대문자로 쓰고 각 단어는 언더바 ("\_")로 분리한다.
+- **Variables**
+  - 소문자 카멜표기법(Lower camel case)를 사용합니다.
+  - 언더바 또는 달러 표시 문자로 시작하는 것이 허용 되기는 하지만, 사용하지 말자.
+  - 짧지만 의미있게 짓는다.
+  - 변수의 사용 의도를 알 수 있도록 의미적으로 짓는다.
+  - 한문자로만 이루어진 변수는 암시적으로만 사용하고 버릴 변수를 제외하고는 피한다.
+- **ETC**
+  - DB 테이블: 소문자와 언더스코어로(lower_snake_case) 구성합니다.
+  - ENUM, 상수: 상태를 가지지 않는 자료형이면서 static final로 선언되어 있는 필드일 때를 상수로 간주하며, 대문자와 언더스코어(UPPER_SNAKE_CASE)로 구성합니다.
+  - 컬렉션(Collection): **복수형**을 사용하거나 **컬렉션**을 명시합니다. (Ex. userList, users, userMap)
+  - LocalDateTime: 접미사에 **Date**를 붙인다.
+
+<br>
+
+## **🗂️ Commit Convention**
+
+Ex) `[feat] #8 구글 로그인 API 기능 구현 `
+
+- **feat** : 새로운 기능 구현 `[feat] #11 구글 로그인 API 기능 구현`
+- **fix** : 코드 오류 수정 `[fix] #10 회원가입 비즈니스 로직 오류 수정`
+- **del** : 쓸모없는 코드 삭제 `[del] #12 불필요한 import 제거`
+- **docs** : README나 wiki 등의 문서 개정 `[docs] #14 리드미 수정`
+- **refactor** : 내부 로직은 변경 하지 않고 기존의 코드를 개선하는 리팩터링 `[refactor] #15 코드 로직 개선`
+- **chore** : 의존성 추가, yml 추가와 수정, 패키지 구조 변경, 파일 이동 `[chore] #21 yml 수정`, `[chore] #22 lombok 의존성 추가`
+- **test**: 테스트 코드 작성, 수정 `[test] #20 로그인 API 테스트 코드 작성`
+- **style** : 코드에 관련 없는 주석 달기, 줄바꿈
+- **rename** : 파일 및 폴더명 수정
+
+<br>
+
+## **🐬 Git Flow**
+
+작업 시작 시 선행되어야 할 작업은 다음과 같습니다.
+
+> 1. issue를 생성합니다.
+> 2. feature branch를 생성합니다.
+> 3. add → commit → push → pull request 를 진행합니다.
+> 4. pull request를 develop branch로 merge 합니다.
+> 5. 이전에 merge된 작업이 있을 경우 다른 branch에서 진행하던 작업에 merge된 작업을 pull 받아옵니다.
+> 6. 종료된 issue와 pull request의 label을 관리합니다.
+
+## **💡Branch**
+
+branch는 작업 단위 & 기능 단위로 생성된 issue를 기반으로 합니다.
+
+branch를 생성하기 전 issue를 먼저 작성합니다. issue 작성 후 생성되는 번호와 domain 명을 조합하여 branch의 이름을 결정합니다. `<Prefix>/<Issue_Number>-<Domain>` 의 양식을 준수합니다.
+
+## **🖥️Branch Naming Rule**
+
+branch를 생성하기 전 issue를 먼저 작성합니다. issue 작성 후 생성되는 번호와 domain 명을 조합하여 branch의 이름을 결정합니다. `<Prefix>/<Issue_Number>-<Domain>` 의 양식을 준수합니다.
+
+## **📑Prefix**
+
+- `main` : 개발이 완료된 산출물이 저장될 공간입니다.
+- `develop`: feature branch에서 구현된 기능들이 merge될 default branch 입니다.
+- `feature`: 기능을 개발하는 branch 입니다. 이슈 별 & 작업 별로 branch를 생성 후 기능을 개발하며 naming은 소문자를 사용합니다.
+
+<br>
+
+
 # Back-end
 ## 공통 사항
 - 단위 테스트 작성(service 메소드 별로) : Junit 사용
