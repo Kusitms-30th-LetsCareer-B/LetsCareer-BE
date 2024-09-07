@@ -65,6 +65,24 @@ public class PersonalScheduleService {
                 .toList();
     }
 
+    /**
+     * 특정 날짜에 해당하는 개인 일정을 가져오는 메소드
+     *
+     * @param userId the user id
+     * @param date   the date
+     * @return the schedule for date
+     */
+    @Transactional(readOnly = true)
+    public List<PersonalScheduleResponse> getPersonalScheduleForDate(Long userId, LocalDate date) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
+
+        return personalScheduleRepository.findAllByUserIdAndDateOrderByDateAsc(user.getId(), date).stream()
+            .map(PersonalScheduleResponse::new)
+            .toList();
+    }
+
+
     // 개인 일정 수정
     public void updatePersonalSchedule(Long personalScheduleId, UpdatePersonalScheduleRequest request) {
         PersonalSchedule personalSchedule = personalScheduleRepository.findById(personalScheduleId)

@@ -125,6 +125,48 @@ public class PersonalScheduleControllerTest extends ControllerTestConfig {
     }
 
     @Test
+    @DisplayName("특정 날짜의 개인 일정 조회")
+    public void testGetPersonalScheduleForDate() throws Exception {
+        // given
+        PersonalScheduleResponse personalScheduleResponse = new PersonalScheduleResponse(1L, LocalDate.of(2024, 9, 7), "프로젝트 미팅");
+        Mockito.when(personalScheduleService.getPersonalScheduleForDate(anyLong(), any(LocalDate.class)))
+            .thenReturn(Collections.singletonList(personalScheduleResponse));
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/calendars/personal/date")
+            .param("userId", "1")
+            .param("date", "2024-09-07")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        resultActions.andExpect(status().isOk())
+            .andDo(MockMvcRestDocumentationWrapper.document("calendar/getPersonalScheduleForDate",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                resource(
+                    ResourceSnippetParameters.builder()
+                        .tag("Calendar")
+                        .description("특정 날짜의 개인 일정 조회")
+                        .queryParameters(
+                            parameterWithName("userId").description("조회할 사용자의 ID"),
+                            parameterWithName("date").description("조회할 날짜 (yyyy-MM-dd)")
+                        )
+                        .responseFields(
+                            fieldWithPath("code").description("응답 코드"),
+                            fieldWithPath("message").description("응답 메시지"),
+                            fieldWithPath("data.[].personalScheduleId").description("개인 일정 ID"),
+                            fieldWithPath("data.[].date").description("개인 일정 날짜"),
+                            fieldWithPath("data.[].content").description("개인 일정 내용")
+                        )
+                        .responseSchema(Schema.schema("PersonalScheduleResponse"))
+                        .build()
+                )
+            ));
+    }
+
+
+    @Test
     @DisplayName("개인 일정 수정")
     public void testUpdatePersonalSchedule() throws Exception {
         // given

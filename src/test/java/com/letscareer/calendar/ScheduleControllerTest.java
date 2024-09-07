@@ -4,6 +4,7 @@ import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.letscareer.calendar.application.ScheduleService;
+import com.letscareer.calendar.dto.response.ScheduleContentResponse;
 import com.letscareer.calendar.presentation.ScheduleController;
 import com.letscareer.calendar.dto.request.PersonalScheduleRequest;
 import com.letscareer.calendar.dto.response.ScheduleResponse;
@@ -79,5 +80,46 @@ public class ScheduleControllerTest extends ControllerTestConfig {
                 )
             ));
     }
+
+    @Test
+    @DisplayName("특정 날짜의 채용 일정 조회")
+    public void testGetScheduleForDate() throws Exception {
+        // given
+        ScheduleContentResponse scheduleContentResponse = new ScheduleContentResponse(1L, "Naver", "서류", "시작");
+        Mockito.when(scheduleService.getScheduleForDate(anyLong(), any(LocalDate.class)))
+            .thenReturn(Collections.singletonList(scheduleContentResponse));
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/calendars/recruitment/date")
+            .param("userId", "1")
+            .param("date", "2024-09-07")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        resultActions.andExpect(status().isOk())
+            .andDo(MockMvcRestDocumentationWrapper.document("calendar/getScheduleForDate",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                resource(
+                    ResourceSnippetParameters.builder()
+                        .tag("Calendar")
+                        .description("특정 날짜의 채용 일정 조회")
+                        .queryParameters(
+                            parameterWithName("userId").description("조회할 사용자의 ID"),
+                            parameterWithName("date").description("조회할 날짜 (yyyy-MM-dd)")
+                        )
+                        .responseFields(
+                            fieldWithPath("code").description("응답 코드"),
+                            fieldWithPath("message").description("응답 메시지"),
+                            fieldWithPath("data.[].scheduleId").description("스케줄 ID"),
+                            fieldWithPath("data.[].content").description("스케줄 내용 (회사 이름 + 전형 이름 + 추가 정보)")
+                        )
+                        .responseSchema(Schema.schema("ScheduleContentResponse"))
+                        .build()
+                )
+            ));
+    }
+
 
 }

@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface PersonalScheduleRepository extends JpaRepository<PersonalSchedule, Long> {
     List<PersonalSchedule> findAllByUserIdAndDateBetweenOrderByDateAsc(Long userId, LocalDate startDate, LocalDate endDate);
+    List<PersonalSchedule> findAllByUserIdAndDateOrderByDateAsc(Long userId, LocalDate date);
+
 }
