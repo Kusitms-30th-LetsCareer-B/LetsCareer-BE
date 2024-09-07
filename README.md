@@ -80,7 +80,7 @@ Redis는 인메모리 데이터 저장소로서 높은 성능과 다양한 기�
 
 ## 🔖 Naming Rules
 
-### 💻Backend
+### 💻 Backend
 
 - **Packages**
   -  언더스코어(_)나 대문자를 섞지 않고 소문자를 사용하여 작성합니다.
@@ -136,17 +136,17 @@ Ex) `[feat] #8 구글 로그인 API 기능 구현 `
 > 5. 이전에 merge된 작업이 있을 경우 다른 branch에서 진행하던 작업에 merge된 작업을 pull 받아옵니다.
 > 6. 종료된 issue와 pull request의 label을 관리합니다.
 
-## **💡Branch**
+## **💡 Branch**
 
 branch는 작업 단위 & 기능 단위로 생성된 issue를 기반으로 합니다.
 
 branch를 생성하기 전 issue를 먼저 작성합니다. issue 작성 후 생성되는 번호와 domain 명을 조합하여 branch의 이름을 결정합니다. `<Prefix>/<Issue_Number>-<Domain>` 의 양식을 준수합니다.
 
-## **🖥️Branch Naming Rule**
+## **🖥️ Branch Naming Rule**
 
 branch를 생성하기 전 issue를 먼저 작성합니다. issue 작성 후 생성되는 번호와 domain 명을 조합하여 branch의 이름을 결정합니다. `<Prefix>/<Issue_Number>-<Domain>` 의 양식을 준수합니다.
 
-## **📑Prefix**
+## **📑 Prefix**
 
 - `main` : 개발이 완료된 산출물이 저장될 공간입니다.
 - `develop`: feature branch에서 구현된 기능들이 merge될 default branch 입니다.
