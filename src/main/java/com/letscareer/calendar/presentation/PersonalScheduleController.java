@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -49,6 +50,21 @@ public class PersonalScheduleController {
             @RequestParam(name = "month") int month) {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess(" 개인 일정 조회에 성공하였습니다.", personalScheduleService.getPersonalScheduleForMonth(userId, year, month)));
     }
+
+    /**
+     * 특정 날짜에 해당하는 개인 일정을 가져오는 API
+     *
+     * @param userId the user id
+     * @param date   the date
+     * @return the schedule for date
+     */
+    @GetMapping("/date")
+    public ResponseEntity<CommonResponse<List<PersonalScheduleResponse>>> getScheduleForDate(
+        @RequestParam(name = "userId") Long userId,
+        @RequestParam(name = "date") LocalDate date) {
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("해당 날짜의 개인 일정 조회에 성공하였습니다.", personalScheduleService.getPersonalScheduleForDate(userId, date)));
+    }
+
 
     /**
      * 개인 일정 수정 API
