@@ -43,19 +43,24 @@ public class RecruitmentService {
 
     @Transactional(readOnly = true)
     public FindRecruitmentRes findRecruitment(Long recruitmentId) {
-        try{
             Recruitment recruitment = recruitmentRepository.findRecruitmentWithStagesByAsc(recruitmentId);
+            if (recruitment == null) {
+                throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);
+            }
+
             List<FindRecruitmentRes.StageRes> stageResponses = recruitment.getStages().stream()
                     .map(FindRecruitmentRes.StageRes::from)
                     .toList();
             List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+            if (stages.isEmpty()) {
+                throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);
+
+
+            }
             DetermineRecruitmentStatusRes statusRes = determineRecruitmentStatus(stages);
 
             return FindRecruitmentRes.of(recruitment, stageResponses, statusRes.getStageName(), statusRes.getStatus(), statusRes.getDaysUntilFinal());
-        }
-        catch(Exception e){
-            throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);
-        }
+
 
     }
 
@@ -112,13 +117,12 @@ public class RecruitmentService {
 
         // 필터링 후 아무런 stage도 남지 않은 경우 (모두 과거에 해당하는 경우)
         if (nextFilteredStages.isEmpty()) {
-            return DetermineRecruitmentStatusRes.from(stages.get(stages.size() - 1));
-//            if (!stages.isEmpty()) {
-//                return DetermineRecruitmentStatusRes.from(stages.get(stages.size() - 1));
-//            } else {
-//                // 만약 stages 리스트가 비어 있다면, 적절한 예외를 던지거나 기본값을 반환
-//                throw new CustomException(ExceptionContent.NO_VALID_STAGE_FOUND);
-//            }
+            if (!stages.isEmpty()) {
+                return DetermineRecruitmentStatusRes.from(stages.get(stages.size() - 1));
+            } else {
+                // 만약 stages 리스트가 비어 있다면, 적절한 예외를 던지거나 기본값을 반환
+                throw new CustomException(ExceptionContent.NO_VALID_STAGE_FOUND);
+            }
         }
 
         // 세 번째 조건: 이후 남은 단계 중 가장 마감일이 가까운 일정를 PROGRESS 상태로 반환
@@ -173,7 +177,7 @@ public class RecruitmentService {
         // 각 Recruitment의 상태를 계산하고 필터링
         List<FindAllRecruitmentsByTypeRes.RecruitmentInfo> filteredRecruitments = recruitments.stream()
                 .map(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllStagesByRecruitmentId(recruitment.getId());
+                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
                     DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
 
                     return FindAllRecruitmentsByTypeRes.RecruitmentInfo.of(
