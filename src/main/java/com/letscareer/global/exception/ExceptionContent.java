@@ -22,6 +22,7 @@ public enum ExceptionContent {
     BAD_REQUEST_SATISFACTION_TYPE(BAD_REQUEST, "잘못된 만족도 타입입니다."),
     BAD_REQUEST_REVIEW_POINT_TYPE(BAD_REQUEST, "잘못된 리뷰 포인트 타입입니다."),
     BAD_REQUEST_DIFFICULTY_TYPE(BAD_REQUEST, "잘못된 난이도 타입입니다."),
+    BAD_REQUEST_DOCUMENT(BAD_REQUEST, "서류 전형은 삭제할 수 없습니다." ),
 
     NOT_FOUND_USER(NOT_FOUND, "존재하지 않는 사용자입니다."),
     NOT_FOUND_RECRUITMENT(NOT_FOUND, "존재하지 않는 일정입니다." ),
@@ -37,7 +38,6 @@ public enum ExceptionContent {
     NOT_FOUND_INTRODUCE(NOT_FOUND,"해당 자기소개 질문을 찾을 수 없습니다."),
     NOT_FOUND_INTERVIEW(NOT_FOUND, "해당 복기노트 면접 질문을 찾을 수 없습니다." ),
     NO_VALID_STAGE_FOUND(NOT_FOUND, "채용 일정에 채용 전형이 존재하지 않습니다." );
-
 
 
     private final HttpStatus httpStatus;
