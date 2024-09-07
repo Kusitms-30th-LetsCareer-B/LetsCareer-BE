@@ -5,6 +5,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.letscareer.calendar.application.PersonalScheduleService;
 import com.letscareer.calendar.dto.request.PersonalScheduleRequest;
+import com.letscareer.calendar.dto.request.UpdatePersonalScheduleRequest;
 import com.letscareer.calendar.dto.response.PersonalScheduleResponse;
 import com.letscareer.calendar.presentation.PersonalScheduleController;
 import com.letscareer.configuration.ControllerTestConfig;
@@ -42,7 +43,7 @@ public class PersonalScheduleControllerTest extends ControllerTestConfig {
         String jsonRequest = """
                 {
                     "date": "2024-09-01",
-                    "content": "Meeting with the team"
+                    "content": "팀 회의 참석"
                 }
                 """;
 
@@ -122,4 +123,84 @@ public class PersonalScheduleControllerTest extends ControllerTestConfig {
                         )
                 ));
     }
+
+    @Test
+    @DisplayName("개인 일정 수정")
+    public void testUpdatePersonalSchedule() throws Exception {
+        // given
+        Mockito.doNothing().when(personalScheduleService).updatePersonalSchedule(anyLong(), any(UpdatePersonalScheduleRequest.class));
+
+        String jsonRequest = """
+            {
+                "content": "수정된 프로젝트 계획 회의"
+            }
+            """;
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/calendars/personal/{personalScheduleId}", 1L)
+            .content(jsonRequest)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        resultActions.andExpect(status().isOk())
+            .andDo(MockMvcRestDocumentationWrapper.document("calendar/updatePersonalSchedule",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                resource(
+                    ResourceSnippetParameters.builder()
+                        .tag("Calendar")
+                        .description("개인 일정 수정")
+                        .pathParameters(
+                            parameterWithName("personalScheduleId").description("수정할 개인 일정의 ID")
+                        )
+                        .requestFields(
+                            fieldWithPath("content").description("수정할 일정 내용")
+                        )
+                        .responseFields(
+                            fieldWithPath("code").description("응답 코드"),
+                            fieldWithPath("message").description("응답 메시지"),
+                            fieldWithPath("data").description("응답 데이터 (없음, null)")
+                        )
+                        .responseSchema(Schema.schema("CommonResponse"))
+                        .build()
+                )
+            ));
+    }
+
+    @Test
+    @DisplayName("개인 일정 삭제")
+    public void testDeletePersonalSchedule() throws Exception {
+        // given
+        Mockito.doNothing().when(personalScheduleService).deletePersonalSchedule(anyLong());
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/calendars/personal/{personalScheduleId}", 1L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        resultActions.andExpect(status().isOk())
+            .andDo(MockMvcRestDocumentationWrapper.document("calendar/deletePersonalSchedule",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                resource(
+                    ResourceSnippetParameters.builder()
+                        .tag("Calendar")
+                        .description("개인 일정 삭제")
+                        .pathParameters(
+                            parameterWithName("personalScheduleId").description("삭제할 개인 일정의 ID")
+                        )
+                        .responseFields(
+                            fieldWithPath("code").description("응답 코드"),
+                            fieldWithPath("message").description("응답 메시지"),
+                            fieldWithPath("data").description("응답 데이터 (없음, null)")
+                        )
+                        .responseSchema(Schema.schema("CommonResponse"))
+                        .build()
+                )
+            ));
+    }
+
+
 }
