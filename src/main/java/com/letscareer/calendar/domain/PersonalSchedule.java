@@ -37,8 +37,7 @@ public class PersonalSchedule extends BaseTimeEntity {
                 .build();
     }
 
-    public void update(PersonalScheduleRequest request) {
-        this.date = request.date();
-        this.content = request.content();
+    public void updateContent(String content) {
+        this.content = content;
     }
 }
