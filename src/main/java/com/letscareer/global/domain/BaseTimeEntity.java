@@ -18,4 +18,5 @@ public class BaseTimeEntity {
 
     @LastModifiedDate
     private LocalDateTime updatedTime;
+
 }

@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    contextPath: /api/v1
+    contextPath:
 
 spring:
   jackson:
@@ -20,20 +20,41 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
-#      ddl-auto: update
+#      ddl-auto: create
+      ddl-auto: update
     open-in-view: false
 
   cloud:
     openfeign:
       okhttp:
         enabled: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKETNAME}
+    region:
+      static: ${AWS_REGION}
+    credentials:
+      access-key: ${AWS_ACCESSKEY}
+      secret-key: ${AWS_SECRETKEY}
+
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    url: /docs/open-api-3.0.1.json
+    path: /docs/swagger
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: prometheus,health,info
   endpoint:
     health:
       probes:
