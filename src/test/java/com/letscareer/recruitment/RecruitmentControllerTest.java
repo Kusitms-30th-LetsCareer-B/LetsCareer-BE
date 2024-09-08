@@ -214,9 +214,9 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 
 		GetRecruitmentsStatusRes statusRes = GetRecruitmentsStatusRes.builder()
 			.total(10)
-			.progress(4)
-			.passed(3)
-			.failed(3)
+			.document(4)
+			.interview(3)
+			.other(3)
 			.build();
 
 		Mockito.when(recruitmentService.getRecruitmentsStatus(userId)).thenReturn(statusRes);
@@ -230,9 +230,9 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 			.andExpect(jsonPath("$.code").value(200))
 			.andExpect(jsonPath("$.message").value("유저의 총 채용일정 상태 개수가 반환되었습니다."))
 			.andExpect(jsonPath("$.data.total").value(10))
-			.andExpect(jsonPath("$.data.progress").value(4))
-			.andExpect(jsonPath("$.data.passed").value(3))
-			.andExpect(jsonPath("$.data.failed").value(3))
+			.andExpect(jsonPath("$.data.document").value(4))
+			.andExpect(jsonPath("$.data.interview").value(3))
+			.andExpect(jsonPath("$.data.other").value(3))
 			.andDo(MockMvcRestDocumentationWrapper.document("recruitment/getRecruitmentsStatus",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
@@ -247,9 +247,9 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 							fieldWithPath("code").description("응답 코드"),
 							fieldWithPath("message").description("응답 메시지"),
 							fieldWithPath("data.total").description("총 채용일정 수"),
-							fieldWithPath("data.progress").description("진행 중인 채용일정 수"),
-							fieldWithPath("data.passed").description("합격한 채용일정 수"),
-							fieldWithPath("data.failed").description("불합격한 채용일정 수")
+							fieldWithPath("data.document").description("일정의 현재 전형의 상태:서류"),
+							fieldWithPath("data.interview").description("일정의 현재 전형의 상태:면접"),
+							fieldWithPath("data.other").description("일정의 현재 전형의 상태:기타")
 						)
 						.responseSchema(Schema.schema("CommonResponse"))
 						.build()

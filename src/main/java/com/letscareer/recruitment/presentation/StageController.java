@@ -62,4 +62,6 @@ public class StageController {
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("채용 전형을 삭제하였습니다.", null));
     }
 
+
+
 }
