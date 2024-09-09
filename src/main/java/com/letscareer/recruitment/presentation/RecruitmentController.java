@@ -52,6 +52,16 @@ public class RecruitmentController {
     /**
      * 유저 총 채용일정의 상태 개수를 반환한다.
      * @param userId 유저id
+     * @return GetRecruitmentsStageStatusRes
+     */
+    @GetMapping("/statuses/stage")
+    public ResponseEntity<CommonResponse<GetRecruitmentsStageStatusRes>> getRecruitmentsStageStatus(@RequestParam(name = "userId") Long userId){
+        return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저의 총 채용일정 상태 개수가 반환되었습니다.",  recruitmentService.getRecruitmentsStageStatus(userId)));
+    }
+
+    /**
+     * 유저 총 채용일정의 상태 개수를 반환한다.
+     * @param userId 유저id
      * @return GetRecruitmentsStatusRes
      */
     @GetMapping("/statuses")
@@ -82,6 +92,8 @@ public class RecruitmentController {
                                                                                                @RequestParam(name = "page") Long page){
         return ResponseEntity.ok().body(CommonResponse.ofSuccess("유저 채용일정 리스트가 반환되었습니다.", recruitmentService.findRecruitmentsByType(type, userId, page)));
     }
+
+
 
     /**
      * 특정 기업의 관심 여부 변경

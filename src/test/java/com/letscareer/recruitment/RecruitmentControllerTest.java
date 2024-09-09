@@ -7,10 +7,7 @@ import com.letscareer.configuration.ControllerTestConfig;
 import com.letscareer.recruitment.application.RecruitmentService;
 import com.letscareer.recruitment.domain.StageStatusType;
 import com.letscareer.recruitment.dto.request.EnrollRecruitmentReq;
-import com.letscareer.recruitment.dto.response.FindAllRecruitmentsByTypeRes;
-import com.letscareer.recruitment.dto.response.FindAllRecruitmentsRes;
-import com.letscareer.recruitment.dto.response.FindRecruitmentRes;
-import com.letscareer.recruitment.dto.response.GetRecruitmentsStatusRes;
+import com.letscareer.recruitment.dto.response.*;
 import com.letscareer.recruitment.presentation.RecruitmentController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -209,19 +206,19 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 
 	@Test
 	@DisplayName("유저의 총 채용일정 상태 개수 조회")
-	public void testGetRecruitmentsStatus() throws Exception {
+	public void testGetRecruitmentsStageStatus() throws Exception {
 		Long userId = 1L;
 
-		GetRecruitmentsStatusRes statusRes = GetRecruitmentsStatusRes.builder()
+		GetRecruitmentsStageStatusRes statusRes = GetRecruitmentsStageStatusRes.builder()
 			.total(10)
 			.document(4)
 			.interview(3)
 			.other(3)
 			.build();
 
-		Mockito.when(recruitmentService.getRecruitmentsStatus(userId)).thenReturn(statusRes);
+		Mockito.when(recruitmentService.getRecruitmentsStageStatus(userId)).thenReturn(statusRes);
 
-		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/statuses")
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/statuses/stage")
 			.param("userId", userId.toString())
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON));
@@ -233,7 +230,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 			.andExpect(jsonPath("$.data.document").value(4))
 			.andExpect(jsonPath("$.data.interview").value(3))
 			.andExpect(jsonPath("$.data.other").value(3))
-			.andDo(MockMvcRestDocumentationWrapper.document("recruitment/getRecruitmentsStatus",
+			.andDo(MockMvcRestDocumentationWrapper.document("recruitment/getRecruitmentsStageStatus",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				resource(
@@ -255,6 +252,56 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 						.build()
 				)
 			));
+	}
+
+	@Test
+	@DisplayName("유저의 총 채용일정 상태 개수 조회")
+	public void testGetRecruitmentsStatus() throws Exception {
+		Long userId = 1L;
+
+		GetRecruitmentsStatusRes statusRes = GetRecruitmentsStatusRes.builder()
+				.total(10)
+				.progress(4)
+				.passed(3)
+				.failed(3)
+				.build();
+
+		Mockito.when(recruitmentService.getRecruitmentsStatus(userId)).thenReturn(statusRes);
+
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/statuses")
+				.param("userId", userId.toString())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		resultActions.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value(200))
+				.andExpect(jsonPath("$.message").value("유저의 총 채용일정 상태 개수가 반환되었습니다."))
+				.andExpect(jsonPath("$.data.total").value(10))
+				.andExpect(jsonPath("$.data.progress").value(4))
+				.andExpect(jsonPath("$.data.passed").value(3))
+				.andExpect(jsonPath("$.data.failed").value(3))
+				.andDo(MockMvcRestDocumentationWrapper.document("recruitment/getRecruitmentsStatus",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(
+								ResourceSnippetParameters.builder()
+										.tag("채용 일정")
+										.description("유저의 총 채용일정 상태 개수 조회")
+										.queryParameters(
+												parameterWithName("userId").description("유저의 ID")
+										)
+										.responseFields(
+												fieldWithPath("code").description("응답 코드"),
+												fieldWithPath("message").description("응답 메시지"),
+												fieldWithPath("data.total").description("총 채용일정 수"),
+												fieldWithPath("data.progress").description("일정의 현재 전형 진행중 수"),
+												fieldWithPath("data.passed").description("일정의 현재 전형 합격 수"),
+												fieldWithPath("data.failed").description("일정의 현재 전형 불합격 수")
+										)
+										.responseSchema(Schema.schema("CommonResponse"))
+										.build()
+						)
+				));
 	}
 
 	@Test
