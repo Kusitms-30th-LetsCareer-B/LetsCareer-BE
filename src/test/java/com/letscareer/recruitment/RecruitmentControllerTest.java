@@ -205,7 +205,7 @@ public class RecruitmentControllerTest extends ControllerTestConfig {
 	}
 
 	@Test
-	@DisplayName("유저의 총 채용일정 상태 개수 조회")
+	@DisplayName("유저의 총 채용일정 상태 개수 조회(전형)")
 	public void testGetRecruitmentsStageStatus() throws Exception {
 		Long userId = 1L;
 
