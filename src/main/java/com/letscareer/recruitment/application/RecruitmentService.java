@@ -72,7 +72,7 @@ public class RecruitmentService {
     }
 
     @Transactional(readOnly = true)
-    public GetRecruitmentsStatusRes getRecruitmentsStatus(Long userId) {
+    public GetRecruitmentsStageStatusRes getRecruitmentsStageStatus(Long userId) {
         List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
         int total=recruitments.size();
         int document=0, interview=0, other=0;
@@ -91,7 +91,30 @@ public class RecruitmentService {
             }
 
         }
-        return GetRecruitmentsStatusRes.of(total, document, interview, other);
+        return GetRecruitmentsStageStatusRes.of(total, document, interview, other);
+    }
+
+    public GetRecruitmentsStatusRes getRecruitmentsStatus(Long userId) {
+        List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
+        int total = recruitments.size();
+        int progress = 0, passed = 0, failed = 0;
+
+        for (Recruitment recruitment : recruitments) {
+            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+            DetermineRecruitmentStatusRes statusRes = determineRecruitmentStatus(stages);
+            switch (statusRes.getStatus()) {
+                case PROGRESS -> ++progress;
+                case PASSED -> {
+                    if (statusRes.getIsFinal()) {
+                        ++passed;
+                    } else {
+                        ++progress;
+                    }
+                }
+                case FAILED -> ++failed;
+            }
+        }
+        return GetRecruitmentsStatusRes.of(total, progress, passed, failed);
     }
 
     private DetermineRecruitmentStatusRes determineRecruitmentStatus(List<Stage> stages){

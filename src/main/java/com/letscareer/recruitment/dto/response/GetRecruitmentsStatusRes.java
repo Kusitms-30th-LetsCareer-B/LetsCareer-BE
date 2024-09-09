@@ -11,17 +11,17 @@ import lombok.Getter;
 public class GetRecruitmentsStatusRes {
 
     private int total;
-    private int document;
-    private int interview;
-    private int other;
+    private int progress;
+    private int passed;
+    private int failed;
 
-    public static GetRecruitmentsStatusRes of(Integer total, Integer document, Integer interview, Integer other) {
+    public static GetRecruitmentsStatusRes of(Integer total, Integer progress, Integer passed, Integer failed) {
         return GetRecruitmentsStatusRes
                 .builder()
                 .total(total)
-                .document(document)
-                .interview(interview)
-                .other(other)
+                .progress(progress)
+                .passed(passed)
+                .failed(failed)
                 .build();
     }
 }
