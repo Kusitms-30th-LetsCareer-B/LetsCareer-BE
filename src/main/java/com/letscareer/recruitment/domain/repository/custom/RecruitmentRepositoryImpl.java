@@ -39,6 +39,7 @@ public class RecruitmentRepositoryImpl implements RecruitmentRepositoryCustom{
                 .fetchJoin()
                 .where(recruitment.user.id.eq(userId)
                         .and(stage.endDate.after(today)))  // 종료일이 오늘 이후인 것만 필터링
+                .orderBy(stage.endDate.asc())
                 .offset(offset)
                 .limit(limit)
                 .fetch();
