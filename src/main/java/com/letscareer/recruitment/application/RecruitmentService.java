@@ -94,6 +94,7 @@ public class RecruitmentService {
         return GetRecruitmentsStageStatusRes.of(total, document, interview, other);
     }
 
+    @Transactional(readOnly = true)
     public GetRecruitmentsStatusRes getRecruitmentsStatus(Long userId) {
         List<Recruitment> recruitments = recruitmentRepository.findAllByUserId(userId);
         int total = recruitments.size();
@@ -167,7 +168,7 @@ public class RecruitmentService {
         // recruitments 리스트를 RecruitmentInfo로 변환 및 정렬
         List<FindAllRecruitmentsRes.RecruitmentInfo> recruitmentInfos = recruitments.stream()
                 .map(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllStagesByRecruitmentId(recruitment.getId());
+                    List<Stage> stages = recruitment.getStages();
 
                     // 필터링 후 첫 번째 단계로 상태 추출
                     DetermineRecruitmentStatusRes recruitmentStatus = DetermineRecruitmentStatusRes.from(stages.get(0));
