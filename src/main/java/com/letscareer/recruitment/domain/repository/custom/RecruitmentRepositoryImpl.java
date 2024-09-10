@@ -22,7 +22,9 @@ public class RecruitmentRepositoryImpl implements RecruitmentRepositoryCustom{
     public Recruitment findRecruitmentWithStagesByAsc(Long recruitmentId) {
         return jpaQueryFactory
                 .selectFrom(recruitment)
+                .distinct()
                 .leftJoin(recruitment.stages, stage)
+                .fetchJoin()
                 .where(recruitment.id.eq(recruitmentId))
                 .orderBy(stage.endDate.asc())
                 .fetchOne();
@@ -34,6 +36,7 @@ public class RecruitmentRepositoryImpl implements RecruitmentRepositoryCustom{
                 .selectFrom(recruitment)  // Recruitment 명시적으로 선택
                 .distinct()
                 .leftJoin(recruitment.stages, stage)
+                .fetchJoin()
                 .where(recruitment.user.id.eq(userId)
                         .and(stage.endDate.after(today)))  // 종료일이 오늘 이후인 것만 필터링
                 .offset(offset)
@@ -68,6 +71,7 @@ public class RecruitmentRepositoryImpl implements RecruitmentRepositoryCustom{
                 selectFrom(recruitment)
                 .distinct()
                 .leftJoin(recruitment.stages, stage)
+                .fetchJoin()
                 .where(recruitment.user.id.eq(userId)
                         .and(condition))
                 .offset(offset)

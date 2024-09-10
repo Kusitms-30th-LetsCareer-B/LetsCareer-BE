@@ -51,10 +51,9 @@ public class RecruitmentService {
             List<FindRecruitmentRes.StageRes> stageResponses = recruitment.getStages().stream()
                     .map(FindRecruitmentRes.StageRes::from)
                     .toList();
-            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+            List<Stage> stages = stageRepository.findAllByRecruitmentOrderByEndDateAsc(recruitment);
             if (stages.isEmpty()) {
                 throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);
-
 
             }
             DetermineRecruitmentStatusRes statusRes = determineRecruitmentStatus(stages);
@@ -78,7 +77,7 @@ public class RecruitmentService {
         int document=0, interview=0, other=0;
 
         for (Recruitment recruitment : recruitments) {
-            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+            List<Stage> stages = stageRepository.findAllByRecruitmentOrderByEndDateAsc(recruitment);
             DetermineRecruitmentStatusRes statusRes = determineRecruitmentStatus(stages);
             if (statusRes.getStageName().equals("서류")){
                 document++;
@@ -101,7 +100,7 @@ public class RecruitmentService {
         int progress = 0, passed = 0, failed = 0;
 
         for (Recruitment recruitment : recruitments) {
-            List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+            List<Stage> stages = stageRepository.findAllByRecruitmentOrderByEndDateAsc(recruitment);
             DetermineRecruitmentStatusRes statusRes = determineRecruitmentStatus(stages);
             switch (statusRes.getStatus()) {
                 case PROGRESS -> ++progress;
@@ -199,7 +198,7 @@ public class RecruitmentService {
         // 각 Recruitment의 상태를 계산하고 필터링
         List<FindAllRecruitmentsByTypeRes.RecruitmentInfo> filteredRecruitments = recruitments.stream()
                 .map(recruitment -> {
-                    List<Stage> stages = stageRepository.findAllByRecruitmentIdOrderByEndDateAsc(recruitment.getId());
+                    List<Stage> stages = stageRepository.findAllByRecruitmentOrderByEndDateAsc(recruitment);
                     DetermineRecruitmentStatusRes recruitmentStatus = determineRecruitmentStatus(stages);
 
                     return FindAllRecruitmentsByTypeRes.RecruitmentInfo.of(
