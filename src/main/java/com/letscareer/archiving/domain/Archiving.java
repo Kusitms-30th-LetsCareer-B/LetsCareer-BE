@@ -21,20 +21,18 @@ public class Archiving extends BaseTimeEntity {
     @JoinColumn(name = "recruitment_id", nullable = false)
     private Recruitment recruitment;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false, length = 3000)
     private String content;
 
-    @Column(nullable = false)
     private String fileName;
 
-    @Column(nullable = false, length = 1000)
+    @Column(length = 1000)
     private String fileUrl;
 
-    @Column(nullable = false)
-    private String fileKey;  // fileKey 필드 추가
+    private String fileKey;
 
     public static Archiving of(Recruitment recruitment, String title, String content, String fileName, String fileUrl, String fileKey) {
         return Archiving.builder()
