@@ -1,16 +1,16 @@
-package com.letscareer.career.domain.enums;
+    package com.letscareer.career.domain.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+    import lombok.Getter;
+    import lombok.RequiredArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor
-public enum MajorType {
+    @Getter
+    @RequiredArgsConstructor
+    public enum MajorType {
 
-    MAJOR("주전공"),
-    MINOR("부전공"),
-    DOUBLE_MAJOR("이중전공"),
-    CONVERGED_MAJOR("복수전공");
+        MAJOR("주전공"),
+        MINOR("부전공"),
+        DOUBLE_MAJOR("이중전공"),
+        CONVERGED_MAJOR("복수전공");
 
-    private final String name;
-}
+        private final String name;
+    }

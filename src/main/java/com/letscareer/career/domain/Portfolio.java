@@ -35,10 +35,14 @@ public class Portfolio extends BaseTimeEntity {
                 .build();
     }
 
-    public void updatePortfolioFile(String fileName, String fileUrl, String fileKey) {
+    public void updatePortfolioFile(String fileName, String fileUrl, String fileKey, String organizationUrl) {
+        if (!this.organizationUrl.equals(organizationUrl)) {
+            this.organizationUrl = organizationUrl;
+        }
         this.fileName = fileName;
         this.fileUrl = fileUrl;
         this.fileKey = fileKey;
     }
+
 }
 
