@@ -1,5 +1,6 @@
 package com.letscareer.recruitment.application;
 
+import com.letscareer.calendar.application.ScheduleService;
 import com.letscareer.global.exception.CustomException;
 import com.letscareer.global.exception.ExceptionContent;
 import com.letscareer.recruitment.domain.Recruitment;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class StageService {
 
+    private final ScheduleService scheduleService;
     private final StageRepository stageRepository;
     private final RecruitmentRepository recruitmentRepository;
 
@@ -25,7 +27,8 @@ public class StageService {
     public void createStage(Long recruitmentId, CreateStageReq request) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(()-> new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT));
-        stageRepository.save(Stage.of(recruitment, request.getStageName(), null, request.getEndDate(), StageStatusType.of(request.getStatus()), request.getIsFinal()));
+        Stage savedStage = stageRepository.save(Stage.of(recruitment, request.getStageName(), null, request.getEndDate(), StageStatusType.of(request.getStatus()), request.getIsFinal()));
+        scheduleService.addSchedule(recruitment.getUser().getId(), savedStage, recruitment.getCompanyName());
     }
 
     @Transactional(readOnly = true)

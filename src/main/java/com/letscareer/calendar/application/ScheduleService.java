@@ -86,7 +86,7 @@ public class ScheduleService {
      * @param stage  the stage
      * @return the void
      */
-    @Transactional// Todo: 채용전형 추가 로직에 추가해야됨
+    @Transactional
     public void addSchedule(Long userId, Stage stage, String companyName) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
@@ -110,7 +110,6 @@ public class ScheduleService {
         scheduleRepository.save(finishSchedule);
     }
 
-    // Todo: 채용 전형 삭제 로직에 추가해야됨
     @Transactional
     public void delete(Long stageId) {
         scheduleRepository.deleteByStageId(stageId);
