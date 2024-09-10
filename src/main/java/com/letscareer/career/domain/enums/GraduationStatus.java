@@ -1,5 +1,7 @@
 package com.letscareer.career.domain.enums;
 
+import com.letscareer.global.exception.CustomException;
+import com.letscareer.global.exception.ExceptionContent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,5 +17,14 @@ public enum GraduationStatus {
     WITHDRAWN("학사");
 
     private final String name;
+
+    public static GraduationStatus of(String name) {
+        for (GraduationStatus type : GraduationStatus.values()) {
+            if (type.getName().equals(name)) {
+                return type;
+            }
+        }
+        throw new CustomException(ExceptionContent.BAD_REQUEST_GRADUATION_STATUS);
+    }
 }
 

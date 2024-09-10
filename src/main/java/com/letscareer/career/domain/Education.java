@@ -67,15 +67,16 @@ public class Education extends BaseTimeEntity {
                 .build();
     }
     public void updateFromDto(CareerRequest.EducationRequest dto) {
-        this.educationType = EducationType.valueOf(dto.educationType());
+        this.educationType = EducationType.of(dto.educationType());
         this.schoolName = dto.schoolName();
-        this.schoolLocation = SchoolLocation.valueOf(dto.schoolLocation());
+        this.schoolLocation = SchoolLocation.of(dto.schoolLocation());
         this.enrollmentDate = dto.enrollmentDate();
         this.graduationDate = dto.graduationDate();
-        this.graduationStatus = GraduationStatus.valueOf(dto.graduationStatus());
-        this.majorType = MajorType.valueOf(dto.majorType());
+        this.graduationStatus = GraduationStatus.of(dto.graduationStatus());
+        this.majorType = MajorType.of(dto.majorType());
         this.majorName = dto.majorName();
-        this.subMajorType = dto.subMajorType() != null ? MajorType.valueOf(dto.subMajorType()) : null;
+        this.subMajorType = dto.subMajorType() != null ? MajorType.of(dto.subMajorType()) : null;
         this.subMajorName = dto.subMajorName();
     }
+
 }

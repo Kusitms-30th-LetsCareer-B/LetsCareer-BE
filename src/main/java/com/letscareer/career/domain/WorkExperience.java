@@ -54,7 +54,7 @@ public class WorkExperience extends BaseTimeEntity {
     }
 
     public void updateFromDto(CareerRequest.WorkExperienceRequest dto) {
-        this.employmentType = EmploymentType.valueOf(dto.employmentType());
+        this.employmentType = EmploymentType.of(dto.employmentType());
         this.companyName = dto.companyName();
         this.departmentName = dto.departmentName();
         this.startDate = dto.startDate();
@@ -62,5 +62,6 @@ public class WorkExperience extends BaseTimeEntity {
         this.jobTitle = dto.jobTitle();
         this.jobDescription = dto.jobDescription();
     }
+
 }
 

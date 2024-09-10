@@ -23,6 +23,13 @@ public enum ExceptionContent {
     BAD_REQUEST_REVIEW_POINT_TYPE(BAD_REQUEST, "잘못된 리뷰 포인트 타입입니다."),
     BAD_REQUEST_DIFFICULTY_TYPE(BAD_REQUEST, "잘못된 난이도 타입입니다."),
     BAD_REQUEST_DOCUMENT(BAD_REQUEST, "서류 전형은 삭제할 수 없습니다." ),
+    BAD_REQUEST_ACTIVITY_TYPE(BAD_REQUEST, "잘못된 활동 유형입니다."),
+    BAD_REQUEST_EDUCATION_TYPE(BAD_REQUEST, "잘못된 교육 유형입니다."),
+    BAD_REQUEST_EMPLOYMENT_TYPE(BAD_REQUEST, "잘못된 고용 유형입니다."),
+    BAD_REQUEST_MAJOR_TYPE(BAD_REQUEST, "잘못된 전공 유형입니다."),
+    BAD_REQUEST_SCHOOL_LOCATION(BAD_REQUEST, "잘못된 학교 위치입니다."),
+    BAD_REQUEST_GRADUATION_STATUS(BAD_REQUEST, "잘못된 졸업 상태입니다."),
+    BAD_REQUEST_GENDER(BAD_REQUEST, "잘못된 성별입니다."),
 
     NOT_FOUND_USER(NOT_FOUND, "존재하지 않는 사용자입니다."),
     NOT_FOUND_RECRUITMENT(NOT_FOUND, "존재하지 않는 일정입니다." ),

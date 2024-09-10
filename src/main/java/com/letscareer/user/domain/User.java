@@ -85,7 +85,7 @@ public class User extends BaseTimeEntity {
 
     public void updateFromRequest(CareerRequest request) {
         this.name = request.name();
-        this.gender = Gender.valueOf(request.gender());
+        this.gender = Gender.of(request.gender());
         this.birthDate = request.birthDate();
     }
 }

@@ -1,5 +1,7 @@
     package com.letscareer.career.domain.enums;
 
+    import com.letscareer.global.exception.CustomException;
+    import com.letscareer.global.exception.ExceptionContent;
     import lombok.Getter;
     import lombok.RequiredArgsConstructor;
 
@@ -13,4 +15,13 @@
         CONVERGED_MAJOR("복수전공");
 
         private final String name;
+
+        public static MajorType of(String name) {
+            for (MajorType type : MajorType.values()) {
+                if (type.getName().equals(name)) {
+                    return type;
+                }
+            }
+            throw new CustomException(ExceptionContent.BAD_REQUEST_MAJOR_TYPE);
+        }
     }

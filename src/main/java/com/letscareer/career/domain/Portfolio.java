@@ -25,6 +25,7 @@ public class Portfolio extends BaseTimeEntity {
 
     private String fileName;
 
+    @Column(length = 1000)
     private String fileUrl;
 
     private String fileKey;
@@ -36,7 +37,7 @@ public class Portfolio extends BaseTimeEntity {
     }
 
     public void updatePortfolioFile(String fileName, String fileUrl, String fileKey, String organizationUrl) {
-        if (!this.organizationUrl.equals(organizationUrl)) {
+        if (this.organizationUrl == null || !this.organizationUrl.equals(organizationUrl)) {
             this.organizationUrl = organizationUrl;
         }
         this.fileName = fileName;

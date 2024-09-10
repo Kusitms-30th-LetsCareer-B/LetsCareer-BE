@@ -15,7 +15,6 @@ public enum ExperienceType {
 
     private final String name;
 
-    // 한글 문자열을 통해 Enum 타입으로 변환하고 검증하는 메소드
     public static ExperienceType of(String name) {
         for (ExperienceType type : ExperienceType.values()) {
             if (type.getName().equals(name)) {

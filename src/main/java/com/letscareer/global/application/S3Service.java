@@ -40,14 +40,8 @@ public class S3Service {
     }
 
     public void deleteFile(String fileKey) {
-        if (amazonS3.doesObjectExist(bucket, fileKey)) {
-            log.info("파일이 존재합니다. 파일 삭제를 진행합니다. Key: {}", fileKey);
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileKey));
             log.info("파일 삭제 성공. Key: {}", fileKey);
-        } else {
-            log.warn("삭제할 파일이 존재하지 않습니다. Key: {}", fileKey);
-            throw new CustomException(ExceptionContent.NOT_FOUND_FILE);
-        }
     }
 
     public byte[] downloadFile(String fileKey) throws IOException {

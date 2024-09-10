@@ -1,5 +1,7 @@
 package com.letscareer.career.domain.enums;
 
+import com.letscareer.global.exception.CustomException;
+import com.letscareer.global.exception.ExceptionContent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -20,4 +22,13 @@ public enum SchoolLocation {
     JEJU("제주");
 
     private final String name;
+
+    public static SchoolLocation of(String name) {
+        for (SchoolLocation type : SchoolLocation.values()) {
+            if (type.getName().equals(name)) {
+                return type;
+            }
+        }
+        throw new CustomException(ExceptionContent.BAD_REQUEST_SCHOOL_LOCATION);
+    }
 }

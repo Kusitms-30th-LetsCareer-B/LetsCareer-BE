@@ -51,12 +51,13 @@ public class Activity extends BaseTimeEntity {
     }
 
     public void updateFromDto(CareerRequest.ActivityRequest dto) {
-        this.activeType = ActivityType.valueOf(dto.activeType());
+        this.activeType = ActivityType.of(dto.activeType());
         this.organization = dto.organization();
         this.startDate = dto.startDate();
         this.endDate = dto.endDate();
         this.isActive = dto.isActive();
         this.activeUrl = dto.activeUrl();
     }
+
 }
 
