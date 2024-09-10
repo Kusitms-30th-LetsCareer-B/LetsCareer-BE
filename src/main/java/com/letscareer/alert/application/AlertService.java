@@ -26,8 +26,7 @@ public class AlertService {
     private final UserRepository userRepository;
 
     @Transactional
-//    @Scheduled(cron = "0 0 0 * * ?")
-    @Scheduled(fixedDelay = 15000)
+    @Scheduled(cron = "0 0 0 * * ?")
     public void checkAndCreateAlerts() {
         LocalDate threeDaysAfter = LocalDate.now().plusDays(3);
         List<Recruitment> recruitments = recruitmentRepository.findAll();
