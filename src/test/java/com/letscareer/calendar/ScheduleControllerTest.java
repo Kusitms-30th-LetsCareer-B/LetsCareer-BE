@@ -41,7 +41,7 @@ public class ScheduleControllerTest extends ControllerTestConfig {
     @DisplayName("월별 채용 일정 조회")
     public void testGetScheduleForMonth() throws Exception {
         // given
-        ScheduleResponse scheduleResponse = new ScheduleResponse(1L, LocalDate.of(2024, 9, 1), "PERSONAL", "Naver");
+        ScheduleResponse scheduleResponse = new ScheduleResponse(1L, LocalDate.of(2024, 9, 1), "면", "Naver",1L);
         Mockito.when(scheduleService.getScheduleForMonth(anyLong(), anyInt(), anyInt()))
             .thenReturn(Collections.singletonList(scheduleResponse));
 
@@ -73,7 +73,8 @@ public class ScheduleControllerTest extends ControllerTestConfig {
                             fieldWithPath("data.[].scheduleId").description("스케줄 ID"),
                             fieldWithPath("data.[].date").description("스케줄 날짜"),
                             fieldWithPath("data.[].filter").description("스케줄 필터"),
-                            fieldWithPath("data.[].companyName").description("회사 이름")
+                            fieldWithPath("data.[].companyName").description("회사 이름"),
+                            fieldWithPath("data.[].recruitmentId").description("채용 일정 ID")
                         )
                         .responseSchema(Schema.schema("ScheduleResponse"))
                         .build()
