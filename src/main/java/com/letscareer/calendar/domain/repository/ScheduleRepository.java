@@ -12,4 +12,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     void deleteByStageId(Long stageId);
 
     List<Schedule> findAllByUserIdAndDate(Long userId, LocalDate date);
+    List<Schedule> findAllByStageId(Long stageId);
+
 }

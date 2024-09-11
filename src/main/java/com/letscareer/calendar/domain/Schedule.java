@@ -46,4 +46,9 @@ public class Schedule extends BaseTimeEntity {
                 .companyName(companyName)
                 .build();
     }
+
+    public void updateDate(LocalDate newDate) {
+        this.date = newDate;
+    }
+
 }

@@ -111,6 +111,20 @@ public class ScheduleService {
     }
 
     @Transactional
+    public void updateScheduleDate(Long stageId, LocalDate newDate) {
+        List<Schedule> schedules = scheduleRepository.findAllByStageId(stageId);
+
+        if (schedules.isEmpty()) {
+            throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);
+        }
+
+        for (Schedule schedule : schedules) {
+            schedule.updateDate(newDate);
+        }
+    }
+
+
+    @Transactional
     public void delete(Long stageId) {
         scheduleRepository.deleteByStageId(stageId);
     }

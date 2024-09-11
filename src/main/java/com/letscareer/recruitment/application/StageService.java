@@ -43,6 +43,7 @@ public class StageService {
         Stage stage = stageRepository.findById(stageId)
                 .orElseThrow(()-> new CustomException(ExceptionContent.NOT_FOUND_STAGE));
         stage.modifyStage(request);
+        scheduleService.updateScheduleDate(stageId, request.getEndDate());
     }
 
     @Transactional
