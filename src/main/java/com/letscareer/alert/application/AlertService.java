@@ -55,11 +55,18 @@ public class AlertService {
 
     @Transactional(readOnly = true)
     public GetAlertsRes getAllAlerts(Long userId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
-        List<Alert> alerts = alertRepository.findAllByUserOrderByIdDesc(user);
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ExceptionContent.NOT_FOUND_USER));
+
+        // 오늘 날짜
+        LocalDate today = LocalDate.now();
+
+        // endDate가 오늘 날짜와 같거나 이후인 알림을 조회
+        List<Alert> alerts = alertRepository.findAllByUserAndEndDateGreaterThanEqualOrderByEndDateAsc(user, today);
+
         return GetAlertsRes.builder()
-                .alerts(alerts.stream().map(GetAlertsRes.AlertRes::from).toList())
-                .build();
+            .alerts(alerts.stream().map(GetAlertsRes.AlertRes::from).toList())
+            .build();
     }
 
 }
