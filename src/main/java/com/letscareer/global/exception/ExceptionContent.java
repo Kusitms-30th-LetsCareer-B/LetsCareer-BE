@@ -36,14 +36,14 @@ public enum ExceptionContent {
     NOT_FOUND_STAGE(NOT_FOUND, "존재하는 않는 일정 전형입니다."),
     NOT_FOUND_ARCHIVING(NOT_FOUND, "존재하지 않는 아카이빙입니다."),
     NOT_FOUND_FILE(NOT_FOUND,"S3 파일을 찾을 수 없습니다."),
-
     NOT_FOUND_TODO(NOT_FOUND, "해당 투두를 찾을 수 없습니다."),
     NOT_FOUND_ROUTINE(NOT_FOUND, "해당 루틴을 찾을 수 없습니다."),
-
     NOT_FOUND_SPECIAL_SKILL(NOT_FOUND,"필살기 경험을 찾을 수 없습니다."),
-
     NOT_FOUND_INTRODUCE(NOT_FOUND,"해당 자기소개 질문을 찾을 수 없습니다."),
     NOT_FOUND_INTERVIEW(NOT_FOUND, "해당 복기노트 면접 질문을 찾을 수 없습니다." ),
+    NOT_FOUND_SCHEDULE(NOT_FOUND, "해당 전형에 스케줄을 찾을 수 없습니다." ),
+
+
     NO_VALID_STAGE_FOUND(NOT_FOUND, "채용 일정에 채용 전형이 존재하지 않습니다." );
 
 

@@ -115,7 +115,7 @@ public class ScheduleService {
         List<Schedule> schedules = scheduleRepository.findAllByStageId(stageId);
 
         if (schedules.isEmpty()) {
-            throw new CustomException(ExceptionContent.NOT_FOUND_RECRUITMENT);
+            throw new CustomException(ExceptionContent.NOT_FOUND_SCHEDULE);
         }
 
         for (Schedule schedule : schedules) {
