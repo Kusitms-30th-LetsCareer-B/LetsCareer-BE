@@ -2,6 +2,8 @@ package com.letscareer.recruitment.domain;
 
 import com.letscareer.archiving.domain.Archiving;
 import com.letscareer.global.domain.BaseTimeEntity;
+import com.letscareer.review.domain.Interview;
+import com.letscareer.review.domain.Review;
 import com.letscareer.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,6 +35,14 @@ public class Recruitment extends BaseTimeEntity {
     @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @Builder.Default
     private List<Archiving> archivings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Interview> intervews = new ArrayList<>();
 
     @Column(nullable = false)
     private String companyName;
