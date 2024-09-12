@@ -104,9 +104,11 @@ public class ScheduleService {
 
     @Transactional
     public void addDocumentSchedule(User user, Stage stage, String companyName) {
-        Schedule startSchedule = Schedule.of(user, stage, stage.getStartDate(), ScheduleFilter.START, companyName);
+        if(stage.getStartDate() != null){
+            Schedule startSchedule = Schedule.of(user, stage, stage.getStartDate(), ScheduleFilter.START, companyName);
+            scheduleRepository.save(startSchedule);
+        }
         Schedule finishSchedule = Schedule.of(user, stage, stage.getEndDate(), ScheduleFilter.FINISH, companyName);
-        scheduleRepository.save(startSchedule);
         scheduleRepository.save(finishSchedule);
     }
 
