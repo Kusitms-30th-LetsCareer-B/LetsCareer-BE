@@ -3,6 +3,7 @@ package com.letscareer.calendar.application;
 import com.letscareer.calendar.domain.Schedule;
 import com.letscareer.calendar.domain.ScheduleFilter;
 import com.letscareer.calendar.domain.repository.ScheduleRepository;
+import com.letscareer.calendar.domain.repository.ScheduleRepositoryCustom;
 import com.letscareer.calendar.dto.response.ScheduleContentResponse;
 import com.letscareer.calendar.dto.response.ScheduleResponse;
 import com.letscareer.global.exception.CustomException;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleRepositoryCustom scheduleRepositoryCustom;
     private final UserRepository userRepository;
 
     /**
@@ -41,7 +43,7 @@ public class ScheduleService {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-        return scheduleRepository.findAllByUserIdAndDateBetweenOrderByDateAsc(user.getId(), startDate, endDate).stream()
+        return scheduleRepositoryCustom.findAllByUserIdAndDateBetweenWithStage(user.getId(), startDate, endDate).stream()
                 .map(ScheduleResponse::new)
                 .toList();
     }
