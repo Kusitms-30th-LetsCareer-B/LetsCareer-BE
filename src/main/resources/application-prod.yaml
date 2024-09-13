@@ -62,4 +62,6 @@ management:
 
 logging:
   level:
-    org.hibernate.SQL: debug
+    root: info
+    org.hibernate.SQL: off
+    com.p6spy: off
