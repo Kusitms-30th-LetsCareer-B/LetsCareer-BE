@@ -154,7 +154,8 @@ public class TodoControllerTest extends ControllerTestConfig {
 				.isCompleted(false)
 				.date(LocalDate.of(2024, 9, 1))
 				.recruitmentId(1L)
-				.isRoutine(null) // isRoutine 필드 추가
+				.isRoutine(null)  // isRoutine 필드 수정
+				.routineId(null)
 				.build()))
 			.build();
 
@@ -174,6 +175,7 @@ public class TodoControllerTest extends ControllerTestConfig {
 			.andExpect(jsonPath("$.data.todos[0].content").value("서류 제출 준비"))
 			.andExpect(jsonPath("$.data.todos[0].isCompleted").value(false))
 			.andExpect(jsonPath("$.data.todos[0].isRoutine").doesNotExist())
+			.andExpect(jsonPath("$.data.todos[0].routineId").doesNotExist())
 			.andDo(MockMvcRestDocumentationWrapper.document("todo/getTodosByCompanyName",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
@@ -193,7 +195,8 @@ public class TodoControllerTest extends ControllerTestConfig {
 							fieldWithPath("data.todos[].isCompleted").description("투두 완료 여부"),
 							fieldWithPath("data.todos[].date").description("투두 날짜"),
 							fieldWithPath("data.todos[].recruitmentId").description("채용 일정 ID"),
-							fieldWithPath("data.todos[].isRoutine").description("루틴 여부").optional() // isRoutine 필드 추가
+							fieldWithPath("data.todos[].isRoutine").description("루틴 여부").optional(),
+							fieldWithPath("data.todos[].routineId").description("루틴 ID").optional()
 						)
 						.responseSchema(Schema.schema("CommonResponse"))
 						.build()
