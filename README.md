@@ -33,7 +33,7 @@
 
 <br>
 
-# ✏️ 서비스 기능 소개
+# ✏️ 서비스 기능
 
 ![image](https://github.com/user-attachments/assets/1ccbf0d1-ed78-4775-98c9-da8c32af2089)
 
