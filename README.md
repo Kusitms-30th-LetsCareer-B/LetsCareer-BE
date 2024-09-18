@@ -271,7 +271,7 @@
   - 테스트 시에 문서를 검증할 수 있어 신뢰성을 높임
 
 - #### 협업 툴
-- ![Slack](https://img.shields.io/badge/Slack-4A154B.svg?style=flat-square&logo=slack&logoColor=white)
+  ![Slack](https://img.shields.io/badge/Slack-4A154B.svg?style=flat-square&logo=slack&logoColor=white)
   ![Notion](https://img.shields.io/badge/Notion-000000.svg?style=flat-square&logo=notion&logoColor=white)
 
 
