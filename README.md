@@ -1,6 +1,9 @@
 # 👨‍👧‍👦 팀 소개
 
 ### **팀명 : 위대한 렛츠비**
+![큐시즘 제출용 표지](https://github.com/user-attachments/assets/3bc71ac6-b5bf-4a63-ad6f-316061afd2f2)
+
+<br>
 
 # 👥 팀원 및 역할
 
@@ -18,8 +21,7 @@
 
 <br>
 
-# Back-End
-## 공통 사항
+# 👍 공통 사항
 - 단위 테스트 작성(service 메소드 별로) : Junit 사용
 - 다른 사람이 알아보기 쉽도록 주석처리해야 합니다.
     - javadoc 형식 https://jake-seo-dev.tistory.com/59
@@ -31,7 +33,197 @@
 
 <br>
 
-### 🛠️ 개발스택
+# ✏️ 서비스 기능 소개
+
+![image](https://github.com/user-attachments/assets/1ccbf0d1-ed78-4775-98c9-da8c32af2089)
+
+
+
+### 1) MY 홈
+**1-1) 내 커리어 현황 한 눈에 확인해요**
+
+![image](https://github.com/user-attachments/assets/8e254f2e-2e37-47ef-881a-63fe5f7991b0)
+
+
+
+- `커리어 현황 확인`
+    - 관심 기업 또는 최근 임박한 기업 순으로 6개까지 확인 가능
+    - 나의 총 지원현황을 수치/리스트로 정리
+    - 마감기한 정보(D-DAY) 자동 업데이트
+- `날짜별 투두리스트`
+    - 우측 화면에서 일자별/기업별 투두리스트 확인
+- `월별 채용일정 캘린더`
+
+<br>
+
+**1-2) 새 채용일정 추가** 
+
+![image](https://github.com/user-attachments/assets/973110ff-92a6-4b94-a613-18e16c5f0f1c)
+
+
+- `준비할 채용 일정 추가`
+    - 사용자가 관심 있는 채용일정만 간편하게 추가하고 관리
+ 
+<br>
+
+**1-3) 마감 공고별 리마인드 알림 기능** 
+
+![image](https://github.com/user-attachments/assets/fe19ea50-0d8c-4a6d-b1f3-0bb4bdbd121c)
+
+
+- `알림센터`
+    - 등록한 기업의 전형 마감일 3일/1일 전에 리마인드 알림 제공
+    - 임박한 마감 일정 더블 체크
+ 
+<br>
+
+### 2) 내 캘린더
+**2-1) 전체 캘린더 일정 관리** 
+
+![image](https://github.com/user-attachments/assets/09314885-39d2-4925-b33d-0de7799ae0eb)
+
+
+- `오늘의 커리어 일정`
+    - 등록된 채용 일정 노출
+    - 개인 일정을 함께 추가하고 관리할 수 있는 캘린더 기능
+- `캘린더 내 기업별 전형 chip`
+    - 서류 - 시작, 끝
+    - 면접
+    - 기타 - 사용자가 입력한 이외의 전형
+- `오늘의 투두리스트`
+    - 우측 화면에서 일자별/기업별 투두리스트 확인
+
+<br>
+
+### 3) 내 지원현황 보기
+**3-1) 준비 현황 페이지** 
+
+![image](https://github.com/user-attachments/assets/ca124f61-8eee-4940-b58c-266615a80431)
+
+
+
+- `기업 카드`
+    - 기업명/직무/가장 최근 전형의 마감일 정보 확인
+    - 정렬 순서 : 관심 기업 → 마감기한
+    - 전형별로 분류하는 필터 제공 : 서류 / 면접 / 기타
+
+<br>
+
+**3-2) 준비중인 기업 관리**
+
+![image](https://github.com/user-attachments/assets/b56ef139-dbe3-4b8c-a234-a37a80192772)
+
+
+- `전형 카드`
+    - 진행되는 일정에 맞춰 전체 전형 절차 및 일정 등록 + 관리
+    - 전형 종류 : 서류, 면접, 기타(사용자가 직접 등록한 이외의 전형)
+    - 상태 : 진행 중 / 합격 / 불합격 3가지로 상태 변경 가능
+- `기업별 투두 리스트`
+    - 투두 등록 : 해당 기업을 위한 매일의 투두를 등록
+    - 루틴 등록 (매일/매주) : 반복해야하는 일정이나 루틴을 등록하기 위한 기능
+    - 일정 미루기, 날짜 변경 기능
+- `기업별 관련 자료 아카이빙`
+    - 기업별 자기소개서 작성하기 페이지 → 자소서 작성 시, 커리어 관리 [필살기 경험] 탭에 있는 경험 불러오기 가능
+    - 아카이빙 :  취업 준비에 필요한 각종 자료들을 아카이빙하는 공간 → 자유로운 게시글 작성 / 파일 업로드 기능
+    
+![image](https://github.com/user-attachments/assets/b8c64d5e-174f-4b8d-84c1-b2fc6c1ded75)
+
+<br>
+  
+**3-3) 종료된 기업카드 관리** 
+
+![image](https://github.com/user-attachments/assets/26291c03-8d05-49c5-ab90-3abcb966a129)
+- 불합격 / 최종합격 현황 확인 가능
+
+<br>
+
+**3-4) 복기 노트** 
+
+    
+![image](https://github.com/user-attachments/assets/59c235f9-9b57-4cbd-98fd-dac753cf7577)
+
+- 전형 준비가 완료된 기업에 대해서 복기 및 회고할 수 있는 기능
+- 서류/면접/기타 전형별 간편 복기 기능
+
+
+
+    **TypeA 서류**
+  
+    ![image](https://github.com/user-attachments/assets/6f530ebb-86ab-46a9-b050-9aa324698ad3)
+
+
+    - 만족도
+    - 핵심 키워드 선택(잘한점/아쉬운점)
+    - 면접 질문&답변 리스트 작성(잘한/아쉬운 답변 기록)
+    - 아쉬웠던 질문 다시보기 기능
+
+    <br>
+
+    **TypeB 면접**
+  
+    ![image](https://github.com/user-attachments/assets/b4aa10ea-ae2e-4941-9e0d-01a713ecc808)
+    
+    
+    - 만족도
+    - 핵심 키워드 선택(잘한점/아쉬운점)
+    - 면접 질문&답변 리스트 작성(잘한/아쉬운 답변 기록)
+    - 아쉬웠던 질문 다시보기 기능
+    
+    <br>
+    
+    **TypeC 기타**
+  
+    ![image](https://github.com/user-attachments/assets/4e7dcc05-59c3-4b66-bdc3-d5996775fd20)
+    
+    - 만족도
+    - 난이도
+    - 잘한점/아쉬운점 자유롭게 기록
+
+<br>
+
+
+### 4) 커리어 관리 
+
+![image](https://github.com/user-attachments/assets/ca8180c4-7989-4819-ac21-490343549c84)
+
+
+**4-1) 기본 이력서**
+
+- `지원서 작성에 필요한 공통 항목 관리용 이력서 기능`
+    - 기본 정보/학력
+    - 자격증/어학
+    - 경력
+    - 경험/수상
+    - 포트폴리오
+
+**4-2) 필살기 경험** 
+
+- `자기소개서 작성에 활용 가능한 핵심 경험 정리 페이지`
+    - 소제목/내용 작성란
+    - 항목별 토글 기능(접기/펼치기)
+    - 저장된 항목은 **<자기소개서 작성하기>** 페이지에서 불러오기 가능
+    - ①성공/도전 경험, ②직무 경험, ③협업 경험 3가지 파트 구성
+
+<br>
+
+# 🎮 시연 영상
+- https://youtu.be/6Pw6TpnJlIs
+
+<br>
+
+# 📑 ERD 설계도
+![image](https://github.com/user-attachments/assets/e24074cc-f647-4d78-9078-1d7c9fe2bab7)
+
+
+<br>
+
+# 💾 시스템 아키텍쳐
+![image](https://github.com/user-attachments/assets/233aa52e-1c57-4f16-88cf-c237f5de79f4)
+
+<br>
+
+
+# 🛠️ 개발스택
 
 - #### Language, Framework, Library
   ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJ%20IDEA-000000.svg?style=flat-square&logo=intellij-idea&logoColor=white)
@@ -78,26 +270,14 @@
   - 테스트 코드 작성과 함께 API 문서가 자동으로 생성되어, 실제 코드와 문서의 동기화 문제가 발생하지 않음
   - 테스트 시에 문서를 검증할 수 있어 신뢰성을 높임
 
-### 🙏 협업 툴
+- #### 협업 툴
 - ![Slack](https://img.shields.io/badge/Slack-4A154B.svg?style=flat-square&logo=slack&logoColor=white)
   ![Notion](https://img.shields.io/badge/Notion-000000.svg?style=flat-square&logo=notion&logoColor=white)
 
 
 <br>
 
-## 📑 ERD 설계도
-![image](https://github.com/user-attachments/assets/e24074cc-f647-4d78-9078-1d7c9fe2bab7)
-
-
-
-<br>
-
-## 💾 시스템 아키텍쳐
-![image](https://github.com/user-attachments/assets/233aa52e-1c57-4f16-88cf-c237f5de79f4)
-
-<br>
-
-## 개발규칙
+# 🤙 개발규칙
 
 ### ⭐ Code Convention
 
